@@ -8,6 +8,7 @@ class LECP : public QMainWindow
 {
 	Q_OBJECT
 
+	
 public:
 	LECP(QWidget *parent = 0);
 	~LECP();
