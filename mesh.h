@@ -16,6 +16,8 @@ public:
 	list<Face*> faces() { return faces_; }
 	list<Vertex*> vertices() { return vertices_; }
 	list<HalfEdge*> edges() { return half_edges_; }
+	/*only for test&debug*/
+	list<pair<int, int>>* all_edges(){ return &all_edges_; }
 
 	void AddVertex(Vertex *v);
 	void ConnectVertices(Vertex *v1, Vertex *v2);
@@ -23,6 +25,8 @@ private:
 	list<Face*> faces_;
 	list<Vertex*> vertices_;
 	list<HalfEdge*> half_edges_;
+	/*only for test&debug*/
+	list<pair<int, int>> all_edges_;
 };
 
 #endif

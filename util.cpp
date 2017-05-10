@@ -37,14 +37,28 @@ Mesh* visibility(Mesh* starPoly)
 		Vertex* v1 = *itor_vertex_temp;
 		itor_vertex_temp++;
 		Vertex* v2 = *itor_vertex_temp;
-		VG_process(v1, v2);
+		VG_process(v1, v2,starPoly);
 	}
 	vertices.clear();
 	return starPoly;
 }
 
-void VG_process(Vertex* i, Vertex* j)
+void VG_process(Vertex* i, Vertex* j, Mesh* starPoly)
 {
+	deque<Vertex*>* Qi = i->queue2store();
+	deque<Vertex*>* Qj = j->queue2store();
+	while ((!Qi->empty()) && toLeft(Qi->front(),i,j)){
+	//PROCEED
+		VG_process(Qi->front(), j, starPoly);
+	//DEQUEUE(Qi)
+		Qi->pop_front();
+	}
+	//ADD(ij)
+	int index_i = i->index();
+	int index_j = j->index();
+	starPoly->all_edges()->push_back({ index_i, index_j });
+	//ENQUEUE(i,Qj)
+		Qj->push_back(i);
 	qDebug() <<"vertex i:"<< i->point().first << "," << i->point().second;
 	qDebug() << "vertex j:" << j->point().first << "," << j->point().second;
 	return;

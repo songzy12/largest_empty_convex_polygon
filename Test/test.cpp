@@ -39,19 +39,15 @@ void visibility_test()
 	//for (int i = 0; i < 6; i++)
 	//{
 	//	points.at(i)->set_point(points_data.at(i));
-	//}
-
-	//for (int i = 0; i < 6; i++)
-	//{
 	//	starPoly->AddVertex(points.at(i));
 	//}
 
-	Vertex *p = new Vertex(); p->set_point({ 0, 4 });
-	Vertex *p1 = new Vertex(); p1->set_point({ 1, 1 });
-	Vertex *p2 = new Vertex(); p2->set_point({ 3, 2 });
-	Vertex *p3 = new Vertex(); p3->set_point({ 5, 3 });
-	Vertex *p4 = new Vertex(); p4->set_point({ 4, 5 });
-	Vertex *p5 = new Vertex(); p5->set_point({ 2, 6 });
+	Vertex *p = new Vertex(); p->set_point({ 0, 3 }); p->set_index(0);
+	Vertex *p1 = new Vertex(); p1->set_point({ 1, 1 }); p1->set_index(1);
+	Vertex *p2 = new Vertex(); p2->set_point({ 2, 2 }); p2->set_index(2);
+	Vertex *p3 = new Vertex(); p3->set_point({ 7, 0 }); p3->set_index(3);
+	Vertex *p4 = new Vertex(); p4->set_point({ 6, 4 }); p4->set_index(4);
+	Vertex *p5 = new Vertex(); p5->set_point({ 8, 6 }); p5->set_index(5);
 	starPoly->AddVertex(p);
 	starPoly->AddVertex(p1);
 	starPoly->AddVertex(p2);
@@ -60,7 +56,12 @@ void visibility_test()
 	starPoly->AddVertex(p5);
 
 	visibility(starPoly);
-	
+	list<pair<int, int>>::iterator itor_edge = starPoly->all_edges()->begin();
+	while (itor_edge != starPoly->all_edges()->end())
+	{
+		qDebug() << itor_edge->first << "->" << itor_edge->second;
+		itor_edge++;
+	}
 
 }
 

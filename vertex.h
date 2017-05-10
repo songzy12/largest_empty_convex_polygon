@@ -22,11 +22,18 @@ public:
 	deque<Vertex*>* queue2store() { return &queue2store_; }
 	void set_queue2store(deque<Vertex*>* queue2store) { queue2store_ = *queue2store; }
 
+	int index() { return index_; }
+	void set_index(int index) { index_ = index; }
+
 private:
 	HalfEdge *half_edge_;
 	pair<double, double> point_;
+
 	/*to store the starting points of the incoming edges of this vertex */
 	deque<Vertex*> queue2store_;
+
+	/*only for test&debug*/
+	int index_;
 };
 
 #endif
