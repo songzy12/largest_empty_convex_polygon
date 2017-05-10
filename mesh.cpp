@@ -19,8 +19,9 @@ Mesh::~Mesh() {
 	vertices_.clear();
 }
 
+/*simple version: add new vertex at the end of the vertex list*/
 void Mesh::AddVertex(Vertex *v) {
-
+	vertices_.push_back(v);
 }
 
 void Mesh::ConnectVertices(Vertex *v1, Vertex *v2) {

@@ -1,3 +1,5 @@
+#ifndef MESH_H
+#define MESH_H
 #include "face.h"
 #include "vertex.h"
 #include "half_edge.h"
@@ -22,3 +24,5 @@ private:
 	list<Vertex*> vertices_;
 	list<HalfEdge*> half_edges_;
 };
+
+#endif

@@ -14,5 +14,7 @@ starPoly:	star-shaped Polygon with points ordered by angle
 */
 Mesh* visibility(Mesh* starPoly);
 
+/*process bewteen vertex i&j (counterclockwise order:i->j)
+in creating visibility graph*/
 void VG_process(Vertex* i, Vertex* j);
 #endif
