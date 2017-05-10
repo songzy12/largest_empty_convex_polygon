@@ -1,6 +1,7 @@
 #include "lecp.h"
 #include<QtGui/QPen>
 #include<QtGui/QMouseEvent>
+#include <qmessagebox.h>
 #include<DataStruct.h>
 #include<Tool.h>
 #include<iostream>
@@ -21,6 +22,13 @@ LECP::LECP(QWidget *parent)
 	flag = false;
 	
 	lecp_doc = new LECP_Doc();
+
+	// deal with button signals
+	signalMapper = new QSignalMapper(this);
+	connect(ui.btn_vg, SIGNAL(clicked()),signalMapper, SLOT(map()));
+	signalMapper->setMapping(ui.btn_vg, "VG_show");
+	connect(signalMapper, SIGNAL(mapped(const QString &)), this, SLOT(doClicked(const QString &)));
+	connect(this, SIGNAL(showVGSignal()), this, SLOT(showVGSlot()));
 }
 
 LECP::~LECP()
@@ -65,4 +73,17 @@ void LECP::mousePressEvent(QMouseEvent *event){
 }
 
 void LECP::resizeEvent(QResizeEvent *event){
+}
+
+void LECP::doClicked(const QString & btnname)
+{
+	if (btnname == "VG_show")
+	{
+		emit showVGSignal();
+	}
+}
+void LECP::showVGSlot()
+{
+	QMessageBox::warning(this, tr("to show"), tr("show animation of VG!"));
+
 }

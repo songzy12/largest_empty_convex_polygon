@@ -5,6 +5,7 @@
 #include "ui_lecp.h"
 #include <QtGui/QPainter>
 #include<QtGui/QPen>
+#include <qsignalmapper.h>
 #include"Tool.h"
 #include"DataStruct.h"
 
@@ -29,9 +30,19 @@ public:
 	QPoint currentPoint;//当前点
 	QPixmap pix;//保存绘画结果
 
+	/*deal with signals mapping*/
+	QSignalMapper *signalMapper;
+
 	bool flag;//画点是否开启
 
 	LECP_Doc *lecp_doc;
+
+private slots:
+	void doClicked(const QString & btnname);
+	void showVGSlot();
+
+signals:
+	void showVGSignal();
 };
 
 #endif // LECP_H
