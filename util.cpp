@@ -16,6 +16,7 @@ bool toLeft(pair<double, double> i, pair<double, double> j, pair<double, double>
 
 Mesh* visibility(Mesh* starPoly)
 {
+	starPoly->all_edges()->clear();// clear the vg of the mesh
 	list<Vertex*> vertices = starPoly->vertices();
 	int N = (starPoly->vertices()).size();
 	
@@ -54,12 +55,9 @@ void VG_process(Vertex* i, Vertex* j, Mesh* starPoly)
 		Qi->pop_front();
 	}
 	//ADD(ij)
-	int index_i = i->index();
-	int index_j = j->index();
-	starPoly->all_edges()->push_back({ index_i, index_j });
+	starPoly->all_edges()->push_back({ i, j });
+
 	//ENQUEUE(i,Qj)
 		Qj->push_back(i);
-	qDebug() <<"vertex i:"<< i->point().first << "," << i->point().second;
-	qDebug() << "vertex j:" << j->point().first << "," << j->point().second;
 	return;
 }

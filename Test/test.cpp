@@ -56,10 +56,10 @@ void visibility_test()
 	starPoly->AddVertex(p5);
 
 	visibility(starPoly);
-	list<pair<int, int>>::iterator itor_edge = starPoly->all_edges()->begin();
+	list<pair<Vertex *, Vertex *>>::iterator itor_edge = starPoly->all_edges()->begin();
 	while (itor_edge != starPoly->all_edges()->end())
 	{
-		qDebug() << itor_edge->first << "->" << itor_edge->second;
+		qDebug() << itor_edge->first->index() << "->" << itor_edge->second->index();
 		itor_edge++;
 	}
 
