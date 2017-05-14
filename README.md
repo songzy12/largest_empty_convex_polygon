@@ -6,6 +6,11 @@ This is a course project for Computational geometry of Tsinghua University, wher
 
 [Google Style Guide](https://zh-google-styleguide.readthedocs.io/en/latest/google-cpp-styleguide/contents/)
 
+## API
+
+* AddVertex
+* ConnectVertices 
+
 ## UnitTest
 
 [Visual Studio C++ Unit Test](http://blog.csdn.net/fire_lord/article/details/12998709)
