@@ -1,8 +1,10 @@
 #include<Tool.h>
 #include<DataStruct.h>
 #include<algorithm>
+#include<iostream>
 using namespace std;
 
+//按照横坐标从左向右排列
 bool comparePoint(LECP_Point a, LECP_Point b){
 	if (a.x < b.x)
 		return true;
@@ -29,6 +31,9 @@ bool LECP_Doc::addPoint(LECP_Point point){
 	if (it == points.end())
 	{
 		points.push_back(point);
+
+		std::cout << points.size() << " point：" << point.x << "," << point.y << endl;
+
 		return true;
 	}
 	return false;
