@@ -9,14 +9,14 @@ This is a course project for Computational geometry of Tsinghua University, wher
 ## Polar Sort
 
 * 12-duality P31
-    对于点 p, 在其右侧的点的极角排序 等价于 对偶图中 对于直线 p, 在其下方（斜率大于 p）的直线与 p 的交点左右顺序排序
-    于是变换到对偶图中，只需要在 O(n) 的时间内从左向右求出 p 下方直线与直线 p 的各交点
+    * 对于点 p, 在其右侧的点的极角排序 等价于 对偶图中 对于直线 p, 在其下方（斜率大于 p）的直线与 p 的交点左右顺序排序
+    * 于是变换到对偶图中，只需要在 O(n) 的时间内从左向右求出 p 下方直线与直线 p 的各交点
 * ln11.pdf Subsection 11.2
-    对于直线 p, 首先使用 O(n) 求出其所在的最左侧 face（根据指向无穷远点的 halfedge 的斜率）
-    此时 p 与该 face 的 左侧交点即为无穷远点 u
-    然后遍历这个 face 的所有 halfedge, 找到与 p 相交的 halfedge e 及右侧交点 v
-    使用 u 和 v 分割该 face （维护点列表，边列表，面列表）
-    使用 e->twin->face 找到下一个要处理的面，此时 v 为 p 与 右侧面 的左交点
+    * 对于直线 p, 首先使用 O(n) 求出其所在的最左侧 face（根据指向无穷远点的 halfedge 的斜率）
+    * 此时 p 与该 face 的 左侧交点即为无穷远点 u
+    * 然后遍历这个 face 的所有 halfedge, 找到与 p 相交的 halfedge e 及右侧交点 v
+    * 使用 u 和 v 分割该 face （维护点列表，边列表，面列表）
+    * 使用 e->twin->face 找到下一个要处理的面，此时 v 为 p 与 右侧面 的左交点
 
 ## DCEL
 
