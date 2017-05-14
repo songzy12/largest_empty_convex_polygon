@@ -13,17 +13,24 @@ point definiation
 class LECP_Point{
 
 public :
-	double x;
-	double y;
+	double x,y;
 public:
 	LECP_Point(){}
 	LECP_Point(double _x, double _y);
 
-	bool operator == (const LECP_Point a){
-		if (a.x == this->x && a.y == this->y)
+	//double x();
+	//double y();
+
+	void setX(double x){ this->x = x; }
+	void setY(double y){ this->y = y; }
+	//void setXY(double x, double y){ this->x= x; this->y= y; }
+
+	bool operator == (LECP_Point a){
+		if (a.x == x && a.y == y)
 			return true;
 		else return false;
 	}
+
 };
 
 #endif

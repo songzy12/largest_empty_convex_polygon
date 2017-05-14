@@ -7,5 +7,7 @@ int main(int argc, char *argv[])
 	LECP w;
 	w.show();
 	
+
+
 	return a.exec();
 }
