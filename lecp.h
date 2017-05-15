@@ -5,7 +5,7 @@
 #include "ui_lecp.h"
 #include <QtGui/QPainter>
 #include<QtGui/QPen>
-#include <qsignalmapper.h>
+//#include <qsignalmapper.h>
 #include"Tool.h"
 #include"DataStruct.h"
 #include "mesh.h"
@@ -36,8 +36,8 @@ public:
 	QPoint currentPoint;//当前点
 	QPixmap pix;//保存绘画结果
 
-	/*deal with signals mapping*/
-	QSignalMapper *signalMapper;
+	///*deal with signals mapping*/
+	//QSignalMapper *signalMapper;
 
 	bool flag;//画点是否开启
 
@@ -46,12 +46,8 @@ public:
 public slots:
   void polarAngleSortSlot();//对于每个输入点，该点左侧的所有点按照关于该点进行极角排序
 
-private slots:
-	void doClicked(const QString & btnname);
 	void showVGSlot();
 
-signals:
-	void showVGSignal();
 };
 
 #endif // LECP_H

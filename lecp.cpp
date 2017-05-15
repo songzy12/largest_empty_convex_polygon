@@ -31,15 +31,10 @@ LECP::LECP(QWidget *parent)
 	this->setCentralWidget(paintWidget);
 
 	QObject::connect(ui.polar_angle_sort, SIGNAL(triggered()), this, SLOT(polarAngleSortSlot()));
-	
+	QObject::connect(ui.create_VG, SIGNAL(triggered()), this, SLOT(showVGSlot()));
 	lecp_doc = new LECP_Doc();
 
-	// deal with button signals
-	signalMapper = new QSignalMapper(this);
-	connect(ui.btn_vg, SIGNAL(clicked()),signalMapper, SLOT(map()));
-	signalMapper->setMapping(ui.btn_vg, "VG_show");
-	connect(signalMapper, SIGNAL(mapped(const QString &)), this, SLOT(doClicked(const QString &)));
-	connect(this, SIGNAL(showVGSignal()), this, SLOT(showVGSlot()));
+	
 
 }
 
@@ -103,7 +98,6 @@ void LECP::mousePressEvent(QMouseEvent *event){
 void LECP::resizeEvent(QResizeEvent *event){
 }
 
-<<<<<<< HEAD
 void  LECP::polarAngleSortSlot(){
 	//首先将输入的所有点按照从左到右的顺序排列
 	vector<LECP_Point> points = lecp_doc->points;
@@ -136,17 +130,10 @@ list<LECP_Point>  LECP::getPolarSort(LECP_Point tmpPoint, vector<LECP_Point> sub
 	std::copy(subV.begin(), subV.end(), std::back_inserter(reList));
 
 	return reList;
-=======
-void LECP::doClicked(const QString & btnname)
-{
-	if (btnname == "VG_show")
-	{
-		emit showVGSignal();
-	}
 }
+
 void LECP::showVGSlot()
 {
 	QMessageBox::warning(this, tr("to show"), tr("show animation of VG!"));
 
->>>>>>> develop
 }

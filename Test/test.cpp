@@ -34,6 +34,7 @@ void toleft_test(){
 void visibility_test()
 {
 	Mesh* starPoly = new Mesh();
+	starPoly->clear();
 	//vector<Vertex *> points(6,new Vertex());
 	//vector<pair<double, double>> points_data = { { 0, 4 }, { 1, 1 }, { 3, 2 }, { 5, 3 }, { 4, 5 }, { 2, 6 } };
 	//for (int i = 0; i < 6; i++)
@@ -65,9 +66,9 @@ void visibility_test()
 
 }
 
-int main() {
-    point_test();
-	toleft_test();
-	visibility_test();
-    return 0;
-}
+//int main() {
+//    point_test();
+//	toleft_test();
+//	visibility_test();
+//    return 0;
+//}

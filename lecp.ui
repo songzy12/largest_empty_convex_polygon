@@ -8,33 +8,17 @@
     <y>0</y>
     <width>995</width>
     <height>599</height>
-
    </rect>
   </property>
   <property name="windowTitle">
    <string>LECP</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="btn_vg">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>0</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>VG_show</string>
-    </property>
-   </widget>
-  </widget>
+  <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-
      <width>995</width>
      <height>23</height>
     </rect>
@@ -44,9 +28,9 @@
      <string>操作</string>
     </property>
     <addaction name="polar_angle_sort"/>
+    <addaction name="create_VG"/>
    </widget>
    <addaction name="menu"/>
-
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -62,7 +46,11 @@
     <string>极角排序</string>
    </property>
   </action>
-
+  <action name="create_VG">
+   <property name="text">
+    <string>生成vg图</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>

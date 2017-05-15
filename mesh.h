@@ -22,20 +22,18 @@ public:
 
 	void AddVertex(Vertex *v);
 	void ConnectVertices(Vertex *v1, Vertex *v2);
-
 	void AddLine(double a, double b);
-
 	void init();//初始化，bounding box, one face,4 half_edge,4 vertex
+	void clear();
 	HalfEdge*  getIntersectHalfEdge(double a,double b);
-
-
 	Vertex* intersectWithBoundingBox(HalfEdge* tmp,double a,double b);
 
 private:
 	list<Face*> faces_;
 	list<Vertex*> vertices_;
 	list<HalfEdge*> half_edges_;
-
+	/*store all directed edges from low_index to high_index in vg*/
+	list<pair<Vertex*, Vertex*>> all_edges_;
 	LECP_Doc *lecp_doc;
 
 	list<HalfEdge*> boundingBox;//保存边界的HalfEdge,用以确定新插入的直线首先穿过哪个face
@@ -44,3 +42,4 @@ private:
 public:
 	vector<list<LECP_Point>> polarAngleSortedVector;
 };
+#endif

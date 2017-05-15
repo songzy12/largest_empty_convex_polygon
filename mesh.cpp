@@ -14,6 +14,9 @@ Mesh::Mesh() {
 }
 
 Mesh::~Mesh() {
+	clear();
+}
+void Mesh ::clear(){
 	for (Face *f : faces_)
 		delete f;
 	faces_.clear();
