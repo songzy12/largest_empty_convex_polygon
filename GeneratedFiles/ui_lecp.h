@@ -16,6 +16,7 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
@@ -25,9 +26,10 @@ QT_BEGIN_NAMESPACE
 class Ui_LECPClass
 {
 public:
+    QWidget *centralWidget;
+    QPushButton *btn_vg;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
-    QWidget *centralWidget;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *LECPClass)
@@ -35,15 +37,19 @@ public:
         if (LECPClass->objectName().isEmpty())
             LECPClass->setObjectName(QStringLiteral("LECPClass"));
         LECPClass->resize(600, 400);
+        centralWidget = new QWidget(LECPClass);
+        centralWidget->setObjectName(QStringLiteral("centralWidget"));
+        btn_vg = new QPushButton(centralWidget);
+        btn_vg->setObjectName(QStringLiteral("btn_vg"));
+        btn_vg->setGeometry(QRect(520, 0, 75, 23));
+        LECPClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(LECPClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
+        menuBar->setGeometry(QRect(0, 0, 600, 23));
         LECPClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(LECPClass);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
-        LECPClass->addToolBar(mainToolBar);
-        centralWidget = new QWidget(LECPClass);
-        centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        LECPClass->setCentralWidget(centralWidget);
+        LECPClass->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(LECPClass);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         LECPClass->setStatusBar(statusBar);
@@ -56,6 +62,7 @@ public:
     void retranslateUi(QMainWindow *LECPClass)
     {
         LECPClass->setWindowTitle(QApplication::translate("LECPClass", "LECP", Q_NULLPTR));
+        btn_vg->setText(QApplication::translate("LECPClass", "VG_show", Q_NULLPTR));
     } // retranslateUi
 
 };

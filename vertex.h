@@ -31,7 +31,7 @@ private:
 	/*to store the starting points of the incoming edges of this vertex */
 	deque<Vertex*> queue2store_;
 
-	/*only for test&debug*/
+	/*only for test&debug ,can be used in animation*/
 	int index_;
 };
 
