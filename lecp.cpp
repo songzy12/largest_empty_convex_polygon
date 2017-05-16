@@ -129,10 +129,10 @@ void LECP::showVGSlot()
 	visibility(mesh);
 	for (int i = 0; i < mesh->sortedVector.size(); i++){
 		qDebug() << " for point" << i << ":";
-		list<pair<Vertex, Vertex>>::iterator itor_edge = mesh->all_edges()->at(i).begin();
+		list<pair<Vertex*, Vertex*>>::iterator itor_edge = mesh->all_edges()->at(i).begin();
 		while (itor_edge != mesh->all_edges()->at(i).end())
 		{
-			qDebug() << itor_edge->first.index() << "->" << itor_edge->second.index();
+			qDebug() << itor_edge->first->index() << "->" << itor_edge->second->index();
 			itor_edge++;
 		}
 	}

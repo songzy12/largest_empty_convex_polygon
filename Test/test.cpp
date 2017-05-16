@@ -77,10 +77,10 @@ void visibility_test()
 	starPoly->sortedVector.push_back(list_temp);
 
 	visibility(starPoly);
-	list<pair<Vertex, Vertex>>::iterator itor_edge = starPoly->all_edges()->at(0).begin();
+	list<pair<Vertex*, Vertex*>>::iterator itor_edge = starPoly->all_edges()->at(0).begin();
 	while (itor_edge != starPoly->all_edges()->at(0).end())
 	{
-		qDebug() << itor_edge->first.index() << "->" << itor_edge->second.index();
+		qDebug() << itor_edge->first->index() << "->" << itor_edge->second->index();
 		itor_edge++;
 	}
 
@@ -120,10 +120,10 @@ void convex_chain_test()
     ConvexChainLength(vs);
 }
 
-//int main() {
-//   // point_test();
-//	//toleft_test();
-//	visibility_test();
-//	//convex_chain_test();
-//    return 0;
-//}
+int main() {
+   // point_test();
+	//toleft_test();
+	visibility_test();
+	//convex_chain_test();
+    return 0;
+}
