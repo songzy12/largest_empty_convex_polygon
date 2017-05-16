@@ -2,10 +2,13 @@
 #include<QtGui/QPen>
 #include<QtGui/QMouseEvent>
 #include <qmessagebox.h>
+#include <qdebug.h>
+
 #include<DataStruct.h>
 #include<Tool.h>
 #include<iostream>
 #include<vertex.h>
+#include <util.h>
 using namespace std;
 
 extern bool comparePoint(LECP_Point a, LECP_Point b);
@@ -123,4 +126,14 @@ void LECP::showVGSlot()
 {
 	QMessageBox::warning(this, tr("to show"), tr("show animation of VG!"));
 
+	visibility(mesh);
+	for (int i = 0; i < mesh->sortedVector.size(); i++){
+		qDebug() << " for point" << i << ":";
+		list<pair<Vertex, Vertex>>::iterator itor_edge = mesh->all_edges()->at(i).begin();
+		while (itor_edge != mesh->all_edges()->at(i).end())
+		{
+			qDebug() << itor_edge->first.index() << "->" << itor_edge->second.index();
+			itor_edge++;
+		}
+	}
 }

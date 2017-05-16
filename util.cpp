@@ -20,28 +20,34 @@ void visibility(Mesh* starPoly)
 
 	for (int index = 0; index < starPoly->sortedVector.size(); index++){
 
+
+		list<pair<Vertex, Vertex>> all_edges_index;
+		starPoly->all_edges()->push_back(all_edges_index);
+
 		list<Vertex> vertices = starPoly->sortedVector.at(index);
-		int N = vertices.size();
+		if (!vertices.empty()){
+			int N = vertices.size();
 
-		//clear the queue of every point
-		list<Vertex>::iterator itor_vertex = vertices.begin();
-		while (itor_vertex != vertices.end())
-		{
-			//Vertex v1 = *itor_vertex;
-			itor_vertex->queue2store()->clear();
-			itor_vertex++;
-		}
+			//clear the queue of every point
+			list<Vertex>::iterator itor_vertex = vertices.begin();
+			while (itor_vertex != vertices.end())
+			{
+				//Vertex v1 = *itor_vertex;
+				itor_vertex->queue2store()->clear();
+				itor_vertex++;
+			}
 
-		//do process for n-2 points
-		itor_vertex = vertices.begin();
-		list<Vertex>::iterator itor_vertex_temp = itor_vertex++;
-		for (int i = 1; i <= N - 2; i++)
-		{
-			itor_vertex_temp = itor_vertex++;
-			Vertex* v1 = &(*itor_vertex_temp);
-			itor_vertex_temp++;
-			Vertex* v2 = &(*itor_vertex_temp);
-			VG_process(v1, v2, starPoly, index);
+			//do process for n-2 points
+			itor_vertex = vertices.begin();
+			list<Vertex>::iterator itor_vertex_temp = itor_vertex++;
+			for (int i = 1; i <= N - 2; i++)
+			{
+				itor_vertex_temp = itor_vertex++;
+				Vertex* v1 = &(*itor_vertex_temp);
+				itor_vertex_temp++;
+				Vertex* v2 = &(*itor_vertex_temp);
+				VG_process(v1, v2, starPoly, index);
+			}
 		}
 	}
 	//return starPoly;
@@ -49,11 +55,6 @@ void visibility(Mesh* starPoly)
 
 void VG_process(Vertex* i, Vertex* j, Mesh* starPoly,int index)
 {
-	if (starPoly->all_edges()->size() == index)
-	{
-			list<pair<Vertex*, Vertex*>> all_edges_index;
-			starPoly->all_edges()->push_back(all_edges_index);
-	}
 	deque<Vertex*>* Qi = i->queue2store();
 	deque<Vertex*>* Qj = j->queue2store();
 	while ((!Qi->empty()) && toLeft(Qi->front(), i, j)){
@@ -63,7 +64,7 @@ void VG_process(Vertex* i, Vertex* j, Mesh* starPoly,int index)
 		Qi->pop_front();
 	}
 	//ADD(ij)
-	starPoly->all_edges()->at(index).push_back({ i, j });
+	starPoly->all_edges()->at(index).push_back({ *i, *j });
 	//ENQUEUE(i,Qj)
 	Qj->push_back(i);
 	return;
