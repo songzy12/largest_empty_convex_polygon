@@ -7,10 +7,13 @@ class HalfEdge
 {
 public:
 	HalfEdge();
+	HalfEdge(Vertex *origin, Vertex *target);
 	~HalfEdge();
 	
 	Vertex* origin() { return origin_; }
 	void set_origin(Vertex *origin) { origin_ = origin; }
+	Vertex* target() { return target_; }
+	void set_target(Vertex *target) { target_ = target; }
 	Face* face() { return face_; }
 	void set_face(Face *face) { face_ = face; }
 	HalfEdge* twin() { return twin_; }
@@ -19,13 +22,17 @@ public:
 	void set_next(HalfEdge *next) { next_ = next; }
 	HalfEdge* prev() { return prev_; }
 	void set_prev(HalfEdge *prev) { prev_ = prev; }
-
+	int L() { return L_; }
+	void set_L(int L) { L_ = L; }
 private:
 	Vertex *origin_;//2017-05-13 修改by zyx,原 target_
+	Vertex *target_;//the Vertex that is pointed to
 	Face *face_;
 	HalfEdge *twin_;//得到另外一个面
 	HalfEdge *next_;
 	HalfEdge *prev_;
+
+	int L_; // only used for convex chain
 };
 
 #endif

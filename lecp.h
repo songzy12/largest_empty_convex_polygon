@@ -44,7 +44,7 @@ public:
 	LECP_Doc *lecp_doc;
 	Mesh *mesh;
 public slots:
-  void polarAngleSortSlot();//对于每个输入点，该点左侧的所有点按照关于该点进行极角排序
+	void polarAngleSortSlot();//对于每个输入点，该点左侧的所有点按照关于该点进行极角排序
 
 	void showVGSlot();
 
