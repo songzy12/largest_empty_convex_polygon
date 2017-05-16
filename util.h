@@ -10,9 +10,9 @@ bool toLeft(pair<double, double> i, pair<double, double> j, pair<double, double>
 
 /*create visibility graph
 starPoly:	star-shaped Polygon with points ordered by angle*/
-Mesh* visibility(Mesh* starPoly);
+void visibility(Mesh* starPoly);
 
 /*process bewteen vertex i&j (counterclockwise order:i->j)
 in creating visibility graph*/
-void VG_process(Vertex* i, Vertex* j, Mesh* starPoly);
+void VG_process(Vertex* i, Vertex* j, Mesh* starPoly,int index);
 #endif

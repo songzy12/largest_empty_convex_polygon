@@ -18,7 +18,8 @@ public:
 	list<Vertex*> vertices() { return vertices_; }
 	list<HalfEdge*> edges() { return half_edges_; }
 	/*store all directed edges from low_index to high_index in vg*/
-	list<pair<Vertex*, Vertex*>>* all_edges(){ return &all_edges_; }
+	//list<pair<Vertex*, Vertex*>>* all_edges(){ return &all_edges_; }
+	vector<list<pair<Vertex*, Vertex*>>>* all_edges(){ return &all_edges_; }
 
 	void AddVertex(Vertex *v);
 	void ConnectVertices(Vertex *v1, Vertex *v2);
@@ -33,7 +34,8 @@ private:
 	list<Vertex*> vertices_;
 	list<HalfEdge*> half_edges_;
 	/*store all directed edges from low_index to high_index in vg*/
-	list<pair<Vertex*, Vertex*>> all_edges_;
+	//list<pair<Vertex*, Vertex*>> all_edges_;
+	vector<list<pair<Vertex*, Vertex*>>> all_edges_;
 	LECP_Doc *lecp_doc;
 
 	list<HalfEdge*> boundingBox;//保存边界的HalfEdge,用以确定新插入的直线首先穿过哪个face
@@ -41,5 +43,6 @@ private:
 	//将屏幕上的点按照横坐标排序，求出每个点的右侧所有点相对于当前点的极角排序，存储为list,所有的点按横坐标存储为vector
 public:
 	vector<list<LECP_Point>> polarAngleSortedVector;
+	vector<list<Vertex>> polarAngleSortedVector_vertex;
 };
 #endif
