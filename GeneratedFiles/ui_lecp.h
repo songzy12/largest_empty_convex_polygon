@@ -27,6 +27,7 @@ class Ui_LECPClass
 {
 public:
     QAction *polar_angle_sort;
+    QAction *create_VG;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menu;
@@ -40,6 +41,8 @@ public:
         LECPClass->resize(995, 599);
         polar_angle_sort = new QAction(LECPClass);
         polar_angle_sort->setObjectName(QStringLiteral("polar_angle_sort"));
+        create_VG = new QAction(LECPClass);
+        create_VG->setObjectName(QStringLiteral("create_VG"));
         centralWidget = new QWidget(LECPClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         LECPClass->setCentralWidget(centralWidget);
@@ -58,6 +61,7 @@ public:
 
         menuBar->addAction(menu->menuAction());
         menu->addAction(polar_angle_sort);
+        menu->addAction(create_VG);
 
         retranslateUi(LECPClass);
 
@@ -68,6 +72,7 @@ public:
     {
         LECPClass->setWindowTitle(QApplication::translate("LECPClass", "LECP", Q_NULLPTR));
         polar_angle_sort->setText(QApplication::translate("LECPClass", "\346\236\201\350\247\222\346\216\222\345\272\217", Q_NULLPTR));
+        create_VG->setText(QApplication::translate("LECPClass", "\347\224\237\346\210\220vg\345\233\276", Q_NULLPTR));
         menu->setTitle(QApplication::translate("LECPClass", "\346\223\215\344\275\234", Q_NULLPTR));
     } // retranslateUi
 

@@ -1,3 +1,5 @@
+#ifndef HALFEDGE_H
+#define HALFEDGE_H
 #include "vertex.h"
 #include "face.h"
 
@@ -25,3 +27,5 @@ private:
 	HalfEdge *next_;
 	HalfEdge *prev_;
 };
+
+#endif

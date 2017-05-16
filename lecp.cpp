@@ -1,6 +1,7 @@
 #include "lecp.h"
 #include<QtGui/QPen>
 #include<QtGui/QMouseEvent>
+#include <qmessagebox.h>
 #include<DataStruct.h>
 #include<Tool.h>
 #include<iostream>
@@ -26,7 +27,11 @@ LECP::LECP(QWidget *parent)
 	this->setCentralWidget(paintWidget);
 
 	QObject::connect(ui.polar_angle_sort, SIGNAL(triggered()), this, SLOT(polarAngleSortSlot()));
+	QObject::connect(ui.create_VG, SIGNAL(triggered()), this, SLOT(showVGSlot()));
+	lecp_doc = new LECP_Doc();
+
 	
+
 }
 
 LECP::~LECP()
@@ -112,4 +117,10 @@ list<LECP_Point>  LECP::getPolarSort(LECP_Point tmpPoint, vector<LECP_Point> sub
 	std::copy(subV.begin(), subV.end(), std::back_inserter(reList));
 
 	return reList;
+}
+
+void LECP::showVGSlot()
+{
+	QMessageBox::warning(this, tr("to show"), tr("show animation of VG!"));
+
 }

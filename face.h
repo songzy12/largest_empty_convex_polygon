@@ -1,5 +1,5 @@
-#ifndef HALFEDGE_H
-#define HALFEDGE_H
+#ifndef Face_H
+#define Face_H
 
 class HalfEdge;
 
