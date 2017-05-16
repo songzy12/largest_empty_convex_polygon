@@ -1,3 +1,7 @@
+/*
+All painting operations  are executed by this file.
+*/
+
 #ifndef PAINT_H
 #define PAINT_H
 
@@ -13,14 +17,14 @@ class PaintWidget:public QWidget
 private:
 	
 	bool paintFlag;
-	list<LECP_Point*> points;
-
-	//Mesh *mesh;
+public:
+	vector<LECP_Point> points;
 public:
 	PaintWidget(){ paintFlag = false; }
 	PaintWidget(int width, int height);
 protected:
 	void paintEvent(QPaintEvent *event);
+	void mousePressEvent(QMouseEvent *event);
 public:
 	void paintPoint(double x, double y);
 	void paintPoint(LECP_Point point_);

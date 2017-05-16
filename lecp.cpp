@@ -16,15 +16,11 @@ LECP::LECP(QWidget *parent)
 
 	lecp_doc = new LECP_Doc();
 
-	
-	Qt::WindowFlags flags = 0;
-	flags |= Qt::WindowMinimizeButtonHint;
-	setWindowFlags(flags); // 设置禁止最大化
 	setFixedSize(lecp_doc->windowWidth, lecp_doc->windowHeight);
 	
-
 	int width = this->width();
 	int height = this->height();
+
 	mesh = new Mesh();
 	paintWidget = new PaintWidget(width, height);
 	this->setCentralWidget(paintWidget);
@@ -40,7 +36,7 @@ LECP::~LECP()
 
 /*
 void LECP::paintEvent(QPaintEvent *event){
-	QPainter painter(&pix);
+	QPainter painter(this);
 
 	QPen pen(qRgb(255, 0, 0));
 
@@ -48,33 +44,18 @@ void LECP::paintEvent(QPaintEvent *event){
 
 	painter.setBrush(QBrush(Qt::red));
 
-	if (flag){
-		LECP_Point point(currentPoint.x(), currentPoint.y());
-		bool add=lecp_doc->addPoint(point);
-		painter.drawEllipse(currentPoint.x(), currentPoint.x(), 6, 6);
+	painter.drawEllipse(currentPoint.x(), currentPoint.y(), 6, 6);
 
-		if (add){
-			
-			
-			//mesh->AddLine((double)currentPoint.x(), (double)currentPoint.y());
-		}
-		
-		QPainter painterTmp(this);
-		painterTmp.drawPixmap(0, 0, pix);
-	}
-	
-	
 }
 
 
 void LECP::mouseReleaseEvent(QMouseEvent *event){
-	if (event->button() == Qt::LeftButton){//鼠标左键按下
-		currentPoint = event->pos();
-		flag = true;
-		update();
+	if (event->button() == Qt::RightButton){//鼠标左键按下
+	currentPoint = event->pos();
+	update();
 	}
 }
-*/
+
 
 void LECP::mousePressEvent(QMouseEvent *event){
 	//flag = false;
@@ -89,11 +70,13 @@ void LECP::mousePressEvent(QMouseEvent *event){
 		}
 	}
 }
+*/
 
 void LECP::resizeEvent(QResizeEvent *event){
 }
 
 void  LECP::polarAngleSortSlot(){
+	lecp_doc->points = paintWidget->points;
 	//首先将输入的所有点按照从左到右的顺序排列
 	vector<LECP_Point> points = lecp_doc->points;
 	sort(points.begin(), points.end(), comparePoint);
@@ -102,7 +85,11 @@ void  LECP::polarAngleSortSlot(){
 		LECP_Point tmpPoint = points[i];
 		vector<LECP_Point> subV(points.begin() + i + 1, points.end());
 		list<LECP_Point> polarList = getPolarSort(tmpPoint, subV);
+
+		list<Vertex> polarVextexList = changeLECO_PointToVertex(polarList);
+
 		mesh->polarAngleSortedVector.push_back(polarList);
+		mesh->sortedVector.push_back(polarVextexList);
 	}
 }
 

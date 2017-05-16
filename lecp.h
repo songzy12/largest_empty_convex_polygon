@@ -24,9 +24,9 @@ private:
 	PaintWidget *paintWidget;
 protected:
 	//void paintEvent(QPaintEvent *event);
-	void mousePressEvent(QMouseEvent *event);
-	void resizeEvent(QResizeEvent *event);
 	//void mouseReleaseEvent(QMouseEvent *event);
+	void resizeEvent(QResizeEvent *event);
+	//void mousePressEvent(QMouseEvent *event);
 	//void mouseMoveEvent(QMouseEvent *event);
 
 	list<LECP_Point> getPolarSort(LECP_Point tmpPoint,vector<LECP_Point> subV);

@@ -15,6 +15,7 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
@@ -25,28 +26,38 @@ QT_BEGIN_NAMESPACE
 class Ui_LECPClass
 {
 public:
-    QMenuBar *menuBar;
-    QToolBar *mainToolBar;
+    QAction *polar_angle_sort;
     QWidget *centralWidget;
+    QMenuBar *menuBar;
+    QMenu *menu;
+    QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *LECPClass)
     {
         if (LECPClass->objectName().isEmpty())
             LECPClass->setObjectName(QStringLiteral("LECPClass"));
-        LECPClass->resize(600, 400);
-        menuBar = new QMenuBar(LECPClass);
-        menuBar->setObjectName(QStringLiteral("menuBar"));
-        LECPClass->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(LECPClass);
-        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
-        LECPClass->addToolBar(mainToolBar);
+        LECPClass->resize(995, 599);
+        polar_angle_sort = new QAction(LECPClass);
+        polar_angle_sort->setObjectName(QStringLiteral("polar_angle_sort"));
         centralWidget = new QWidget(LECPClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         LECPClass->setCentralWidget(centralWidget);
+        menuBar = new QMenuBar(LECPClass);
+        menuBar->setObjectName(QStringLiteral("menuBar"));
+        menuBar->setGeometry(QRect(0, 0, 995, 23));
+        menu = new QMenu(menuBar);
+        menu->setObjectName(QStringLiteral("menu"));
+        LECPClass->setMenuBar(menuBar);
+        mainToolBar = new QToolBar(LECPClass);
+        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
+        LECPClass->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(LECPClass);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         LECPClass->setStatusBar(statusBar);
+
+        menuBar->addAction(menu->menuAction());
+        menu->addAction(polar_angle_sort);
 
         retranslateUi(LECPClass);
 
@@ -56,6 +67,8 @@ public:
     void retranslateUi(QMainWindow *LECPClass)
     {
         LECPClass->setWindowTitle(QApplication::translate("LECPClass", "LECP", Q_NULLPTR));
+        polar_angle_sort->setText(QApplication::translate("LECPClass", "\346\236\201\350\247\222\346\216\222\345\272\217", Q_NULLPTR));
+        menu->setTitle(QApplication::translate("LECPClass", "\346\223\215\344\275\234", Q_NULLPTR));
     } // retranslateUi
 
 };
