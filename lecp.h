@@ -25,9 +25,9 @@ private:
 	PaintWidget *paintWidget;
 protected:
 	//void paintEvent(QPaintEvent *event);
-	void mousePressEvent(QMouseEvent *event);
-	void resizeEvent(QResizeEvent *event);
 	//void mouseReleaseEvent(QMouseEvent *event);
+	void resizeEvent(QResizeEvent *event);
+	//void mousePressEvent(QMouseEvent *event);
 	//void mouseMoveEvent(QMouseEvent *event);
 
 	list<LECP_Point> getPolarSort(LECP_Point tmpPoint,vector<LECP_Point> subV);
@@ -44,7 +44,7 @@ public:
 	LECP_Doc *lecp_doc;
 	Mesh *mesh;
 public slots:
-  void polarAngleSortSlot();//对于每个输入点，该点左侧的所有点按照关于该点进行极角排序
+	void polarAngleSortSlot();//对于每个输入点，该点左侧的所有点按照关于该点进行极角排序
 
 	void showVGSlot();
 

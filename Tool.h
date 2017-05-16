@@ -9,6 +9,9 @@ This file stores all of the public params and public configures.
 #include<DataStruct.h>
 #include<vector>
 #include<set>
+#include<list>
+#include<vertex.h>
+#include<DataStruct.h>
 using namespace std;
 
 #define WIN_WIDTH  1200
@@ -26,10 +29,12 @@ public:
 		windowHeight = WIN_HEIGHT;
 	}
 
-	bool addPoint(LECP_Point point);//return whether the point is added to the array successfully.
 	void removeRepeatPoints();//remove one of the same point to ensure every point in points is unique.
 };
 
 extern bool comparePoint(LECP_Point a, LECP_Point b);
+extern list<Vertex> changeLECO_PointToVertex(list<LECP_Point> points);
 
+//return whether the point is added to the array successfully.If point in points,return false;otherwise return true.
+extern bool addPoint(LECP_Point point,vector<LECP_Point> points);
 #endif

@@ -18,9 +18,9 @@ void visibility(Mesh* starPoly)
 {
 	starPoly->all_edges()->clear();// clear the vg of the mesh
 
-	for (int index = 0; index < starPoly->polarAngleSortedVector_vertex.size();index++){
+	for (int index = 0; index < starPoly->sortedVector.size(); index++){
 
-		list<Vertex> vertices = starPoly->polarAngleSortedVector_vertex.at(index);
+		list<Vertex> vertices = starPoly->sortedVector.at(index);
 		int N = vertices.size();
 
 		//clear the queue of every point
@@ -68,6 +68,7 @@ void VG_process(Vertex* i, Vertex* j, Mesh* starPoly,int index)
 	Qj->push_back(i);
 	return;
 }
+
 
 /*µ¥¸övertex list*/
 //Mesh* visibility(Mesh* starPoly)
@@ -117,3 +118,47 @@ void VG_process(Vertex* i, Vertex* j, Mesh* starPoly,int index)
 //		Qj->push_back(i);
 //	return;
 //}
+/* For each vertex in the VG, we have a list of incoming edges
+ * Also, the incoming edges have been sorted counterclock wise
+ */
+
+
+bool IsConvexTurn(HalfEdge *i, HalfEdge *o) {
+	return toLeft(i->origin(), i->target(), o->target());
+}
+
+int ConvexChainPoint(Vertex * p) {
+	vector<HalfEdge*> in_edges = p->incoming_edges();
+	vector<HalfEdge*> out_edges = p->outgoing_edges();
+	qDebug() << "in edge count:"<<in_edges.size() << "," << "out edge count:" << out_edges.size();
+	vector<HalfEdge*>::reverse_iterator it_i;
+	vector<HalfEdge*>::iterator it_o = out_edges.begin();
+
+	int m = 0;
+	for (it_i = in_edges.rbegin(); it_i != in_edges.rend(); it_i++) {
+		// we compute the L for incoming edge i.
+		qDebug() << "in point:" << (*it_i)->target()->point().first << "," << (*it_i)->target()->point().second;
+		if (it_o != out_edges.end()) {
+			qDebug() << "out point:" << (*it_o)->target()->point().first << "," << (*it_o)->target()->point().second;
+			qDebug() << IsConvexTurn(*it_i, *it_o) << (*it_o)->L() << endl;
+		}
+		while (it_o != out_edges.end() && IsConvexTurn(*it_i, *it_o)) {
+			m = max(m, (*it_o)->L());
+			it_o++;
+		}
+		qDebug() << "set L point:" << (*it_i)->target()->point().first << "," << (*it_i)->target()->point().second<<":"<<m+1;
+		(*it_i)->set_L(m + 1);
+	}
+	return m + 1;
+}
+
+int ConvexChainLength(vector<Vertex*> vertices) {
+	int max_len = 0;
+	for (size_t i = vertices.size() - 1; i > 0; --i) {
+		Vertex* p = vertices[i];
+		max_len = max(max_len, ConvexChainPoint(p));
+		qDebug() << "max_len for point" << p->point().first << "," << p->point().second << ":" << max_len << endl;
+	}
+	qDebug() << "max_len for all points:" << max_len << endl;
+	return max_len;
+}

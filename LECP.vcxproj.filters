@@ -71,12 +71,6 @@
     <ClCompile Include="vertex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Test\test.cpp">
-      <Filter>TEST</Filter>
-    </ClCompile>
-    <ClCompile Include="util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Paint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -114,10 +108,10 @@
     <ClInclude Include="vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="util.h">
+    <ClInclude Include="Paint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Paint.h">
+    <ClInclude Include="EdgeIterator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

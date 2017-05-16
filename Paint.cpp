@@ -7,35 +7,32 @@
 #include<vertex.h>
 #include<QtGui\qpainter.h>
 
-void PaintWidget::paintEvent(QPaintEvent *event){
-	QPainter painter(this);
-	painter.setBrush(Qt::red);
-
-	if (paintFlag){
-	
-		//painter.setPen(QPen(Qt::red, 5));
-		
-
-		list<LECP_Point*>::iterator tmpiterator = points.begin();
-		while (tmpiterator != points.end()){//一样的
-			LECP_Point *tmp = *tmpiterator++;
-			painter.drawEllipse(tmp->x, tmp->y, 6, 6);
-		}
-
-		paintFlag = false;
-	}
-	
-}
 
 PaintWidget::PaintWidget(int width, int height){
 	resize(width, height);
 	paintFlag = false;
-	//point = new LECP_Point();
-
-	//mesh = new Mesh();
 }
 
+//绘制points中所有点
+void PaintWidget::paintEvent(QPaintEvent *event){
+
+	if (paintFlag){
+		QPainter painter(this);
+		painter.setBrush(Qt::red);
+		vector<LECP_Point>::iterator tmpiterator = points.begin();
+		while (tmpiterator != points.end()){//一样的
+			LECP_Point tmp = *tmpiterator++;
+			painter.drawEllipse(tmp.x, tmp.y, 6, 6);
+		}
+
+		paintFlag = false;
+	}
+
+}
+
+
 void PaintWidget::paintPoint(double x, double y){
+	/*
 	LECP_Point *point = new LECP_Point();
 	point->x = x;
 	point->y = y;
@@ -43,9 +40,23 @@ void PaintWidget::paintPoint(double x, double y){
 	points.push_back(point);
 
 	update();
-
+*/
 	//mesh->AddLine(x, y);
 
+}
+
+extern bool addPoint(LECP_Point point, vector<LECP_Point> points);
+void PaintWidget::mousePressEvent(QMouseEvent *event){
+	QPoint p = event->pos();
+	LECP_Point point;
+	point.x = p.x();
+	point.y = p.y();
+
+	if (addPoint(point, points)){
+		paintFlag = true;
+		points.push_back(point);
+		update();
+	}
 }
 
 void PaintWidget::paintPoint(LECP_Point point_){
