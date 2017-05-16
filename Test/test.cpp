@@ -29,8 +29,6 @@ void toleft_test(){
 	}
 }
 
-
-
 void visibility_test()
 {
 	Mesh* starPoly = new Mesh();
@@ -66,9 +64,44 @@ void visibility_test()
 
 }
 
-//int main() {
-//    point_test();
-//	toleft_test();
-//	visibility_test();
-//    return 0;
-//}
+void convex_chain_test() 
+{
+    vector<Vertex *> vs;
+    
+    Vertex *p0 = new Vertex(); p0->set_point({ 0, 0 }); 
+	Vertex *p1 = new Vertex(); p1->set_point({ 1, 0 }); 
+	Vertex *p2 = new Vertex(); p2->set_point({ 1, 1 }); 
+	Vertex *p3 = new Vertex(); p3->set_point({ 2, 3 }); 
+	Vertex *p4 = new Vertex(); p4->set_point({ 0, 4 }); 
+    vs.push_back(p0);
+    vs.push_back(p1);
+    vs.push_back(p2);
+    vs.push_back(p3);
+    vs.push_back(p4);
+
+	HalfEdge *e12 = new HalfEdge(p1, p2);
+    p1->outgoing_edges_.push_back(e12);
+    p2->incoming_edges_.push_back(e12);
+
+	HalfEdge *e23 = new HalfEdge(p2, p3);
+    p2->outgoing_edges_.push_back(e23);
+    p3->incoming_edges_.push_back(e23);
+    
+	HalfEdge *e24 = new HalfEdge(p2, p4);
+    p2->outgoing_edges_.push_back(e24);
+    p4->incoming_edges_.push_back(e24);
+    
+	HalfEdge *e34 = new HalfEdge(p3, p4);
+    p3->outgoing_edges_.push_back(e34);
+    p4->incoming_edges_.push_back(e34);
+    
+    ConvexChainLength(vs);
+}
+
+/*int main() {
+    //point_test();
+	//toleft_test();
+	//visibility_test();
+	convex_chain_test();
+    return 0;
+}*/

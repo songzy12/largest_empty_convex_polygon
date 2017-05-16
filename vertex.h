@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <deque>
+#include <vector>
 using namespace std;
 
 class HalfEdge;
@@ -23,7 +24,13 @@ public:
 
 	int index() { return index_; }
 	void set_index(int index) { index_ = index; }
+	
+	vector<HalfEdge*> incoming_edges() { return incoming_edges_; }
+	vector<HalfEdge*> outgoing_edges() { return outgoing_edges_; }
 
+
+	vector<HalfEdge*> incoming_edges_; // only used for convex chain
+	vector<HalfEdge*> outgoing_edges_; // only used for convex chain
 private:
 	HalfEdge *half_edge_;//每个Vertex对应多个half_edge,选择一个作为origin
 	pair<double, double> point_;
