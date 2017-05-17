@@ -13,9 +13,9 @@ void point_test() {
 
 //only test left or right ; not test point on the line
 void toleft_test(){
-	Vertex *v1 = new Vertex(); v1->set_point({ 1, 1 });
-	Vertex *v2 = new Vertex(); v2->set_point({ 2, 3 });
-	Vertex *v3 = new Vertex(); v3->set_point({ 1, 3 });
+	Vertex *v1 = new Vertex(); v1->set_point({ 402, 548 });
+	Vertex *v2 = new Vertex(); v2->set_point({ 822, 511 });
+	Vertex *v3 = new Vertex(); v3->set_point({ 638, 246 });
 	Vertex *v4 = new Vertex(); v4->set_point({ 2, 2 });
 
 	bool res1 = toLeft(v1, v2, v3);
@@ -67,13 +67,13 @@ void visibility_test()
 	starPoly->AddVertex(p4);
 	starPoly->AddVertex(p5);
 
-	list<Vertex> list_temp;
-	list_temp.push_back(*p);
-	list_temp.push_back(*p1);
-	list_temp.push_back(*p2);
-	list_temp.push_back(*p3);
-	list_temp.push_back(*p4);
-	list_temp.push_back(*p5);
+	list<Vertex*> list_temp;
+	list_temp.push_back(p);
+	list_temp.push_back(p1);
+	list_temp.push_back(p2);
+	list_temp.push_back(p3);
+	list_temp.push_back(p4);
+	list_temp.push_back(p5);
 	starPoly->sortedVector.push_back(list_temp);
 
 	visibility(starPoly);
@@ -119,11 +119,11 @@ void convex_chain_test()
     
     ConvexChainLength(vs);
 }
-
-int main() {
-   // point_test();
-	//toleft_test();
-	visibility_test();
-	//convex_chain_test();
-    return 0;
-}
+//
+//int main() {
+//   // point_test();
+//	toleft_test();
+//	//visibility_test();
+//	//convex_chain_test();
+//    return 0;
+//}
