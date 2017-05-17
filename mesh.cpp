@@ -55,8 +55,16 @@ void Mesh::AddLine(double a, double b){
 
 	vertices_.push_back(v);
 	half_edges_.push_back(newHalf);
-
 	boundingBox.push_back(newHalf);
+	// end intersection with bouding box
+
+	/*
+	//沿着新产生的half_edge找到当前face中与直线y=ax-b有交点的half_edge
+	HalfEdge* nextHalfEdge = newHalf->next();
+	while (!intersaction(nextHalfEdge, a, b)){
+
+	}
+*/
 }
 
 //最外围的墙，no twins,翻不出去

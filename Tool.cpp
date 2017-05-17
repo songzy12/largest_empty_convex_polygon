@@ -2,6 +2,7 @@
 #include<DataStruct.h>
 #include<algorithm>
 #include<iostream>
+#include<half_edge.h>
 using namespace std;
 
 //按照横坐标从左向右排列
@@ -72,4 +73,9 @@ bool addPoint(LECP_Point point, vector<LECP_Point> points){
 		return true;
 	}
 	return false;
+}
+
+//判断half_edge与直线y=ax-b是否有交点，if intersect,return the Vertex,else return null
+Vertex* intersaction(HalfEdge *half_edge, double a, double b){
+	return NULL;
 }

@@ -38,4 +38,8 @@ extern list<Vertex*> changeLECO_PointToVertex(vector<LECP_Point> points);
 
 //return whether the point is added to the array successfully.If point in points,return false;otherwise return true.
 extern bool addPoint(LECP_Point point,vector<LECP_Point> points);
+
+//判断half_edge与直线y=ax-b是否有交点，if intersect,return the Vertex,else return null
+extern Vertex* intersaction(HalfEdge *half_edge, double a, double b);
+
 #endif

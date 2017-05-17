@@ -10,6 +10,7 @@ All painting operations  are executed by this file.
 #include <DataStruct.h>
 #include <list>
 #include <QtGui/qpainter.h>
+#include<mesh.h>
 using namespace std;
 
 class PaintWidget:public QWidget
@@ -19,6 +20,7 @@ private:
 	bool paintFlag;
 public:
 	vector<LECP_Point> points;
+	Mesh *mesh;
 public:
 	PaintWidget(){ paintFlag = false; }
 	PaintWidget(int width, int height);
@@ -32,6 +34,8 @@ public:
 	{ 
 		paintFlag = flag;
 	}
+	bool savePoints(char *filename);
+	void openFile(char *fileName);
 };
 
 #endif

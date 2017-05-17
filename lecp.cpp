@@ -3,7 +3,7 @@
 #include<QtGui/QMouseEvent>
 #include <qmessagebox.h>
 #include <qdebug.h>
-
+#include<qfiledialog.h>
 #include<DataStruct.h>
 #include<Tool.h>
 #include<iostream>
@@ -29,11 +29,13 @@ LECP::LECP(QWidget *parent)
 	paintWidget = new PaintWidget(width, height);
 	this->setCentralWidget(paintWidget);
 
-	QObject::connect(ui.polar_angle_sort, SIGNAL(triggered()), this, SLOT(polarAngleSortSlot()));
-	QObject::connect(ui.create_VG, SIGNAL(triggered()), this, SLOT(showVGSlot()));
 	lecp_doc = new LECP_Doc();
 
-	
+	QObject::connect(ui.polar_angle_sort, SIGNAL(triggered()), this, SLOT(polarAngleSortSlot()));
+	QObject::connect(ui.create_VG, SIGNAL(triggered()), this, SLOT(showVGSlot()));
+	QObject::connect(ui.saveFile, SIGNAL(triggered()), this, SLOT(saveFileSlot()));
+	QObject::connect(ui.openFile, SIGNAL(triggered()), this, SLOT(openFileSlot()));
+
 
 }
 
@@ -41,44 +43,6 @@ LECP::~LECP()
 {
 
 }
-
-/*
-void LECP::paintEvent(QPaintEvent *event){
-	QPainter painter(this);
-
-	QPen pen(qRgb(255, 0, 0));
-
-	painter.setPen(pen);
-
-	painter.setBrush(QBrush(Qt::red));
-
-	painter.drawEllipse(currentPoint.x(), currentPoint.y(), 6, 6);
-
-}
-
-
-void LECP::mouseReleaseEvent(QMouseEvent *event){
-	if (event->button() == Qt::RightButton){//鼠标左键按下
-	currentPoint = event->pos();
-	update();
-	}
-}
-
-
-void LECP::mousePressEvent(QMouseEvent *event){
-	//flag = false;
-	if (event->button() == Qt::LeftButton){//鼠标左键按下
-		currentPoint = event->pos();
-		LECP_Point point(currentPoint.x(), currentPoint.y());
-		bool add = lecp_doc->addPoint(point);
-		if (add){
-			paintWidget->setpaint(true);
-			paintWidget->paintPoint(currentPoint.x(), currentPoint.y());
-			mesh->AddLine((double)currentPoint.x(), (double)currentPoint.y());
-		}
-	}
-}
-*/
 
 void LECP::resizeEvent(QResizeEvent *event){
 }
@@ -99,7 +63,7 @@ bool compareVertex(Vertex* p, Vertex* q){
 	return false;
 }
 
-
+//极角排序
 void  LECP::polarAngleSortSlot(){
 	lecp_doc->points = paintWidget->points;
 	//首先将输入的所有点按照从左到右的顺序排列
@@ -128,7 +92,7 @@ bool comparePolar(const LECP_Point p, const LECP_Point q){
 	return false;
 }
 
-//极角从小到大排列
+//极角从小到大排列。暂时不用
 list<LECP_Point>  LECP::getPolarSort(LECP_Point tmpPoint, vector<LECP_Point> subV){
 	list<LECP_Point> reList;
 
@@ -156,4 +120,39 @@ void LECP::showVGSlot()
 			itor_edge++;
 		}
 	}
+}
+
+void LECP::saveFileSlot(){
+	QString saveFileName;
+	saveFileName = QFileDialog::getSaveFileName(this, tr("save file"));
+
+	if (!saveFileName.isNull())
+	{
+		char *str = (char *)malloc(255);
+		QByteArray ba = saveFileName.toLatin1();
+		strcpy(str, ba.data());
+		
+		bool re = paintWidget->savePoints(str);
+		if (re)
+		{
+			QMessageBox box;
+			box.about(paintWidget, "Success", "Save successfull!");
+			box.show();
+			paintWidget->setpaint(true);
+			paintWidget->update();
+		}
+	}
+}
+
+void LECP::openFileSlot(){
+	QDir dir;
+	QString fileName = QFileDialog::getOpenFileName(this, QString("Open File"), dir.absolutePath());
+	if (fileName.isEmpty()){
+		return;
+	}
+
+	QByteArray ba = fileName.toLocal8Bit();
+	char* fileName_str = ba.data();
+
+	paintWidget->openFile(fileName_str);
 }
