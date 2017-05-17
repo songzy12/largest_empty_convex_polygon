@@ -33,7 +33,8 @@ public:
 };
 
 extern bool comparePoint(LECP_Point a, LECP_Point b);
-extern list<Vertex> changeLECO_PointToVertex(list<LECP_Point> points);
+extern list<Vertex*> changeLECO_PointToVertex(list<LECP_Point> points);
+extern list<Vertex*> changeLECO_PointToVertex(vector<LECP_Point> points);
 
 //return whether the point is added to the array successfully.If point in points,return false;otherwise return true.
 extern bool addPoint(LECP_Point point,vector<LECP_Point> points);

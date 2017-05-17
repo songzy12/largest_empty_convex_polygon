@@ -29,23 +29,24 @@ void visibility(Mesh* starPoly)
 			//int N = vertices->size();
 			int N = starPoly->sortedVector.at(index).size();
 			//clear the queue of every point
-			list<Vertex>::iterator itor_vertex = starPoly->sortedVector.at(index).begin();
+			list<Vertex*>::iterator itor_vertex = starPoly->sortedVector.at(index).begin();
 			while (itor_vertex != starPoly->sortedVector.at(index).end())
 			{
-				//Vertex v1 = *itor_vertex;
-				itor_vertex->queue2store()->clear();
+				Vertex *v1 = *itor_vertex;
+				v1->queue2store()->clear();
+				//itor_vertex->queue2store()->clear();
 				itor_vertex++;
 			}
 
 			//do process for n-2 points
 			itor_vertex = starPoly->sortedVector.at(index).begin();
-			list<Vertex>::iterator itor_vertex_temp = itor_vertex++;
+			list<Vertex*>::iterator itor_vertex_temp = itor_vertex++;
 			for (int i = 1; i <= N - 2; i++)
 			{
 				itor_vertex_temp = itor_vertex++;
-				Vertex* v1 = &(*itor_vertex_temp);
+				Vertex* v1 = (*itor_vertex_temp);
 				itor_vertex_temp++;
-				Vertex* v2 = &(*itor_vertex_temp);
+				Vertex* v2 = (*itor_vertex_temp);
 				VG_process(v1, v2, starPoly, index);
 			}
 		}

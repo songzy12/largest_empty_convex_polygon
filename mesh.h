@@ -43,7 +43,7 @@ private:
 	//将屏幕上的点按照横坐标排序，求出每个点的右侧所有点相对于当前点的极角排序，存储为list,所有的点按横坐标存储为vector
 public:
 	vector<list<LECP_Point>> polarAngleSortedVector;
-	vector<list<Vertex>> sortedVector;
+	vector<list<Vertex*>> sortedVector;
 };
 
 #endif

@@ -83,21 +83,40 @@ void LECP::mousePressEvent(QMouseEvent *event){
 void LECP::resizeEvent(QResizeEvent *event){
 }
 
+Vertex* pole;
+bool compareVertex(Vertex* p, Vertex* q){
+	double px = p->point().first;
+	double py = p->point().second;
+	double sx = pole->point().first;
+	double sy = pole->point().second;
+	double qx = q->point().first;
+	double qy = q->point().second;
+
+
+	double area = px*qy - py*qx + qx*sy - qy*sx + sx*py - sy*px;
+	if (area < 0)
+		return true;
+	return false;
+}
+
+
 void  LECP::polarAngleSortSlot(){
 	lecp_doc->points = paintWidget->points;
 	//首先将输入的所有点按照从左到右的顺序排列
 	vector<LECP_Point> points = lecp_doc->points;
 	sort(points.begin(), points.end(), comparePoint);
+	list<Vertex*> polarVextex = changeLECO_PointToVertex(points);
 
-	for (long i = 0; i < points.size(); i++){
-		LECP_Point tmpPoint = points[i];
-		vector<LECP_Point> subV(points.begin() + i + 1, points.end());
-		list<LECP_Point> polarList = getPolarSort(tmpPoint, subV);
+	list<Vertex*>::iterator it = polarVextex.begin();
+	while (it != polarVextex.end()){
+		pole = *it;
 
-		list<Vertex> polarVextexList = changeLECO_PointToVertex(polarList);
+		list<Vertex*> subV(++it, polarVextex.end());
+		subV.sort(compareVertex);
+		
+		subV.push_front(pole);
 
-		mesh->polarAngleSortedVector.push_back(polarList);
-		mesh->sortedVector.push_back(polarVextexList);
+		mesh->sortedVector.push_back(subV);
 	}
 }
 
@@ -122,6 +141,7 @@ list<LECP_Point>  LECP::getPolarSort(LECP_Point tmpPoint, vector<LECP_Point> sub
 	return reList;
 }
 
+extern void visibility(Mesh* starPoly);
 void LECP::showVGSlot()
 {
 	QMessageBox::warning(this, tr("to show"), tr("show animation of VG!"));

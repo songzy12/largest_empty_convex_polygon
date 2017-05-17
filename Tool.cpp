@@ -23,8 +23,8 @@ void LECP_Doc::removeRepeatPoints(){
 	//earse(pos, points.end());
 }
 
-list<Vertex> changeLECO_PointToVertex(list<LECP_Point> points){
-	list<Vertex> re;
+list<Vertex*> changeLECO_PointToVertex(list<LECP_Point> points){
+	list<Vertex*> re;
 
 	list<LECP_Point>::iterator it = points.begin();
 	while (it != points.end()){
@@ -34,11 +34,29 @@ list<Vertex> changeLECO_PointToVertex(list<LECP_Point> points){
 		p.first = point.x;
 		p.second = point.y;
 		v->set_point(p);
-		re.push_back(*v);
+		re.push_back(v);
 	}
 
 	return re;
 }
+
+list<Vertex*> changeLECO_PointToVertex(vector<LECP_Point> points){
+	list<Vertex*> re;
+
+	for (long long i = 0; i < points.size(); i++){
+		LECP_Point point = points[i];
+		Vertex *v = new Vertex();
+		pair<double, double> p;
+		p.first = point.x;
+		p.second = point.y;
+		v->set_point(p);
+		v->set_index(i);
+		re.push_back(v);
+	}
+
+	return re;
+}
+
 
 bool addPoint(LECP_Point point, vector<LECP_Point> points){
 	vector<LECP_Point>::iterator it, it1;
