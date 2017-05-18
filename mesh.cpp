@@ -1,10 +1,9 @@
 #include "mesh.h"
 #include <cstdio>
-#include<list>
+#include <list>
 using namespace std;
 
 Mesh::Mesh() {
-	faces_ = list<Face*>();
 	half_edges_ = list<HalfEdge*>();
 	vertices_ = list<Vertex*>();
 
@@ -17,9 +16,6 @@ Mesh::~Mesh() {
 	clear();
 }
 void Mesh ::clear(){
-	for (Face *f : faces_)
-		delete f;
-	faces_.clear();
 	for (HalfEdge *e : half_edges_)
 		delete e;
 	half_edges_.clear();
@@ -46,7 +42,6 @@ void Mesh::AddLine(double a, double b){
 	Vertex *v = intersectWithBoundingBox(firstIntersect, a, b);
 	
 	HalfEdge* newHalf = new HalfEdge();
-	newHalf->set_face( firstIntersect->face());
 	newHalf->set_next (firstIntersect->next()); 
 	newHalf->set_origin( v);
 	newHalf->set_prev(firstIntersect);
@@ -69,8 +64,6 @@ void Mesh::AddLine(double a, double b){
 
 //最外围的墙，no twins,翻不出去
 void Mesh::init(){
-	// init face
-	Face *face = new Face();
 
 	//init four vertex, which are the four window points. 
 
@@ -101,19 +94,15 @@ void Mesh::init(){
 	// four half_edge
 	HalfEdge *h1 = new HalfEdge();
 	h1->set_origin(v1);
-	h1->set_face(face);
 
 	HalfEdge *h2 = new HalfEdge();
 	h2->set_origin(v2);
-	h2->set_face(face);
 
 	HalfEdge *h3 = new HalfEdge();
 	h3->set_origin(v3);
-	h3->set_face(face);
 
 	HalfEdge *h4 = new HalfEdge();
 	h4->set_origin(v4);
-	h4->set_face(face);
 
 	// set the half_edges of each vertex
 	v1->set_half_edge(h1);
@@ -133,12 +122,6 @@ void Mesh::init(){
 
 	h4->set_next(h1);
 	h4->set_prev(h3);
-
-	//set the left most point as the half edge of the face
-	face->set_half_edge(h1);
-
-	//add parameters to mesh
-	faces_.push_back(face);
 	
 	vertices_.push_back(v1);
 	vertices_.push_back(v2);
@@ -236,5 +219,10 @@ Vertex*  Mesh::intersectWithBoundingBox(HalfEdge* tmp, double a, double b){
 		}
 	}
 
+	return NULL;
+}
+
+//判断half_edge与直线y=ax-b是否有交点，if intersect,return the Vertex,else return null
+Vertex* intersaction(HalfEdge *half_edge, double a, double b){
 	return NULL;
 }

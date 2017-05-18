@@ -5,18 +5,17 @@
 #include "util.h"
 
 void point_test() {
-	Vertex *v = new Vertex();
-	v->set_point({ 1, 2 });
+	Vertex *v = new Vertex({ 1, 2 });
 	printf("%lf\n", v->point().first);
 	return;
 }
 
 //only test left or right ; not test point on the line
 void toleft_test(){
-	Vertex *v1 = new Vertex(); v1->set_point({ 402, 548 });
-	Vertex *v2 = new Vertex(); v2->set_point({ 822, 511 });
-	Vertex *v3 = new Vertex(); v3->set_point({ 638, 246 });
-	Vertex *v4 = new Vertex(); v4->set_point({ 2, 2 });
+	Vertex *v1 = new Vertex({ 402, 548 }); 
+	Vertex *v2 = new Vertex({ 822, 511 }); 
+	Vertex *v3 = new Vertex({ 638, 246 }); 
+	Vertex *v4 = new Vertex({ 2, 2 }); 
 
 	bool res1 = toLeft(v1, v2, v3);
 	bool res2 = toLeft(v1, v2, v4);
@@ -31,70 +30,37 @@ void toleft_test(){
 
 void visibility_test()
 {
-	Mesh* starPoly = new Mesh();
-	starPoly->clear();
-	//vector<Vertex *> points(6,new Vertex());
-	//vector<pair<double, double>> points_data = { { 0, 4 }, { 1, 1 }, { 3, 2 }, { 5, 3 }, { 4, 5 }, { 2, 6 } };
-	//for (int i = 0; i < 6; i++)
-	//{
-	//	points.at(i)->set_point(points_data.at(i));
-	//	starPoly->AddVertex(points.at(i));
-	//}
+	vector<Vertex *> vertices;
+	vertices.push_back(new Vertex({ 0, 3 }, 0));
+	vertices.push_back(new Vertex({ 1, 1 }, 1));
+	vertices.push_back(new Vertex({ 2, 2 }, 2));
+	vertices.push_back(new Vertex({ 7, 0 }, 3));
+	vertices.push_back(new Vertex({ 6, 4 }, 4));
+	vertices.push_back(new Vertex({ 8, 6 }, 5));
+	Polygon * polygon = new Polygon(vertices);
 
-	/*Vertex *p = new Vertex(); p->set_point({ 0, 3 }); p->set_index(0);
-	Vertex *p1 = new Vertex(); p1->set_point({ 1, 1 }); p1->set_index(1);
-	Vertex *p2 = new Vertex(); p2->set_point({ 2, 2 }); p2->set_index(2);
-	Vertex *p3 = new Vertex(); p3->set_point({ 7, 0 }); p3->set_index(3);
-	Vertex *p4 = new Vertex(); p4->set_point({ 6, 4 }); p4->set_index(4);
-	Vertex *p5 = new Vertex(); p5->set_point({ 8, 6 }); p5->set_index(5);
-	starPoly->AddVertex(p);
-	starPoly->AddVertex(p1);
-	starPoly->AddVertex(p2);
-	starPoly->AddVertex(p3);
-	starPoly->AddVertex(p4);
-	starPoly->AddVertex(p5);*/
-
-	Vertex *p = new Vertex(); p->set_point({ 0, 3 }); p->set_index(0);
-	Vertex *p1 = new Vertex(); p1->set_point({ 1, 1 }); p1->set_index(1);
-	Vertex *p2 = new Vertex(); p2->set_point({ 2, 2 }); p2->set_index(2);
-	Vertex *p3 = new Vertex(); p3->set_point({ 7, 0 }); p3->set_index(3);
-	Vertex *p4 = new Vertex(); p4->set_point({ 6, 4 }); p4->set_index(4);
-	Vertex *p5 = new Vertex(); p5->set_point({ 8, 6 }); p5->set_index(5);
-	starPoly->AddVertex(p);
-	starPoly->AddVertex(p1);
-	starPoly->AddVertex(p2);
-	starPoly->AddVertex(p3);
-	starPoly->AddVertex(p4);
-	starPoly->AddVertex(p5);
-
-	list<Vertex*> list_temp;
-	list_temp.push_back(p);
-	list_temp.push_back(p1);
-	list_temp.push_back(p2);
-	list_temp.push_back(p3);
-	list_temp.push_back(p4);
-	list_temp.push_back(p5);
-	starPoly->sortedVector.push_back(list_temp);
-
-	visibility(starPoly);
-	list<pair<Vertex*, Vertex*>>::iterator itor_edge = starPoly->all_edges()->at(0).begin();
-	while (itor_edge != starPoly->all_edges()->at(0).end())
-	{
-		qDebug() << itor_edge->first->index() << "->" << itor_edge->second->index();
-		itor_edge++;
+	vector<Vertex*> visibility_graph = polygon->getVisibilityGraph(); 
+	
+	vector<Vertex*>::iterator it = visibility_graph.begin();
+	for (; it != visibility_graph.end(); ++it) {
+		qDebug() << "Vertex with index " << (*it)->index() << ":";
+		vector<HalfEdge*> incoming_edges = (*it)->incoming_edges_;
+		vector<HalfEdge*>::iterator it_e = incoming_edges.begin();
+		for (; it_e != incoming_edges.end(); ++it_e) {
+			qDebug() << (*it_e)->origin()->index() << "->" << (*it_e)->target()->index();
+		}
 	}
-
 }
 
 void convex_chain_test() 
 {
     vector<Vertex *> vs;
     
-    Vertex *p0 = new Vertex(); p0->set_point({ 0, 0 }); 
-	Vertex *p1 = new Vertex(); p1->set_point({ 1, 0 }); 
-	Vertex *p2 = new Vertex(); p2->set_point({ 1, 1 }); 
-	Vertex *p3 = new Vertex(); p3->set_point({ 2, 3 }); 
-	Vertex *p4 = new Vertex(); p4->set_point({ 0, 4 }); 
+	Vertex *p0 = new Vertex({ 0, 0 }, 0);
+	Vertex *p1 = new Vertex({ 1, 0 }, 1);
+	Vertex *p2 = new Vertex({ 1, 1 }, 2);
+	Vertex *p3 = new Vertex({ 2, 3 }, 3);
+	Vertex *p4 = new Vertex({ 0, 4 }, 4);
     vs.push_back(p0);
     vs.push_back(p1);
     vs.push_back(p2);
@@ -117,13 +83,14 @@ void convex_chain_test()
     p3->outgoing_edges_.push_back(e34);
     p4->incoming_edges_.push_back(e34);
     
-    ConvexChainLength(vs);
+	Polygon *polygon = new Polygon(vs);
+	vector<Vertex*> convex_chain = polygon->getConvexChain();
+
+	for (size_t i = 0; i < convex_chain.size(); ++i) {
+		qDebug() << convex_chain[i]->index();
+	}
 }
-//
-//int main() {
-//   // point_test();
-//	toleft_test();
-//	//visibility_test();
-//	//convex_chain_test();
-//    return 0;
-//}
+
+int main() {
+	convex_chain_test();
+}

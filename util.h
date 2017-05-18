@@ -1,20 +1,10 @@
-#ifndef UTIL_H
-#define UTIL_H
+#include "vertex.h"
 #include "half_edge.h"
-#include "mesh.h"
+//按照横坐标从左向右排列
+bool comparePoint(Vertex* a, Vertex* b);
 
 /*toLeft test
 direct line i->j, test point k*/
 bool toLeft(Vertex* i, Vertex* j, Vertex* k);
 bool toLeft(pair<double, double> i, pair<double, double> j, pair<double, double> k);
-
-/*create visibility graph
-starPoly:	star-shaped Polygon with points ordered by angle*/
-void visibility(Mesh* starPoly);
-
-/*process bewteen vertex i&j (counterclockwise order:i->j)
-in creating visibility graph*/
-void VG_process(Vertex* i, Vertex* j, Mesh* starPoly,int index);
-
-int ConvexChainLength(vector<Vertex*> vertices);
-#endif
+bool isConvexTurn(HalfEdge *i, HalfEdge *o);

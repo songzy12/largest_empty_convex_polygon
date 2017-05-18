@@ -1,17 +1,13 @@
 #include "lecp.h"
-#include<QtGui/QPen>
-#include<QtGui/QMouseEvent>
+#include <QtGui/QPen>
+#include <QtGui/QMouseEvent>
 #include <qmessagebox.h>
 #include <qdebug.h>
-#include<qfiledialog.h>
-#include<DataStruct.h>
-#include<Tool.h>
-#include<iostream>
-#include<vertex.h>
+#include <qfiledialog.h>
+#include <iostream>
+#include <vertex.h>
 #include <util.h>
 using namespace std;
-
-extern bool comparePoint(LECP_Point a, LECP_Point b);
 
 LECP::LECP(QWidget *parent)
 	: QMainWindow(parent)
@@ -25,18 +21,13 @@ LECP::LECP(QWidget *parent)
 	int width = this->width();
 	int height = this->height();
 
-	mesh = new Mesh();
-	paintWidget = new PaintWidget(width, height);
+	paintWidget = new PaintWidget(width, height, lecp_doc);
 	this->setCentralWidget(paintWidget);
 
-	lecp_doc = new LECP_Doc();
-
 	QObject::connect(ui.polar_angle_sort, SIGNAL(triggered()), this, SLOT(polarAngleSortSlot()));
-	QObject::connect(ui.create_VG, SIGNAL(triggered()), this, SLOT(showVGSlot()));
+	QObject::connect(ui.create_VG, SIGNAL(triggered()), this, SLOT(showVisibilityGraphSlot()));
 	QObject::connect(ui.saveFile, SIGNAL(triggered()), this, SLOT(saveFileSlot()));
 	QObject::connect(ui.openFile, SIGNAL(triggered()), this, SLOT(openFileSlot()));
-
-
 }
 
 LECP::~LECP()
@@ -45,84 +36,52 @@ LECP::~LECP()
 }
 
 void LECP::resizeEvent(QResizeEvent *event){
-}
 
-Vertex* pole;
-bool compareVertex(Vertex* p, Vertex* q){
-	double px = p->point().first;
-	double py = p->point().second;
-	double sx = pole->point().first;
-	double sy = pole->point().second;
-	double qx = q->point().first;
-	double qy = q->point().second;
-
-
-	double area = px*qy - py*qx + qx*sy - qy*sx + sx*py - sy*px;
-	if (area < 0)
-		return true;
-	return false;
 }
 
 //极角排序
-void  LECP::polarAngleSortSlot(){
-	lecp_doc->points = paintWidget->points;
+void LECP::polarAngleSortSlot() {
+
 	//首先将输入的所有点按照从左到右的顺序排列
-	vector<LECP_Point> points = lecp_doc->points;
-	sort(points.begin(), points.end(), comparePoint);
-	list<Vertex*> polarVextex = changeLECO_PointToVertex(points);
+	vector<Vertex*> vertices = lecp_doc->sortVerticesOnX();
+	qDebug() << "Total vertice count:" << vertices.size();
+	vector<vector<Vertex*>> star_polygons = lecp_doc->getStarPolygons();
 
-	list<Vertex*>::iterator it = polarVextex.begin();
-	while (it != polarVextex.end()){
-		pole = *it;
-
-		list<Vertex*> subV(++it, polarVextex.end());
-		subV.sort(compareVertex);
+	for (int i = 0; i < star_polygons.size(); ++i) {
+		qDebug() << "Star Polygon " << i << ":";
+		vector<Vertex*> star_polygon = star_polygons[i];
+		vector<Vertex*>::iterator it = star_polygon.begin();
 		
-		subV.push_front(pole);
-
-		mesh->sortedVector.push_back(subV);
-	}
-}
-
-LECP_Point s;
-bool comparePolar(const LECP_Point p, const LECP_Point q){
-	double area = p.x*q.y - p.y*q.x + q.x*s.y - q.y*s.x + s.x*p.y - s.y*p.x;
-	if (area < 0)
-		return true;
-	return false;
-}
-
-//极角从小到大排列。暂时不用
-list<LECP_Point>  LECP::getPolarSort(LECP_Point tmpPoint, vector<LECP_Point> subV){
-	list<LECP_Point> reList;
-
-	s = tmpPoint;
-	//to left test进行极角排序
-	sort(subV.begin(), subV.end(), comparePolar);
-
-	std::copy(subV.begin(), subV.end(), std::back_inserter(reList));
-
-	return reList;
-}
-
-extern void visibility(Mesh* starPoly);
-void LECP::showVGSlot()
-{
-	QMessageBox::warning(this, tr("to show"), tr("show animation of VG!"));
-
-	visibility(mesh);
-	for (int i = 0; i < mesh->sortedVector.size(); i++){
-		qDebug() << " for point" << i << ":";
-		list<pair<Vertex*, Vertex*>>::iterator itor_edge = mesh->all_edges()->at(i).begin();
-		while (itor_edge != mesh->all_edges()->at(i).end())
-		{
-			qDebug() << itor_edge->first->index() << "->" << itor_edge->second->index();
-			itor_edge++;
+		for (; it != star_polygon.end(); ++it) {
+			qDebug() << "Vertex" << (*it)->index() << ":" << (*it)->point().first << "," << (*it)->point().second;
 		}
+		break;
 	}
 }
 
-void LECP::saveFileSlot(){
+void LECP::showVisibilityGraphSlot()
+{
+	//QMessageBox::warning(this, tr("to show"), tr("show animation of VG!"));
+	vector<vector<Vertex*>> visibility_graphs = lecp_doc->getVisibilityGraphs();
+
+	for (int i = 0; i < visibility_graphs.size(); i++){
+		qDebug() << "Visibility Graph " << i << ":";
+		vector<Vertex*> visibility_graph = visibility_graphs[i];
+
+		vector<Vertex*>::iterator it = visibility_graph.begin();
+		for (; it != visibility_graph.end(); ++it) {
+			qDebug() << "Vertex with index " << (*it)->index() << ":";
+			vector<HalfEdge*> incoming_edges = (*it)->incoming_edges_;
+			vector<HalfEdge*>::iterator it_e = incoming_edges.begin();
+			for (; it_e != incoming_edges.end(); ++it_e) {
+				qDebug() << (*it_e)->origin()->index() << "->" << (*it_e)->target()->index();
+			}
+		}
+		break;
+	}
+}
+
+void LECP::saveFileSlot() {
 	QString saveFileName;
 	saveFileName = QFileDialog::getSaveFileName(this, tr("save file"));
 
@@ -138,13 +97,12 @@ void LECP::saveFileSlot(){
 			QMessageBox box;
 			box.about(paintWidget, "Success", "Save successfull!");
 			box.show();
-			paintWidget->setpaint(true);
 			paintWidget->update();
 		}
 	}
 }
 
-void LECP::openFileSlot(){
+void LECP::openFileSlot() {
 	QDir dir;
 	QString fileName = QFileDialog::getOpenFileName(this, QString("Open File"), dir.absolutePath());
 	if (fileName.isEmpty()){
@@ -154,5 +112,5 @@ void LECP::openFileSlot(){
 	QByteArray ba = fileName.toLocal8Bit();
 	char* fileName_str = ba.data();
 
-	paintWidget->openFile(fileName_str);
+	paintWidget->loadPoints(fileName_str);
 }

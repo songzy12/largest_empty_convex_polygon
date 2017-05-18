@@ -1,79 +1,43 @@
 #include "Paint.h"
-#include<QtGui/QPen>
-#include<QtGui/QMouseEvent>
-#include<DataStruct.h>
-#include<Tool.h>
-#include<iostream>
-#include<vertex.h>
-#include<QtGui\qpainter.h>
+#include <QtGui/QPen>
+#include <QtGui/QMouseEvent>
+#include <iostream>
+#include <vertex.h>
+#include <QtGui\qpainter.h>
 #include <iomanip>
 #include <fstream>
-#include<QMessageBox>
+#include <QMessageBox>
 #include <string>
-#include <iostream>
 #include <vector>
 using namespace std;
 
-PaintWidget::PaintWidget(int width, int height){
-	resize(width, height);
-	paintFlag = false;
+PaintWidget::PaintWidget() {
 
-	mesh = new Mesh();
+}
+
+PaintWidget::PaintWidget(int width, int height, LECP_Doc *lecp_doc){
+	lecp_doc_ = lecp_doc;
+	resize(width, height);
+}
+
+PaintWidget::~PaintWidget() {
+
 }
 
 //绘制points中所有点
 void PaintWidget::paintEvent(QPaintEvent *event){
-
-	//if (paintFlag){
-		QPainter painter(this);
-		painter.setBrush(Qt::red);
-		vector<LECP_Point>::iterator tmpiterator = points.begin();
-		while (tmpiterator != points.end()){//一样的
-			LECP_Point tmp = *tmpiterator++;
-			painter.drawEllipse(tmp.x, tmp.y, 6, 6);
-		}
-
-		paintFlag = false;
-	//}
-
-}
-
-
-void PaintWidget::paintPoint(double x, double y){
-	/*
-	LECP_Point *point = new LECP_Point();
-	point->x = x;
-	point->y = y;
-
-	points.push_back(point);
-
-	update();
-*/
-	//mesh->AddLine(x, y);
-
-}
-
-extern bool addPoint(LECP_Point point, vector<LECP_Point> points);
-void PaintWidget::mousePressEvent(QMouseEvent *event){
-	QPoint p = event->pos();
-	LECP_Point point;
-	point.x = p.x();
-	point.y = p.y();
-
-	if (addPoint(point, points)){
-		paintFlag = true;
-		points.push_back(point);
-
-		//change DCEL
-		mesh->AddLine(point.x, point.y);
-
-		update();
+	QPainter painter(this);
+	painter.setBrush(Qt::red);
+	vector<Vertex*>::iterator it = lecp_doc_->vertices_.begin();
+	while (it != lecp_doc_->vertices_.end()){
+		paintPoint(*it);
+		it++;
 	}
 }
 
-void PaintWidget::paintPoint(LECP_Point point_){
-	//point->x = point_.x;
-	//point->y = point_.y;
+void PaintWidget::mousePressEvent(QMouseEvent *event){
+	QPoint p = event->pos();
+	lecp_doc_->addPoint(p.x(), p.y());
 	update();
 }
 
@@ -87,11 +51,11 @@ bool PaintWidget::savePoints(char *filename){
 		return false;
 	}
 
-	outFile << points.size() << endl;
+	outFile << lecp_doc_->vertices_.size() << endl;
 
-	for (long long i = 0; i < points.size(); i++){
-		LECP_Point point = points[i];
-		outFile << point.x << " " << point.y << endl;
+	for (long long i = 0; i < lecp_doc_->vertices_.size(); i++){
+		Vertex* point = lecp_doc_->vertices_[i];
+		outFile << point->point().first << " " << point->point().second << endl;
 	}
 
 	outFile.close();
@@ -99,7 +63,7 @@ bool PaintWidget::savePoints(char *filename){
 	return true;
 }
 
-void PaintWidget::openFile(char *fileName){
+void PaintWidget::loadPoints(char *fileName){
 	ifstream in(fileName);
 
 	if (!in){
@@ -116,7 +80,7 @@ void PaintWidget::openFile(char *fileName){
 	in.getline(buffer, 10);
 	int size = atoi(buffer);
 
-	for (int i = 0; i < size; i++){
+	for (int i = 0; i < size; i++) {
 		in.getline(buffer, 10);
 		char *cx = strtok(buffer, " ");
 		x = atof(cx);
@@ -125,13 +89,15 @@ void PaintWidget::openFile(char *fileName){
 
 		y = atof(cy);
 
-		LECP_Point point;
-		point.setX(x);
-		point.setY(y);
-		points.push_back(point);
+		lecp_doc_->addPoint(x, y);
 	}
 
-	paintFlag = true;
 	update();
+}
 
+void PaintWidget::paintPoint(Vertex* point_){
+	QPainter painter(this);
+	painter.setBrush(Qt::red);
+	painter.drawEllipse(point_->point().first, point_->point().second, 6, 6);
+	update();
 }
