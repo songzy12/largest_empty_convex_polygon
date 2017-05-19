@@ -6,13 +6,21 @@
 #include <iterator> 
 
 Polygon::Polygon() {
-	vertices_.clear();
+	
 }
+
 
 Polygon::Polygon(vector<Vertex*> vertices) {
 	vertices_ = vertices;
 	if (vertices_.size() > 0)
 		kernel_ = vertices_[0];
+}
+
+Polygon::Polygon(vector<Vertex*> vertices, PaintWidget* paint_widget) {
+	vertices_ = vertices;
+	if (vertices_.size() > 0)
+		kernel_ = vertices_[0];
+	paint_widget_ = paint_widget;
 }
 
 Polygon::~Polygon() {

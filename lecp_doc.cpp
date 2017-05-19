@@ -12,31 +12,8 @@ LECP_Doc::~LECP_Doc() {
 
 }
 
-// origin in lecp_doc
-
-bool LECP_Doc::addPoint(double x, double y) {
-	vector<Vertex*>::iterator it;
-
-	Vertex *point = new Vertex(x, y, vertices_.size());
-	it = find(vertices_.begin(), vertices_.end(), point);
-
-	if (it == vertices_.end())	{
-		qDebug() << "vertex" << vertices_.size() << ":" << point->point().first << "," << point->point().second;
-		vertices_.push_back(point);
-		return true;
-	}
-	else {
-		delete point;
-	}
-	return false;
-}
-
-void LECP_Doc::removeRepeatPoints() {
-	sort(vertices_.begin(), vertices_.end(), comparePoint);
-	vertices_.erase(unique(vertices_.begin(), vertices_.end()), vertices_.end());
-}
-
 vector<Vertex*> LECP_Doc::sortVerticesOnX() {
+	vertices_ = paint_widget_->vertices_;
 	sort(vertices_.begin(), vertices_.end(), comparePoint);
 	return vertices_;
 }
@@ -47,7 +24,7 @@ vector<vector<Vertex*>> LECP_Doc::getStarPolygons() {
 	vector<Vertex*>::iterator it = vertices_.begin();
 	while (it != vertices_.end()) {
 		vector<Vertex*> vertices(it, vertices_.end());
-		Polygon* polygon = new Polygon(vertices); // TODO: need to be new vertex
+		Polygon* polygon = new Polygon(vertices, paint_widget_); // TODO: need to be new vertex
 		polygons_.push_back(polygon);
 		star_polygons_.push_back(polygon->getStarPolygon());
 		it++;

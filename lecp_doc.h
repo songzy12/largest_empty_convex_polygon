@@ -1,7 +1,7 @@
-#include "polygon.h"
-
 #define WIN_WIDTH  1200
 #define WIN_HEIGHT 800
+#include "polygon.h"
+#include "paint.h"
 
 class LECP_Doc{
 public:
@@ -11,10 +11,9 @@ public:
 	int windowWidth;
 	int windowHeight;
 
-	bool addPoint(double x, double y);
-	void removeRepeatPoints(); //remove one of the same point to ensure every point in points is unique.
+	void set_paint_widget(PaintWidget* paint_widget) { paint_widget_ = paint_widget; }
 
-	vector<Vertex*> vertices_; //all of the points user input
+	vector<Vertex*> vertices_;
 
 	vector<Vertex*> sortVerticesOnX();
 
@@ -26,4 +25,7 @@ public:
 	vector<vector<Vertex*>> star_polygons_;
 	vector<vector<Vertex*>> visibility_graphs_;
 	vector<vector<Vertex*>> convex_chains_;
+
+private:
+	PaintWidget *paint_widget_;
 };

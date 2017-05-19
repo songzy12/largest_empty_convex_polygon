@@ -5,18 +5,18 @@ All painting operations  are executed by this file.
 #ifndef PAINT_H
 #define PAINT_H
 
-#include "lecp_doc.h"
+#include "vertex.h"
+#include "half_edge.h"
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets\qwidget.h>
 #include <QtGui/qpainter.h>
-#include <list>
 
 class PaintWidget:public QWidget
 {
 public:
 	PaintWidget();
 	~PaintWidget();
-	PaintWidget(int width, int height, LECP_Doc *lecp_doc);
+	PaintWidget(int width, int height);
 protected:
 	void paintEvent(QPaintEvent *event);
 	void mousePressEvent(QMouseEvent *event);
@@ -26,7 +26,10 @@ public:
 	void paintPoint(Vertex* point);
 	void paintEdge(HalfEdge* edge);
 
-	LECP_Doc* lecp_doc_;
+	bool addPoint(double x, double y);
+	void removeRepeatPoints(); //remove one of the same point to ensure every point in points is unique.
+
+	vector<Vertex*> vertices_; //all of the points user input
 };
 
 #endif

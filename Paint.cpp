@@ -1,22 +1,24 @@
 #include "Paint.h"
+#include "util.h"
 #include <QtGui/QPen>
 #include <QtGui/QMouseEvent>
-#include <iostream>
-#include <vertex.h>
 #include <QtGui\qpainter.h>
-#include <iomanip>
-#include <fstream>
 #include <QMessageBox>
+#include "qdebug.h"
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
+#include <vertex.h>
 using namespace std;
 
 PaintWidget::PaintWidget() {
 
 }
 
-PaintWidget::PaintWidget(int width, int height, LECP_Doc *lecp_doc){
-	lecp_doc_ = lecp_doc;
+PaintWidget::PaintWidget(int width, int height) {
 	resize(width, height);
 }
 
@@ -28,8 +30,8 @@ PaintWidget::~PaintWidget() {
 void PaintWidget::paintEvent(QPaintEvent *event){
 	QPainter painter(this);
 	painter.setBrush(Qt::red);
-	vector<Vertex*>::iterator it = lecp_doc_->vertices_.begin();
-	while (it != lecp_doc_->vertices_.end()){
+	vector<Vertex*>::iterator it = vertices_.begin();
+	while (it != vertices_.end()){
 		paintPoint(*it);
 		it++;
 	}
@@ -37,8 +39,32 @@ void PaintWidget::paintEvent(QPaintEvent *event){
 
 void PaintWidget::mousePressEvent(QMouseEvent *event){
 	QPoint p = event->pos();
-	lecp_doc_->addPoint(p.x(), p.y());
+	addPoint(p.x(), p.y());
 	update();
+}
+
+// origin in lecp_doc
+
+bool PaintWidget::addPoint(double x, double y) {
+	Vertex *point = new Vertex(x, y, vertices_.size());
+
+	vector<Vertex*>::iterator it = std::find(vertices_.begin(), vertices_.end(), point);
+
+	if (it == vertices_.end())	{
+		qDebug() << "vertex" << vertices_.size() << ":" << point->point().first << "," << point->point().second;
+		vertices_.push_back(point);
+		//paintPoint(point);
+		return true;
+	}
+	else {
+		delete point;
+	}
+	return false;
+}
+
+void PaintWidget::removeRepeatPoints() {
+	sort(vertices_.begin(), vertices_.end(), comparePoint);
+	vertices_.erase(unique(vertices_.begin(), vertices_.end()), vertices_.end());
 }
 
 bool PaintWidget::savePoints(char *filename){
@@ -51,10 +77,10 @@ bool PaintWidget::savePoints(char *filename){
 		return false;
 	}
 
-	outFile << lecp_doc_->vertices_.size() << endl;
+	outFile << vertices_.size() << endl;
 
-	for (long long i = 0; i < lecp_doc_->vertices_.size(); i++){
-		Vertex* point = lecp_doc_->vertices_[i];
+	for (long long i = 0; i < vertices_.size(); i++){
+		Vertex* point = vertices_[i];
 		outFile << point->point().first << " " << point->point().second << endl;
 	}
 
@@ -79,7 +105,7 @@ void PaintWidget::loadPoints(char *fileName){
 
 	in.getline(buffer, 10);
 	int size = atoi(buffer);
-
+	// TODO: whether to clear vertices_ first?
 	for (int i = 0; i < size; i++) {
 		in.getline(buffer, 10);
 		char *cx = strtok(buffer, " ");
@@ -89,7 +115,7 @@ void PaintWidget::loadPoints(char *fileName){
 
 		y = atof(cy);
 
-		lecp_doc_->addPoint(x, y);
+		addPoint(x, y);
 	}
 
 	update();
@@ -99,5 +125,14 @@ void PaintWidget::paintPoint(Vertex* point_){
 	QPainter painter(this);
 	painter.setBrush(Qt::red);
 	painter.drawEllipse(point_->point().first, point_->point().second, 6, 6);
+	painter.drawText(point_->point().first, point_->point().second, QString::number(point_->index()));
+	update();
+}
+
+void PaintWidget::paintEdge(HalfEdge* edge_) {
+	QPainter painter(this);
+	painter.setBrush(Qt::blue);
+	painter.drawLine(edge_->origin()->point().first, edge_->origin()->point().second, 
+					 edge_->target()->point().first, edge_->target()->point().second);
 	update();
 }

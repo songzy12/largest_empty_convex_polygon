@@ -91,6 +91,6 @@ void convex_chain_test()
 	}
 }
 
-int main() {
-	convex_chain_test();
-}
+//int main() {
+//	convex_chain_test();
+//}

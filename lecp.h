@@ -5,7 +5,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPen>
 #include "ui_lecp.h"
-#include "paint.h"
+#include "lecp_doc.h"
 
 class LECP : public QMainWindow
 {

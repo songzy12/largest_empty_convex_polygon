@@ -7,7 +7,6 @@
 using namespace std;
 
 class HalfEdge;
-
 class Vertex
 {
 public:

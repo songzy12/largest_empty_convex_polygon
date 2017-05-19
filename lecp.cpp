@@ -21,8 +21,9 @@ LECP::LECP(QWidget *parent)
 	int width = this->width();
 	int height = this->height();
 
-	paintWidget = new PaintWidget(width, height, lecp_doc);
+	paintWidget = new PaintWidget(width, height);
 	this->setCentralWidget(paintWidget);
+	lecp_doc->set_paint_widget(paintWidget);
 
 	QObject::connect(ui.polar_angle_sort, SIGNAL(triggered()), this, SLOT(polarAngleSortSlot()));
 	QObject::connect(ui.create_VG, SIGNAL(triggered()), this, SLOT(showVisibilityGraphSlot()));
@@ -55,7 +56,7 @@ void LECP::polarAngleSortSlot() {
 		for (; it != star_polygon.end(); ++it) {
 			qDebug() << "Vertex" << (*it)->index() << ":" << (*it)->point().first << "," << (*it)->point().second;
 		}
-		break;
+		break; // TODO: delete this line
 	}
 }
 
@@ -77,7 +78,7 @@ void LECP::showVisibilityGraphSlot()
 				qDebug() << (*it_e)->origin()->index() << "->" << (*it_e)->target()->index();
 			}
 		}
-		break;
+		break; // TODO: delete this line
 	}
 }
 

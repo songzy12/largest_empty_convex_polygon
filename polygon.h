@@ -1,9 +1,11 @@
 #include "vertex.h"
 
+class PaintWidget;
 class Polygon {
 public:
 	Polygon();
 	Polygon(vector<Vertex*> vertices);
+	Polygon(vector<Vertex*> vertices, PaintWidget* paint_widget);
 	~Polygon();
 
 	vector<Vertex*> getStarPolygon();
@@ -16,4 +18,6 @@ private:
 	vector<Vertex *> vertices_;	
 	Vertex* kernel_; // which is vertices[0]
 	bool comparePolar(Vertex* p, Vertex* q);
+
+	PaintWidget* paint_widget_;
 };
