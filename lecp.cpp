@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vertex.h>
 #include <util.h>
+#include "lecp_doc.h"
 using namespace std;
 
 LECP::LECP(QWidget *parent)
@@ -16,19 +17,21 @@ LECP::LECP(QWidget *parent)
 
 	lecp_doc = new LECP_Doc();
 
-	setFixedSize(lecp_doc->windowWidth, lecp_doc->windowHeight);
+	setFixedSize(WIN_WIDTH, WIN_HEIGHT);
 	
 	int width = this->width();
 	int height = this->height();
 
+	mesh = new Mesh();
+
 	paintWidget = new PaintWidget(width, height);
 	this->setCentralWidget(paintWidget);
-	lecp_doc->set_paint_widget(paintWidget);
-
+	
 	QObject::connect(ui.polar_angle_sort, SIGNAL(triggered()), this, SLOT(polarAngleSortSlot()));
 	QObject::connect(ui.create_VG, SIGNAL(triggered()), this, SLOT(showVisibilityGraphSlot()));
 	QObject::connect(ui.saveFile, SIGNAL(triggered()), this, SLOT(saveFileSlot()));
 	QObject::connect(ui.openFile, SIGNAL(triggered()), this, SLOT(openFileSlot()));
+	QObject::connect(ui.sortedDCEL, SIGNAL(triggered()), this, SLOT(polarAngleSortDCELSlot()));
 }
 
 LECP::~LECP()
@@ -36,28 +39,56 @@ LECP::~LECP()
 
 }
 
-void LECP::resizeEvent(QResizeEvent *event){
+Vertex* pole;
+bool compareVertex(Vertex* p, Vertex* q){
+	double px = p->point().first;
+	double py = p->point().second;
+	double sx = pole->point().first;
+	double sy = pole->point().second;
+	double qx = q->point().first;
+	double qy = q->point().second;
 
+
+	double area = px*qy - py*qx + qx*sy - qy*sx + sx*py - sy*px;
+	if (area < 0)
+		return true;
+	return false;
 }
-
 //极角排序
 void LECP::polarAngleSortSlot() {
-
+	lecp_doc->points = paintWidget->points;
 	//首先将输入的所有点按照从左到右的顺序排列
-	vector<Vertex*> vertices = lecp_doc->sortVerticesOnX();
-	qDebug() << "Total vertice count:" << vertices.size();
-	vector<vector<Vertex*>> star_polygons = lecp_doc->getStarPolygons();
+	vector<LECP_Point> points = lecp_doc->points;
+	sort(points.begin(), points.end(), comparePoint);
+	list<Vertex*> polarVextex = changeLECO_PointToVertex(points);
 
-	for (int i = 0; i < star_polygons.size(); ++i) {
-		qDebug() << "Star Polygon " << i << ":";
-		vector<Vertex*> star_polygon = star_polygons[i];
-		vector<Vertex*>::iterator it = star_polygon.begin();
-		
-		for (; it != star_polygon.end(); ++it) {
-			qDebug() << "Vertex" << (*it)->index() << ":" << (*it)->point().first << "," << (*it)->point().second;
-		}
-		break; // TODO: delete this line
+	list<Vertex*>::iterator it = polarVextex.begin();
+	while (it != polarVextex.end()){
+		pole = *it;
+
+		list<Vertex*> subV(++it, polarVextex.end());
+		subV.sort(compareVertex);
+
+		subV.push_front(pole);
+
+		mesh->sortedVector.push_back(subV);
 	}
+}
+
+void LECP::polarAngleSortDCELSlot(){
+	lecp_doc->points = paintWidget->points;
+	//首先将输入的所有点按照从左到右的顺序排列
+	vector<LECP_Point> points = lecp_doc->points;
+	sort(points.begin(), points.end(), comparePoint);
+
+	//from right to left ,get the polar angle sorted list
+
+	for (long long i = points.size()-1; i>= 0; i--){
+		LECP_Point *point = &points[i];
+		mesh->AddLine(point);
+	}
+
+	mesh->postCalcPolarAngle();
 }
 
 void LECP::showVisibilityGraphSlot()

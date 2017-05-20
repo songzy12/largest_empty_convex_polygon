@@ -71,12 +71,6 @@
     <ClCompile Include="half_edge.cpp">
       <Filter>Source Files\DCEL</Filter>
     </ClCompile>
-    <ClCompile Include="Test\test.cpp">
-      <Filter>TEST</Filter>
-    </ClCompile>
-    <ClCompile Include="polygon.cpp">
-      <Filter>Source Files\LECP</Filter>
-    </ClCompile>
     <ClCompile Include="util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -86,7 +80,13 @@
     <ClCompile Include="lecp.cpp">
       <Filter>Source Files\LECP</Filter>
     </ClCompile>
+    <ClCompile Include="LECP_Point.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="lecp_doc.cpp">
+      <Filter>Source Files\LECP</Filter>
+    </ClCompile>
+    <ClCompile Include="polygon.cpp">
       <Filter>Source Files\LECP</Filter>
     </ClCompile>
   </ItemGroup>
@@ -114,16 +114,19 @@
     <ClInclude Include="vertex.h">
       <Filter>Header Files\DCEL</Filter>
     </ClInclude>
-    <ClInclude Include="polygon.h">
-      <Filter>Header Files\LECP</Filter>
-    </ClInclude>
     <ClInclude Include="util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="paint.h">
       <Filter>Header Files\LECP</Filter>
     </ClInclude>
+    <ClInclude Include="LECP_Point.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="lecp_doc.h">
+      <Filter>Header Files\LECP</Filter>
+    </ClInclude>
+    <ClInclude Include="polygon.h">
       <Filter>Header Files\LECP</Filter>
     </ClInclude>
   </ItemGroup>

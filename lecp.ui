@@ -28,6 +28,7 @@
      <string>操作</string>
     </property>
     <addaction name="polar_angle_sort"/>
+    <addaction name="sortedDCEL"/>
     <addaction name="create_VG"/>
    </widget>
    <widget class="QMenu" name="menu_2">
@@ -51,7 +52,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="polar_angle_sort">
    <property name="text">
-    <string>极角排序</string>
+    <string>极角排序（naive）</string>
    </property>
   </action>
   <action name="create_VG">
@@ -67,6 +68,11 @@
   <action name="openFile">
    <property name="text">
     <string>open file</string>
+   </property>
+  </action>
+  <action name="sortedDCEL">
+   <property name="text">
+    <string>极角排序（DCEL）</string>
    </property>
   </action>
  </widget>
