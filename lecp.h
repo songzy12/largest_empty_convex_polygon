@@ -7,6 +7,7 @@
 #include "ui_lecp.h"
 #include"Paint.h"
 #include"lecp_doc.h"
+#include"DisplayDCEL.h"
 
 class LECP : public QMainWindow
 {
@@ -22,6 +23,8 @@ private:
 
 	PaintWidget *paintWidget;	
 
+	QAction *openAction;
+
 public:
 	
 public slots:
@@ -30,9 +33,13 @@ public slots:
 	void saveFileSlot();
 	void openFileSlot();
 	void polarAngleSortDCELSlot();
+	void DCELAnimationSlot();
+	void clearDCELAnimationSlot();
+	void resetSlot();
 public:
 	Mesh *mesh;
 	LECP_Doc* lecp_doc;
+	
 };
 
 #endif // LECP_H

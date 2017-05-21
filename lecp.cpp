@@ -32,6 +32,11 @@ LECP::LECP(QWidget *parent)
 	QObject::connect(ui.saveFile, SIGNAL(triggered()), this, SLOT(saveFileSlot()));
 	QObject::connect(ui.openFile, SIGNAL(triggered()), this, SLOT(openFileSlot()));
 	QObject::connect(ui.sortedDCEL, SIGNAL(triggered()), this, SLOT(polarAngleSortDCELSlot()));
+	QObject::connect(ui.DCEL_animation, SIGNAL(triggered()), this, SLOT(DCELAnimationSlot()));
+	QObject::connect(ui.clearDCELAnimation, SIGNAL(triggered()), this, SLOT(clearDCELAnimationSlot()));
+	QObject::connect(ui.reset, SIGNAL(triggered()), this, SLOT(resetSlot()));
+	
+	
 }
 
 LECP::~LECP()
@@ -145,4 +150,32 @@ void LECP::openFileSlot() {
 	char* fileName_str = ba.data();
 
 	paintWidget->loadPoints(fileName_str);
+}
+
+void LECP::DCELAnimationSlot(){
+	lecp_doc->points = paintWidget->points;
+	//首先将输入的所有点按照从左到右的顺序排列
+	vector<LECP_Point> points = lecp_doc->points;
+	sort(points.begin(), points.end(), comparePoint);
+
+	for (long long i = points.size() - 1; i >= 0; i--){
+		LECP_Point *point = &points[i];
+	
+		MyQPoint  *qPoint =paintWidget->changeLECP_PointToMyQPoint(*point);
+
+		vector<pair<LECP_Point*, LECP_Point*>> lecp_points = mesh->AddLine(point);
+		paintWidget->animationPoint(qPoint, lecp_points);
+		_sleep(3 * 1000);
+		qPoint->setColor(Qt::red);
+		paintWidget->update();
+	}
+	
+}
+
+void LECP::clearDCELAnimationSlot(){
+	paintWidget->lines.clear();
+}
+
+void LECP::resetSlot(){
+	paintWidget->init();
 }

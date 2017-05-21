@@ -6,6 +6,7 @@ This file is only used by zyx.
 #define  LECP_POINT_H
 
 #include<queue>
+#include<QColor>
 using namespace std;
 
 /*
@@ -17,8 +18,9 @@ class LECP_Point{
 public:
 	double x, y;
 	long long index;
+	QColor color; //default color is red
 public:
-	LECP_Point(){}
+	LECP_Point();
 	LECP_Point(double _x, double _y);
 
 	void setX(double x){ this->x = x; }

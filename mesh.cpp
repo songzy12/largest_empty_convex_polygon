@@ -36,7 +36,9 @@ void Mesh::ConnectVertices(Vertex *v1, Vertex *v2) {
 }
 
 //屏幕上增加一个点，对应的对偶图中增加一条线
-void Mesh::AddLine(LECP_Point *point){
+vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
+	vector<pair<LECP_Point*, LECP_Point*>> return_intersections;
+
 	list<LECP_Point*> sortedAngle;// kernel point's sorted result.
 	sortedAngle.push_back(point);
 	
@@ -117,7 +119,24 @@ void Mesh::AddLine(LECP_Point *point){
 	//判断当前的交点是否在bounding box上
 	bool onBB = onBoundingBox(newIntersection);
 
-	while (!onBB){//没有结束  死循环！！！！
+	while (!onBB){
+		//---------------start add new pair--------------------------------------------------------
+		// add a new intersection vertex to the return vector.
+		LECP_Point* first = new LECP_Point();
+		first->setX(newIntersection->point().first);
+		first->setY(newIntersection->point().second);
+
+		LECP_Point* second = intersectHalfEdgeRight->lecp_point;
+
+		pair<LECP_Point*, LECP_Point*> intersectionPair;
+		intersectionPair.first = first;
+		intersectionPair.second = second;
+
+		return_intersections.push_back(intersectionPair);
+		//-----------end add new pair--------------------------------------------------
+
+
+
 		sortedAngle.push_back(intersectHalfEdgeLeft->lecp_point);
 
 
@@ -154,6 +173,7 @@ void Mesh::AddLine(LECP_Point *point){
 		// for polar angle sort
 		newRight->lecp_point = intersectHalfEdgeLeft->lecp_point;
 
+
 		Vertex *intersection = new Vertex();
 		intersection->set_point(tmpV.point());
 
@@ -182,6 +202,8 @@ void Mesh::AddLine(LECP_Point *point){
 
 	//save current kernel's polar angle sorted result
 	sortedPoint.push_back(sortedAngle);
+
+	return return_intersections;
 }
 
 //最外围的墙，no twins,翻不出去

@@ -37,9 +37,18 @@
     </property>
     <addaction name="saveFile"/>
     <addaction name="openFile"/>
+    <addaction name="reset"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>动画演示</string>
+    </property>
+    <addaction name="DCEL_animation"/>
+    <addaction name="clearDCELAnimation"/>
    </widget>
    <addaction name="menu_2"/>
    <addaction name="menu"/>
+   <addaction name="menu_3"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -48,6 +57,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="saveFile"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="polar_angle_sort">
@@ -61,6 +71,10 @@
    </property>
   </action>
   <action name="saveFile">
+   <property name="icon">
+    <iconset resource="lecp.qrc">
+     <normaloff>:/Resources/save.ico</normaloff>:/Resources/save.ico</iconset>
+   </property>
    <property name="text">
     <string>save file</string>
    </property>
@@ -73,6 +87,21 @@
   <action name="sortedDCEL">
    <property name="text">
     <string>极角排序（DCEL）</string>
+   </property>
+  </action>
+  <action name="DCEL_animation">
+   <property name="text">
+    <string>DCEL极角排序动画</string>
+   </property>
+  </action>
+  <action name="clearDCELAnimation">
+   <property name="text">
+    <string>清楚DCEL动画演示</string>
+   </property>
+  </action>
+  <action name="reset">
+   <property name="text">
+    <string>重置</string>
    </property>
   </action>
  </widget>
