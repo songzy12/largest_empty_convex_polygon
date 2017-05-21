@@ -1,9 +1,6 @@
 #include "lecp.h"
 #include <QtGui/QPen>
 #include <QtGui/QMouseEvent>
-#include <qmessagebox.h>
-#include <qdebug.h>
-#include <qfiledialog.h>
 #include <iostream>
 #include <vertex.h>
 #include <util.h>
@@ -27,17 +24,86 @@ LECP::LECP(QWidget *parent)
 	paintWidget = new PaintWidget(width, height);
 	this->setCentralWidget(paintWidget);
 	
+	createToolBar();    //创建工具栏 
+	this->addToolBarBreak();
+
 	QObject::connect(ui.polar_angle_sort, SIGNAL(triggered()), this, SLOT(polarAngleSortSlot()));
 	QObject::connect(ui.create_VG, SIGNAL(triggered()), this, SLOT(showVisibilityGraphSlot()));
 	QObject::connect(ui.saveFile, SIGNAL(triggered()), this, SLOT(saveFileSlot()));
 	QObject::connect(ui.openFile, SIGNAL(triggered()), this, SLOT(openFileSlot()));
 	QObject::connect(ui.sortedDCEL, SIGNAL(triggered()), this, SLOT(polarAngleSortDCELSlot()));
+
+	//动画演示
+	QObject::connect(ui.sortMenu, SIGNAL(triggered()), this, SLOT(sortMenuSlot()));
+	QObject::connect(ui.vgMenu, SIGNAL(triggered()), this, SLOT(vgMenuSlot()));
+	QObject::connect(ui.chainMenu, SIGNAL(triggered()), this, SLOT(chainMenuSlot()));
+
 }
 
 LECP::~LECP()
 {
 
 }
+
+void LECP::createToolBar()
+{
+	//工具栏  
+	this->ui.showContent->hide();
+	this->ui.showControl->hide();
+
+	//演示内容 工具栏
+	QLabel* contentLabel = new QLabel(tr("show contents:      "));    
+	sortComboBox = new QCheckBox(tr("1.sort     "));
+	vgComboBox = new QCheckBox(tr("2.VG     "));
+	chainComboBox = new QCheckBox(tr("3.chain     "));
+	this->ui.showContent->addWidget(contentLabel);
+	this->ui.showContent->addWidget(sortComboBox);
+	this->ui.showContent->addWidget(vgComboBox);
+	this->ui.showContent->addWidget(chainComboBox);
+
+	connect(sortComboBox, SIGNAL(stateChanged(int)), this, SLOT(onSortSelected(int)));
+	connect(vgComboBox, SIGNAL(stateChanged(int)), this, SLOT(onVGSelected(int)));
+	connect(chainComboBox, SIGNAL(stateChanged(int)), this, SLOT(onChainSelected(int)));
+
+
+	//演示控制 工具栏
+	QLabel* speedLabel = new QLabel(tr("show speed:     "));
+
+	pSpinBox = new QSpinBox(this);
+	pSpinBox->setMinimum(showSpeedMin); 
+	pSpinBox->setMaximum(showSpeedMax);  
+	pSpinBox->setSingleStep(1);  
+
+	speedSlider=new QSlider(this);
+	speedSlider->setOrientation(Qt::Horizontal);
+	speedSlider->setMinimum(showSpeedMin);
+	speedSlider->setMaximum(showSpeedMax);
+	speedSlider->setSingleStep(1);
+	speedSlider->setTickInterval(1); 
+	speedSlider->setTickPosition(QSlider::TicksAbove);
+	speedSlider->setFixedWidth(240);
+
+	QLabel* spaceLabel1 = new QLabel(tr("     "));
+	startButton = new QPushButton(this);
+	startButton->setText(tr("start"));
+	QLabel* spaceLabel2 = new QLabel(tr("     "));
+	stopButton = new QPushButton(this);
+	stopButton->setText(tr("stop"));
+
+	this->ui.showControl->addWidget(speedLabel);
+	this->ui.showControl->addWidget(pSpinBox);
+	this->ui.showControl->addWidget(speedSlider);
+	this->ui.showControl->addWidget(spaceLabel1);
+	this->ui.showControl->addWidget(startButton);
+	this->ui.showControl->addWidget(spaceLabel2);
+	this->ui.showControl->addWidget(stopButton);
+
+	connect(pSpinBox, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
+	connect(speedSlider, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
+
+}
+
+
 
 Vertex* pole;
 bool compareVertex(Vertex* p, Vertex* q){
@@ -145,4 +211,85 @@ void LECP::openFileSlot() {
 	char* fileName_str = ba.data();
 
 	paintWidget->loadPoints(fileName_str);
+}
+
+//动画演示Menu Slot
+void LECP::sortMenuSlot()
+{
+	this->ui.showContent->hide();
+	this->ui.showControl->show();
+}
+void LECP::vgMenuSlot()
+{
+	this->ui.showContent->show();
+	this->ui.showControl->show();
+}
+void LECP::chainMenuSlot()
+{
+	this->ui.showContent->show();
+	this->ui.showControl->show();
+}
+
+void LECP::onSortSelected(int flag)
+{
+	switch (flag)
+	{
+	case 0:
+		showSort = false;
+		break;
+	case 2:
+		showSort = true;
+		break;
+	}
+}
+void LECP::onVGSelected(int flag)
+{
+	switch (flag)
+	{
+	case 0:
+		showVG = false;
+		break;
+	case 2:
+		showVG = true;
+		break;
+	}
+}
+void LECP::onChainSelected(int flag)
+{
+	switch (flag)
+	{
+	case 0:
+		showChain = false;
+		break;
+	case 2:
+		showChain = true;
+		break;
+	}
+}
+
+void LECP::changeSpeedSlot(int newSpeed)
+{
+	pSpinBox->setValue(newSpeed);
+	speedSlider->setValue(newSpeed);
+	showspeed = newSpeed;
+}
+
+void LECP::startShowSlot()
+{
+	isStart = true;//演示结束时设为false
+
+	if (showSort){}
+	else{}
+
+	if (showVG){}
+	else{}
+
+	if (showChain){}
+	else{}
+
+}
+
+void LECP::stopShowSlot()
+{
+	
 }

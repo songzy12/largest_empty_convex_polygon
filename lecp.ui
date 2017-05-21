@@ -38,10 +38,23 @@
     <addaction name="saveFile"/>
     <addaction name="openFile"/>
    </widget>
+   <widget class="QMenu" name="menu_show">
+    <property name="title">
+     <string>动画演示</string>
+    </property>
+    <addaction name="sortMenu"/>
+    <addaction name="vgMenu"/>
+    <addaction name="chainMenu"/>
+   </widget>
    <addaction name="menu_2"/>
    <addaction name="menu"/>
+   <addaction name="menu_show"/>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="showContent">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -49,7 +62,17 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="showControl">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
   <action name="polar_angle_sort">
    <property name="text">
     <string>极角排序（naive）</string>
@@ -73,6 +96,21 @@
   <action name="sortedDCEL">
    <property name="text">
     <string>极角排序（DCEL）</string>
+   </property>
+  </action>
+  <action name="sortMenu">
+   <property name="text">
+    <string>sort</string>
+   </property>
+  </action>
+  <action name="vgMenu">
+   <property name="text">
+    <string>vg</string>
+   </property>
+  </action>
+  <action name="chainMenu">
+   <property name="text">
+    <string>chain</string>
    </property>
   </action>
  </widget>

@@ -31,12 +31,17 @@ public:
     QAction *saveFile;
     QAction *openFile;
     QAction *sortedDCEL;
+    QAction *sortMenu;
+    QAction *vgMenu;
+    QAction *chainMenu;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menu;
     QMenu *menu_2;
-    QToolBar *mainToolBar;
+    QMenu *menu_show;
     QStatusBar *statusBar;
+    QToolBar *showContent;
+    QToolBar *showControl;
 
     void setupUi(QMainWindow *LECPClass)
     {
@@ -53,6 +58,12 @@ public:
         openFile->setObjectName(QStringLiteral("openFile"));
         sortedDCEL = new QAction(LECPClass);
         sortedDCEL->setObjectName(QStringLiteral("sortedDCEL"));
+        sortMenu = new QAction(LECPClass);
+        sortMenu->setObjectName(QStringLiteral("sortMenu"));
+        vgMenu = new QAction(LECPClass);
+        vgMenu->setObjectName(QStringLiteral("vgMenu"));
+        chainMenu = new QAction(LECPClass);
+        chainMenu->setObjectName(QStringLiteral("chainMenu"));
         centralWidget = new QWidget(LECPClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         LECPClass->setCentralWidget(centralWidget);
@@ -63,21 +74,30 @@ public:
         menu->setObjectName(QStringLiteral("menu"));
         menu_2 = new QMenu(menuBar);
         menu_2->setObjectName(QStringLiteral("menu_2"));
+        menu_show = new QMenu(menuBar);
+        menu_show->setObjectName(QStringLiteral("menu_show"));
         LECPClass->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(LECPClass);
-        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
-        LECPClass->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(LECPClass);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         LECPClass->setStatusBar(statusBar);
+        showContent = new QToolBar(LECPClass);
+        showContent->setObjectName(QStringLiteral("showContent"));
+        LECPClass->addToolBar(Qt::TopToolBarArea, showContent);
+        showControl = new QToolBar(LECPClass);
+        showControl->setObjectName(QStringLiteral("showControl"));
+        LECPClass->addToolBar(Qt::TopToolBarArea, showControl);
 
         menuBar->addAction(menu_2->menuAction());
         menuBar->addAction(menu->menuAction());
+        menuBar->addAction(menu_show->menuAction());
         menu->addAction(polar_angle_sort);
         menu->addAction(sortedDCEL);
         menu->addAction(create_VG);
         menu_2->addAction(saveFile);
         menu_2->addAction(openFile);
+        menu_show->addAction(sortMenu);
+        menu_show->addAction(vgMenu);
+        menu_show->addAction(chainMenu);
 
         retranslateUi(LECPClass);
 
@@ -92,8 +112,14 @@ public:
         saveFile->setText(QApplication::translate("LECPClass", "save file", Q_NULLPTR));
         openFile->setText(QApplication::translate("LECPClass", "open file", Q_NULLPTR));
         sortedDCEL->setText(QApplication::translate("LECPClass", "\346\236\201\350\247\222\346\216\222\345\272\217\357\274\210DCEL\357\274\211", Q_NULLPTR));
+        sortMenu->setText(QApplication::translate("LECPClass", "sort", Q_NULLPTR));
+        vgMenu->setText(QApplication::translate("LECPClass", "vg", Q_NULLPTR));
+        chainMenu->setText(QApplication::translate("LECPClass", "chain", Q_NULLPTR));
         menu->setTitle(QApplication::translate("LECPClass", "\346\223\215\344\275\234", Q_NULLPTR));
         menu_2->setTitle(QApplication::translate("LECPClass", "\346\226\207\344\273\266", Q_NULLPTR));
+        menu_show->setTitle(QApplication::translate("LECPClass", "\345\212\250\347\224\273\346\274\224\347\244\272", Q_NULLPTR));
+        showContent->setWindowTitle(QApplication::translate("LECPClass", "toolBar", Q_NULLPTR));
+        showControl->setWindowTitle(QApplication::translate("LECPClass", "toolBar", Q_NULLPTR));
     } // retranslateUi
 
 };
