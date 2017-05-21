@@ -1,4 +1,6 @@
 <RCC>
-    <qresource prefix="LECP">
+    <qresource prefix="/LECP"/>
+    <qresource prefix="/">
+        <file>Resources/save.ico</file>
     </qresource>
 </RCC>

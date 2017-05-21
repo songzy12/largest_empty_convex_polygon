@@ -21,7 +21,10 @@ public:
 
 	void AddVertex(Vertex *v);
 	void ConnectVertices(Vertex *v1, Vertex *v2);
-	void AddLine(LECP_Point *point);
+
+	//the first is the intersection point, and the second is the corresponding point user input.
+	vector<pair<LECP_Point*,LECP_Point*>> AddLine(LECP_Point *point);// return the intersections
+
 	void init();//≥ı ºªØ£¨bounding box, one face,4 half_edge,4 vertex
 	void clear();
 	HalfEdge*  getIntersectHalfEdge(double a,double b);

@@ -48,6 +48,12 @@
     <Filter Include="Source Files\LECP">
       <UniqueIdentifier>{072a9886-f3d7-4956-9fbf-e193af22970a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Ainimation">
+      <UniqueIdentifier>{3281d47c-9f29-4923-9dea-f6e4b928d242}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Animation">
+      <UniqueIdentifier>{ad56fa2c-c357-4289-8113-1a25e147b264}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -89,6 +95,15 @@
     <ClCompile Include="lecp.cpp">
       <Filter>Source Files\LECP</Filter>
     </ClCompile>
+    <ClCompile Include="MyQLine.cpp">
+      <Filter>Source Files\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="MyQPoint.cpp">
+      <Filter>Source Files\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="DisplayDCEL.cpp">
+      <Filter>Source Files\DCEL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="lecp.ui">
@@ -128,6 +143,15 @@
     </ClInclude>
     <ClInclude Include="polygon.h">
       <Filter>Header Files\LECP</Filter>
+    </ClInclude>
+    <ClInclude Include="MyQLine.h">
+      <Filter>Header Files\Ainimation</Filter>
+    </ClInclude>
+    <ClInclude Include="MyQPoint.h">
+      <Filter>Header Files\Ainimation</Filter>
+    </ClInclude>
+    <ClInclude Include="DisplayDCEL.h">
+      <Filter>Header Files\DCEL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

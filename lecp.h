@@ -19,6 +19,7 @@
 #include "ui_lecp.h"
 #include"Paint.h"
 #include"lecp_doc.h"
+#include"DisplayDCEL.h"
 
 class LECP : public QMainWindow
 {
@@ -43,6 +44,8 @@ private:
 	QSlider* speedSlider;
 	QSpinBox* pSpinBox;
 
+	QAction *openAction;
+
 public:
 	void createToolBar();
 public slots:
@@ -52,6 +55,10 @@ public slots:
 	void openFileSlot();
 	void polarAngleSortDCELSlot();
 
+	//DCEL ¶¯»­
+	void DCELAnimationSlot();
+	void clearDCELAnimationSlot();
+	void resetSlot();
 	//¶¯»­ÑÝÊ¾
 	void sortMenuSlot();
 	void vgMenuSlot();
@@ -62,6 +69,7 @@ public slots:
 	void changeSpeedSlot(int newSpeed);
 	void startShowSlot();
 	void stopShowSlot();
+
 public:
 	Mesh *mesh;
 	LECP_Doc* lecp_doc;
@@ -74,6 +82,7 @@ public:
 	bool isStart = false;
 	bool isStop = false;
 	int showspeed = 1;
+
 	
 };
 
