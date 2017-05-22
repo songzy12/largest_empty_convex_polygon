@@ -1,5 +1,6 @@
-#define WIN_WIDTH  1200
-#define WIN_HEIGHT 800
+#ifndef LECP_DOC_H
+#define LECP_DOC_H
+
 #include "polygon.h"
 #include "paint.h"
 
@@ -8,14 +9,11 @@ public:
 	LECP_Doc();
 	~LECP_Doc(); 
 	
-	int windowWidth;
-	int windowHeight;
-
-	void set_paint_widget(PaintWidget* paint_widget) { paint_widget_ = paint_widget; }
-
 	vector<Vertex*> vertices_;
+	vector<LECP_Point> points;//all of the points user input Calculated coordinate system
 
-	vector<Vertex*> sortVerticesOnX();
+	//vector<LECP_Point> sortVerticesOnX();
+	
 
 	vector<vector<Vertex*>> getStarPolygons();
 	vector<vector<Vertex*>> getVisibilityGraphs();
@@ -29,3 +27,5 @@ public:
 private:
 	PaintWidget *paint_widget_;
 };
+
+#endif

@@ -1,12 +1,10 @@
 #include "lecp.h"
 #include <QtGui/QPen>
 #include <QtGui/QMouseEvent>
-#include <qmessagebox.h>
-#include <qdebug.h>
-#include <qfiledialog.h>
 #include <iostream>
 #include <vertex.h>
 #include <util.h>
+#include "lecp_doc.h"
 using namespace std;
 
 LECP::LECP(QWidget *parent)
@@ -16,19 +14,35 @@ LECP::LECP(QWidget *parent)
 
 	lecp_doc = new LECP_Doc();
 
-	setFixedSize(lecp_doc->windowWidth, lecp_doc->windowHeight);
+	setFixedSize(WIN_WIDTH, WIN_HEIGHT);
 	
 	int width = this->width();
 	int height = this->height();
 
+	mesh = new Mesh();
+
 	paintWidget = new PaintWidget(width, height);
 	this->setCentralWidget(paintWidget);
-	lecp_doc->set_paint_widget(paintWidget);
+	
+	createToolBar();    //创建工具栏 
+	this->addToolBarBreak();
 
 	QObject::connect(ui.polar_angle_sort, SIGNAL(triggered()), this, SLOT(polarAngleSortSlot()));
 	QObject::connect(ui.create_VG, SIGNAL(triggered()), this, SLOT(showVisibilityGraphSlot()));
 	QObject::connect(ui.saveFile, SIGNAL(triggered()), this, SLOT(saveFileSlot()));
 	QObject::connect(ui.openFile, SIGNAL(triggered()), this, SLOT(openFileSlot()));
+	QObject::connect(ui.sortedDCEL, SIGNAL(triggered()), this, SLOT(polarAngleSortDCELSlot()));
+
+	//DCEL 动画
+	QObject::connect(ui.DCEL_animation, SIGNAL(triggered()), this, SLOT(DCELAnimationSlot()));
+	QObject::connect(ui.clearDCELAnimation, SIGNAL(triggered()), this, SLOT(clearDCELAnimationSlot()));
+	QObject::connect(ui.reset, SIGNAL(triggered()), this, SLOT(resetSlot()));
+
+	//动画演示
+	QObject::connect(ui.sortMenu, SIGNAL(triggered()), this, SLOT(sortMenuSlot()));
+	QObject::connect(ui.vgMenu, SIGNAL(triggered()), this, SLOT(vgMenuSlot()));
+	QObject::connect(ui.chainMenu, SIGNAL(triggered()), this, SLOT(chainMenuSlot()));
+
 }
 
 LECP::~LECP()
@@ -36,28 +50,116 @@ LECP::~LECP()
 
 }
 
-void LECP::resizeEvent(QResizeEvent *event){
+void LECP::createToolBar()
+{
+	//工具栏  
+	this->ui.showContent->hide();
+	this->ui.showControl->hide();
+
+	//演示内容 工具栏
+	QLabel* contentLabel = new QLabel(tr("show contents:      "));    
+	sortComboBox = new QCheckBox(tr("1.sort     "));
+	vgComboBox = new QCheckBox(tr("2.VG     "));
+	chainComboBox = new QCheckBox(tr("3.chain     "));
+	this->ui.showContent->addWidget(contentLabel);
+	this->ui.showContent->addWidget(sortComboBox);
+	this->ui.showContent->addWidget(vgComboBox);
+	this->ui.showContent->addWidget(chainComboBox);
+
+	connect(sortComboBox, SIGNAL(stateChanged(int)), this, SLOT(onSortSelected(int)));
+	connect(vgComboBox, SIGNAL(stateChanged(int)), this, SLOT(onVGSelected(int)));
+	connect(chainComboBox, SIGNAL(stateChanged(int)), this, SLOT(onChainSelected(int)));
+
+
+	//演示控制 工具栏
+	QLabel* speedLabel = new QLabel(tr("show speed:     "));
+
+	pSpinBox = new QSpinBox(this);
+	pSpinBox->setMinimum(showSpeedMin); 
+	pSpinBox->setMaximum(showSpeedMax);  
+	pSpinBox->setSingleStep(1);  
+
+	speedSlider=new QSlider(this);
+	speedSlider->setOrientation(Qt::Horizontal);
+	speedSlider->setMinimum(showSpeedMin);
+	speedSlider->setMaximum(showSpeedMax);
+	speedSlider->setSingleStep(1);
+	speedSlider->setTickInterval(1); 
+	speedSlider->setTickPosition(QSlider::TicksAbove);
+	speedSlider->setFixedWidth(240);
+
+	QLabel* spaceLabel1 = new QLabel(tr("     "));
+	startButton = new QPushButton(this);
+	startButton->setText(tr("start"));
+	QLabel* spaceLabel2 = new QLabel(tr("     "));
+	stopButton = new QPushButton(this);
+	stopButton->setText(tr("stop"));
+
+	this->ui.showControl->addWidget(speedLabel);
+	this->ui.showControl->addWidget(pSpinBox);
+	this->ui.showControl->addWidget(speedSlider);
+	this->ui.showControl->addWidget(spaceLabel1);
+	this->ui.showControl->addWidget(startButton);
+	this->ui.showControl->addWidget(spaceLabel2);
+	this->ui.showControl->addWidget(stopButton);
+
+	connect(pSpinBox, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
+	connect(speedSlider, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
 
 }
 
+
+
+Vertex* pole;
+bool compareVertex(Vertex* p, Vertex* q){
+	double px = p->point().first;
+	double py = p->point().second;
+	double sx = pole->point().first;
+	double sy = pole->point().second;
+	double qx = q->point().first;
+	double qy = q->point().second;
+
+
+	double area = px*qy - py*qx + qx*sy - qy*sx + sx*py - sy*px;
+	if (area < 0)
+		return true;
+	return false;
+}
 //极角排序
 void LECP::polarAngleSortSlot() {
-
+	lecp_doc->points = paintWidget->points;
 	//首先将输入的所有点按照从左到右的顺序排列
-	vector<Vertex*> vertices = lecp_doc->sortVerticesOnX();
-	qDebug() << "Total vertice count:" << vertices.size();
-	vector<vector<Vertex*>> star_polygons = lecp_doc->getStarPolygons();
+	vector<LECP_Point> points = lecp_doc->points;
+	sort(points.begin(), points.end(), comparePoint);
+	list<Vertex*> polarVextex = changeLECO_PointToVertex(points);
 
-	for (int i = 0; i < star_polygons.size(); ++i) {
-		qDebug() << "Star Polygon " << i << ":";
-		vector<Vertex*> star_polygon = star_polygons[i];
-		vector<Vertex*>::iterator it = star_polygon.begin();
-		
-		for (; it != star_polygon.end(); ++it) {
-			qDebug() << "Vertex" << (*it)->index() << ":" << (*it)->point().first << "," << (*it)->point().second;
-		}
-		break; // TODO: delete this line
+	list<Vertex*>::iterator it = polarVextex.begin();
+	while (it != polarVextex.end()){
+		pole = *it;
+
+		list<Vertex*> subV(++it, polarVextex.end());
+		subV.sort(compareVertex);
+
+		subV.push_front(pole);
+
+		mesh->sortedVector.push_back(subV);
 	}
+}
+
+void LECP::polarAngleSortDCELSlot(){
+	lecp_doc->points = paintWidget->points;
+	//首先将输入的所有点按照从左到右的顺序排列
+	vector<LECP_Point> points = lecp_doc->points;
+	sort(points.begin(), points.end(), comparePoint);
+
+	//from right to left ,get the polar angle sorted list
+
+	for (long long i = points.size()-1; i>= 0; i--){
+		LECP_Point *point = &points[i];
+		mesh->AddLine(point);
+	}
+
+	mesh->postCalcPolarAngle();
 }
 
 void LECP::showVisibilityGraphSlot()
@@ -115,3 +217,114 @@ void LECP::openFileSlot() {
 
 	paintWidget->loadPoints(fileName_str);
 }
+
+//DCEL 动画
+void LECP::DCELAnimationSlot(){
+	lecp_doc->points = paintWidget->points;
+	//首先将输入的所有点按照从左到右的顺序排列
+	vector<LECP_Point> points = lecp_doc->points;
+	sort(points.begin(), points.end(), comparePoint);
+
+	for (long long i = points.size() - 1; i >= 0; i--){
+		LECP_Point *point = &points[i];
+
+		MyQPoint  *qPoint = paintWidget->changeLECP_PointToMyQPoint(*point);
+
+		vector<pair<LECP_Point*, LECP_Point*>> lecp_points = mesh->AddLine(point);
+		paintWidget->animationPoint(qPoint, lecp_points);
+		_sleep(3 * 1000);
+		qPoint->setColor(Qt::red);
+		paintWidget->update();
+	}
+
+}
+
+void LECP::clearDCELAnimationSlot(){
+	paintWidget->lines.clear();
+}
+
+void LECP::resetSlot(){
+	paintWidget->init();
+}
+
+//动画演示Menu Slot
+void LECP::sortMenuSlot()
+{
+	this->ui.showContent->hide();
+	this->ui.showControl->show();
+}
+void LECP::vgMenuSlot()
+{
+	this->ui.showContent->show();
+	this->ui.showControl->show();
+}
+void LECP::chainMenuSlot()
+{
+	this->ui.showContent->show();
+	this->ui.showControl->show();
+}
+
+void LECP::onSortSelected(int flag)
+{
+	switch (flag)
+	{
+	case 0:
+		showSort = false;
+		break;
+	case 2:
+		showSort = true;
+		break;
+	}
+}
+void LECP::onVGSelected(int flag)
+{
+	switch (flag)
+	{
+	case 0:
+		showVG = false;
+		break;
+	case 2:
+		showVG = true;
+		break;
+	}
+}
+void LECP::onChainSelected(int flag)
+{
+	switch (flag)
+	{
+	case 0:
+		showChain = false;
+		break;
+	case 2:
+		showChain = true;
+		break;
+	}
+}
+
+void LECP::changeSpeedSlot(int newSpeed)
+{
+	pSpinBox->setValue(newSpeed);
+	speedSlider->setValue(newSpeed);
+	showspeed = newSpeed;
+}
+
+void LECP::startShowSlot()
+{
+	isStart = true;//演示结束时设为false
+
+	if (showSort){}
+	else{}
+
+	if (showVG){}
+	else{}
+
+	if (showChain){}
+	else{}
+
+}
+
+void LECP::stopShowSlot()
+{
+	
+}
+

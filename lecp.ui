@@ -28,6 +28,7 @@
      <string>操作</string>
     </property>
     <addaction name="polar_angle_sort"/>
+    <addaction name="sortedDCEL"/>
     <addaction name="create_VG"/>
    </widget>
    <widget class="QMenu" name="menu_2">
@@ -36,11 +37,34 @@
     </property>
     <addaction name="saveFile"/>
     <addaction name="openFile"/>
+    <addaction name="reset"/>
    </widget>
-   <addaction name="menu_2"/>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>动画演示</string>
+    </property>
+    <addaction name="DCEL_animation"/>
+    <addaction name="clearDCELAnimation"/>
+   </widget>
+   <widget class="QMenu" name="menu_show">
+    <property name="title">
+     <string>动画演示</string>
+    </property>
+    <addaction name="sortMenu"/>
+    <addaction name="vgMenu"/>
+    <addaction name="chainMenu"/>
+   </widget>
    <addaction name="menu"/>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
+   <addaction name="menu_2"/>
+    <addaction name="menu_3"/>
+    <addaction name="menu_show"/>
+
+
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="showContent">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -48,10 +72,22 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="showControl">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="saveFile"/>
+  </widget>
+
   <action name="polar_angle_sort">
    <property name="text">
-    <string>极角排序</string>
+    <string>极角排序（naive）</string>
    </property>
   </action>
   <action name="create_VG">
@@ -60,6 +96,10 @@
    </property>
   </action>
   <action name="saveFile">
+   <property name="icon">
+    <iconset resource="lecp.qrc">
+     <normaloff>:/Resources/save.ico</normaloff>:/Resources/save.ico</iconset>
+   </property>
    <property name="text">
     <string>save file</string>
    </property>
@@ -69,7 +109,46 @@
     <string>open file</string>
    </property>
   </action>
+  <action name="sortedDCEL">
+   <property name="text">
+    <string>极角排序（DCEL）</string>
+   </property>
+  </action>
+
+  <action name="sortMenu">
+   <property name="text">
+    <string>sort</string>
+   </property>
+  </action>
+  <action name="vgMenu">
+   <property name="text">
+    <string>vg</string>
+   </property>
+  </action>
+  <action name="chainMenu">
+   <property name="text">
+    <string>chain</string>
+    </property>
+   </action>
+
+  <action name="DCEL_animation">
+   <property name="text">
+    <string>DCEL极角排序动画</string>
+   </property>
+  </action>
+  <action name="clearDCELAnimation">
+   <property name="text">
+    <string>清楚DCEL动画演示</string>
+   </property>
+  </action>
+  <action name="reset">
+   <property name="text">
+    <string>重置</string>
+
+   </property>
+  </action>
  </widget>
+  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
   <include location="lecp.qrc"/>

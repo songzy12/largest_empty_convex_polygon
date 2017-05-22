@@ -48,10 +48,40 @@
     <Filter Include="Source Files\LECP">
       <UniqueIdentifier>{072a9886-f3d7-4956-9fbf-e193af22970a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Ainimation">
+      <UniqueIdentifier>{3281d47c-9f29-4923-9dea-f6e4b928d242}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Animation">
+      <UniqueIdentifier>{ad56fa2c-c357-4289-8113-1a25e147b264}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_lecp.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="half_edge.cpp">
+      <Filter>Source Files\DCEL</Filter>
+    </ClCompile>
+    <ClCompile Include="lecp_doc.cpp">
+      <Filter>Source Files\DCEL</Filter>
+    </ClCompile>
+    <ClCompile Include="LECP_Point.cpp">
+      <Filter>Source Files\DCEL</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh.cpp">
+      <Filter>Source Files\DCEL</Filter>
+    </ClCompile>
+    <ClCompile Include="polygon.cpp">
+      <Filter>Source Files\LECP</Filter>
+    </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>Source Files\LECP</Filter>
+    </ClCompile>
+    <ClCompile Include="vertex.cpp">
+      <Filter>Source Files\LECP</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_lecp.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -59,35 +89,23 @@
     <ClCompile Include="GeneratedFiles\Release\moc_lecp.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\qrc_lecp.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mesh.cpp">
-      <Filter>Source Files\DCEL</Filter>
-    </ClCompile>
-    <ClCompile Include="vertex.cpp">
-      <Filter>Source Files\DCEL</Filter>
-    </ClCompile>
-    <ClCompile Include="half_edge.cpp">
-      <Filter>Source Files\DCEL</Filter>
-    </ClCompile>
-    <ClCompile Include="Test\test.cpp">
-      <Filter>TEST</Filter>
-    </ClCompile>
-    <ClCompile Include="polygon.cpp">
-      <Filter>Source Files\LECP</Filter>
-    </ClCompile>
-    <ClCompile Include="util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="paint.cpp">
-      <Filter>Source Files\LECP</Filter>
-    </ClCompile>
     <ClCompile Include="lecp.cpp">
       <Filter>Source Files\LECP</Filter>
     </ClCompile>
-    <ClCompile Include="lecp_doc.cpp">
-      <Filter>Source Files\LECP</Filter>
+    <ClCompile Include="Paint.cpp">
+      <Filter>Source Files\DCEL</Filter>
+    </ClCompile>
+    <ClCompile Include="MyQPoint.cpp">
+      <Filter>Source Files\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="MyQLine.cpp">
+      <Filter>Source Files\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="face.cpp">
+      <Filter>Source Files\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="DisplayDCEL.cpp">
+      <Filter>Source Files\Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -108,23 +126,44 @@
     <ClInclude Include="half_edge.h">
       <Filter>Header Files\DCEL</Filter>
     </ClInclude>
+    <ClInclude Include="lecp_doc.h">
+      <Filter>Header Files\DCEL</Filter>
+    </ClInclude>
+    <ClInclude Include="LECP_Point.h">
+      <Filter>Header Files\DCEL</Filter>
+    </ClInclude>
     <ClInclude Include="mesh.h">
       <Filter>Header Files\DCEL</Filter>
     </ClInclude>
     <ClInclude Include="vertex.h">
-      <Filter>Header Files\DCEL</Filter>
+      <Filter>Header Files\LECP</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>Header Files\LECP</Filter>
     </ClInclude>
     <ClInclude Include="polygon.h">
       <Filter>Header Files\LECP</Filter>
     </ClInclude>
-    <ClInclude Include="util.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Paint.h">
+      <Filter>Header Files\DCEL</Filter>
     </ClInclude>
-    <ClInclude Include="paint.h">
-      <Filter>Header Files\LECP</Filter>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files\Ainimation</Filter>
     </ClInclude>
-    <ClInclude Include="lecp_doc.h">
-      <Filter>Header Files\LECP</Filter>
+    <ClInclude Include="MyQPoint.h">
+      <Filter>Header Files\Ainimation</Filter>
+    </ClInclude>
+    <ClInclude Include="MyQLine.h">
+      <Filter>Header Files\Ainimation</Filter>
+    </ClInclude>
+    <ClInclude Include="face.h">
+      <Filter>Header Files\Ainimation</Filter>
+    </ClInclude>
+    <ClInclude Include="EdgeIterator.h">
+      <Filter>Header Files\Ainimation</Filter>
+    </ClInclude>
+    <ClInclude Include="DisplayDCEL.h">
+      <Filter>Header Files\Ainimation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

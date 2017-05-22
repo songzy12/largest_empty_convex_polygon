@@ -1,11 +1,25 @@
 #ifndef LECP_H
 #define LECP_H
+#define showSpeedMax 20
+#define showSpeedMin 1
 
 #include <QtWidgets/QMainWindow>
 #include <QtGui/QPainter>
 #include <QtGui/QPen>
+
+#include <qspinbox.h>
+#include <qmessagebox.h>
+#include <qlabel.h>
+#include <qcheckbox.h>
+#include <qpushbutton.h>
+#include <qdebug.h>
+#include <qfiledialog.h>
+#include <qslider.h>
+
 #include "ui_lecp.h"
-#include "lecp_doc.h"
+#include"Paint.h"
+#include"lecp_doc.h"
+#include"DisplayDCEL.h"
 
 class LECP : public QMainWindow
 {
@@ -15,30 +29,61 @@ public:
 	LECP(QWidget *parent = 0);
 	~LECP();
 
-	LECP_Doc* lecp_doc;
+	
 private:
 	Ui::LECPClass ui;
 
-	PaintWidget *paintWidget;	
-protected:
-	//void paintEvent(QPaintEvent *event);
-	//void mouseReleaseEvent(QMouseEvent *event);
-	void resizeEvent(QResizeEvent *event);
-	//void mousePressEvent(QMouseEvent *event);
-	//void mouseMoveEvent(QMouseEvent *event);
+	PaintWidget *paintWidget;
+
+	//toolbar content:
+	QCheckBox* sortComboBox;
+	QCheckBox* vgComboBox;
+	QCheckBox* chainComboBox;
+	QPushButton* startButton;
+	QPushButton* stopButton;
+	QSlider* speedSlider;
+	QSpinBox* pSpinBox;
+
+	QAction *openAction;
 
 public:
-	//QPoint currentPoint; //当前点
-	//QPixmap pix; //保存绘画结果
-
-	///*deal with signals mapping*/
-	//QSignalMapper *signalMapper;
-
+	void createToolBar();
 public slots:
 	void polarAngleSortSlot();//对于每个输入点，该点左侧的所有点按照关于该点进行极角排序
 	void showVisibilityGraphSlot();
 	void saveFileSlot();
 	void openFileSlot();
+	void polarAngleSortDCELSlot();
+
+	//DCEL 动画
+	void DCELAnimationSlot();
+	void clearDCELAnimationSlot();
+	void resetSlot();
+	//动画演示
+	void sortMenuSlot();
+	void vgMenuSlot();
+	void chainMenuSlot();
+	void onSortSelected(int flag);
+	void onVGSelected(int flag);
+	void onChainSelected(int flag);
+	void changeSpeedSlot(int newSpeed);
+	void startShowSlot();
+	void stopShowSlot();
+
+public:
+	Mesh *mesh;
+	LECP_Doc* lecp_doc;
+
+	//show variable
+	enum showMode { finalRes, allPoints, simplePoint };
+	bool showSort = false;
+	bool showVG = false;
+	bool showChain = false;
+	bool isStart = false;
+	bool isStop = false;
+	int showspeed = 1;
+
+	
 };
 
 #endif // LECP_H

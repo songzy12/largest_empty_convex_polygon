@@ -1,6 +1,7 @@
 #ifndef HALFEDGE_H
 #define HALFEDGE_H
 #include "vertex.h"
+#include "LECP_Point.h"
 
 class HalfEdge
 {
@@ -35,6 +36,8 @@ private:
 	int L_; // only used for convex chain
 public:
 	HalfEdge *prev_chain_;
+
+	LECP_Point *lecp_point;//which LECP_Point(line) the half_edge belongs to
 };
 
 #endif

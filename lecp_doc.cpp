@@ -4,20 +4,23 @@
 #include <algorithm>
 
 LECP_Doc::LECP_Doc() {
-	windowWidth = WIN_WIDTH;
-	windowHeight = WIN_HEIGHT;
+
 }
 
 LECP_Doc::~LECP_Doc() {
 
 }
 
-vector<Vertex*> LECP_Doc::sortVerticesOnX() {
-	vertices_ = paint_widget_->vertices_;
-	sort(vertices_.begin(), vertices_.end(), comparePoint);
-	return vertices_;
-}
+/*
+vector<LECP_Point> LECP_Doc::sortVerticesOnX() {
+	points = paint_widget_->points;
+	sort(points.begin(), points.end(), comparePoint);
 
+	//vector<Vertex*> polarVextex = changeLECO_PointToVertex(points);
+
+	//return polarVextex;
+}
+*/
 vector<vector<Vertex*>> LECP_Doc::getStarPolygons() {
 	polygons_.clear();
 	star_polygons_.clear();

@@ -44,8 +44,7 @@ bool Polygon::comparePolar(Vertex* p, Vertex* q){
 vector<Vertex*> Polygon::getStarPolygon() {
 	vector<Vertex*>::iterator it = vertices_.begin();	
 	//to left test½øÐÐ¼«½ÇÅÅÐò
-	sort(vertices_.begin() + 1, vertices_.end(), 
-		 std::bind(&Polygon::comparePolar, this, std::placeholders::_1, std::placeholders::_2));
+	//sort(vertices_.begin() + 1, vertices_.end(), std::bind(&Polygon::comparePolar, this, std::placeholders::_1, std::placeholders::_2));
 	return vertices_;
 }
 
