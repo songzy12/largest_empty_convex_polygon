@@ -136,6 +136,7 @@ vector<Vertex*> Polygon::getConvexChain() {
 	convex_chain_.push_back(longest_edge->origin());
 	while (longest_edge) {
 		convex_chain_.push_back(longest_edge->target());
+		longest_edge = longest_edge->prev_chain_;
 	}
 	return convex_chain_;
 }
