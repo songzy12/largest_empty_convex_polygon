@@ -11,6 +11,7 @@ class Polygon {
 		Polygon(vector<Vertex*> vertices, PaintWidget* paint_widget);
 		~Polygon();
 
+		void setVertices(vector<Vertex*>);
 		vector<Vertex*> getStarPolygon();
 		/*create visibility graph
 		starPoly:	star-shaped Polygon with points ordered by angle*/

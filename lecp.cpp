@@ -20,6 +20,7 @@ LECP::LECP(QWidget *parent)
 	int height = this->height();
 
 	mesh = new Mesh();
+	poly2show = new Polygon();
 
 	paintWidget = new PaintWidget(width, height);
 	this->setCentralWidget(paintWidget);
@@ -88,6 +89,9 @@ void LECP::createToolBar()
 	speedSlider->setTickPosition(QSlider::TicksAbove);
 	speedSlider->setFixedWidth(240);
 
+	QLabel* spaceLabel0 = new QLabel(tr("     "));
+	pSelectButton = new QPushButton(this);
+	pSelectButton->setText(tr("select point"));
 	QLabel* spaceLabel1 = new QLabel(tr("     "));
 	startButton = new QPushButton(this);
 	startButton->setText(tr("start"));
@@ -98,6 +102,8 @@ void LECP::createToolBar()
 	this->ui.showControl->addWidget(speedLabel);
 	this->ui.showControl->addWidget(pSpinBox);
 	this->ui.showControl->addWidget(speedSlider);
+	this->ui.showControl->addWidget(spaceLabel0);
+	this->ui.showControl->addWidget(pSelectButton);
 	this->ui.showControl->addWidget(spaceLabel1);
 	this->ui.showControl->addWidget(startButton);
 	this->ui.showControl->addWidget(spaceLabel2);
@@ -106,6 +112,8 @@ void LECP::createToolBar()
 	connect(pSpinBox, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
 	connect(speedSlider, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
 
+	connect(startButton, SIGNAL(clicked()), this, SLOT(startShowSlot()));
+	connect(stopButton, SIGNAL(clicked()), this, SLOT(stopShowSlot()));
 }
 
 
@@ -311,7 +319,7 @@ void LECP::changeSpeedSlot(int newSpeed)
 void LECP::startShowSlot()
 {
 	isStart = true;//演示结束时设为false
-
+	trans2Poly();
 	if (showSort){}
 	else{}
 
@@ -326,5 +334,33 @@ void LECP::startShowSlot()
 void LECP::stopShowSlot()
 {
 	
+}
+
+Polygon* LECP::trans2Poly(int kernal_index)
+{
+	if (kernal_index < 0)
+		qDebug() << "kernal index should >=0 in Fun trans2Poly(int kernal_index)";
+	//int pointsNum = mesh->sortedVector.size();
+	int pointsNum = 1;
+	//循环处理每个点
+	/*for (int points_index = 0; points_index < pointsNum; points_index++)
+	{*/
+	int points_index = 3;
+		//temp 存储用来初始化polygon的vertor<vertex>
+		vector<Vertex*> temp_vertices;
+		int vertexNum = mesh->sortedVector.at(points_index).size();
+		list<Vertex*>::iterator iter_vertex = mesh->sortedVector.at(points_index).begin();
+		while (iter_vertex != mesh->sortedVector.at(points_index).end())
+		{
+			temp_vertices.push_back(*iter_vertex);
+			iter_vertex++;
+		}
+		poly2show->setVertices(temp_vertices);
+		//polygon的返回值 不应该直接修改polygon的vertex吗
+		temp_vertices = poly2show->getVisibilityGraph();
+		temp_vertices = poly2show->getConvexChain();
+		temp_vertices.clear();
+	/*}*/
+	return poly2show;
 }
 
