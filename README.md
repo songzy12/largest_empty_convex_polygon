@@ -1,3 +1,14 @@
+## TODO
+
+### polar angle sort
+
+* 交点可能交在屏幕之外
+* 按钮交错
+
+### outer loop
+
+* 
+
 ## Largest Empty Convex Polygon
 
 This is a course project for Computational geometry of Tsinghua University, where we try to implement the method of reporting empty convex polygons from paper [1].

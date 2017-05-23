@@ -68,9 +68,6 @@
     <ClCompile Include="lecp_doc.cpp">
       <Filter>Source Files\DCEL</Filter>
     </ClCompile>
-    <ClCompile Include="LECP_Point.cpp">
-      <Filter>Source Files\DCEL</Filter>
-    </ClCompile>
     <ClCompile Include="mesh.cpp">
       <Filter>Source Files\DCEL</Filter>
     </ClCompile>
@@ -95,17 +92,20 @@
     <ClCompile Include="Paint.cpp">
       <Filter>Source Files\DCEL</Filter>
     </ClCompile>
-    <ClCompile Include="MyQPoint.cpp">
-      <Filter>Source Files\Animation</Filter>
+    <ClCompile Include="Test\test.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MyQLine.cpp">
       <Filter>Source Files\Animation</Filter>
     </ClCompile>
-    <ClCompile Include="face.cpp">
+    <ClCompile Include="MyQPoint.cpp">
       <Filter>Source Files\Animation</Filter>
     </ClCompile>
     <ClCompile Include="DisplayDCEL.cpp">
       <Filter>Source Files\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="LECP_Point.cpp">
+      <Filter>Source Files\LECP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -129,9 +129,6 @@
     <ClInclude Include="lecp_doc.h">
       <Filter>Header Files\DCEL</Filter>
     </ClInclude>
-    <ClInclude Include="LECP_Point.h">
-      <Filter>Header Files\DCEL</Filter>
-    </ClInclude>
     <ClInclude Include="mesh.h">
       <Filter>Header Files\DCEL</Filter>
     </ClInclude>
@@ -147,23 +144,17 @@
     <ClInclude Include="Paint.h">
       <Filter>Header Files\DCEL</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files\Ainimation</Filter>
-    </ClInclude>
-    <ClInclude Include="MyQPoint.h">
+    <ClInclude Include="DisplayDCEL.h">
       <Filter>Header Files\Ainimation</Filter>
     </ClInclude>
     <ClInclude Include="MyQLine.h">
       <Filter>Header Files\Ainimation</Filter>
     </ClInclude>
-    <ClInclude Include="face.h">
+    <ClInclude Include="MyQPoint.h">
       <Filter>Header Files\Ainimation</Filter>
     </ClInclude>
-    <ClInclude Include="EdgeIterator.h">
-      <Filter>Header Files\Ainimation</Filter>
-    </ClInclude>
-    <ClInclude Include="DisplayDCEL.h">
-      <Filter>Header Files\Ainimation</Filter>
+    <ClInclude Include="LECP_Point.h">
+      <Filter>Header Files\LECP</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
