@@ -4,7 +4,12 @@
 #include <algorithm> 
 #include <functional> 
 #include <iterator> 
-
+/////////////////////////////////////////////
+// red: kernal 及kernal 左侧的点
+// black ： kernal 右侧的点
+// yellow：
+// green:
+////////////////////////////////////////////
 Polygon::Polygon() {
 	
 }
@@ -25,6 +30,14 @@ Polygon::Polygon(vector<Vertex*> vertices, PaintWidget* paint_widget) {
 
 Polygon::~Polygon() {
 
+	clear();
+}
+
+void Polygon::clear()
+{
+	vertices_.clear();
+	paint_widget_->allQLines2Draw.clear();
+	paint_widget_->allQPoints2Draw.clear();
 }
 void Polygon::setVertices(vector<Vertex*> vertices)
 {
@@ -33,6 +46,18 @@ void Polygon::setVertices(vector<Vertex*> vertices)
 	if (vertices_.size() > 0)
 		kernel_ = vertices_[0];
 }
+
+
+void Polygon::setPaintWidget(PaintWidget* paintWidget)
+{
+	paint_widget_ = paintWidget;
+}
+
+PaintWidget* Polygon::getPaintWidget()
+{
+	return paint_widget_;
+}
+
 bool Polygon::comparePolar(Vertex* p, Vertex* q){
 	Vertex *s = kernel_;
 	double px = p->point().first;
@@ -57,32 +82,73 @@ vector<Vertex*> Polygon::getStarPolygon() {
 /*process bewteen vertex i&j (counterclockwise order:i->j)
 in creating visibility graph*/
 
-void proceedNeighborPoints(Vertex* i, Vertex* j)
+void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j,int index_i,int index_j)
 {
+	
+
 	while ((!(i->Q_.empty())) && toLeft(i->Q_.front(), i, j)){
 		//PROCEED
-		proceedNeighborPoints(i->Q_.front(), j);
+		proceedNeighborPoints(i->Q_.front(), j, i->Q_.front()->index(),j->index());
 		//DEQUEUE(Qi)
+		int temp_vertex_index = i->Q_.front()->index();
 		i->Q_.pop_front();
+
+		//show animation
+		paint_widget_->allQPoints2Draw[temp_vertex_index].setColor(Qt::black);
 	}
 	//ADD(ij)
+		//show animation
+	paint_widget_->allQPoints2Draw[index_i].setColor(Qt::yellow);
+	paint_widget_->allQPoints2Draw[index_j].setColor(Qt::green);
+
 	HalfEdge *e = new HalfEdge(i, j);
 	i->outgoing_edges_.push_back(e);
 	j->incoming_edges_.push_back(e);
 	//ENQUEUE(i,Qj)
 	j->Q_.push_back(i);
+
+	//animation
+	//MyQPoint vertex_i(QPoint(i->point().first+10, i->point().second+10));
+	//MyQPoint vertex_j(QPoint(j->point().first+10, j->point().second+10));
+	//vertex_i.setColor(Qt::yellow);
+	//vertex_j.setColor(Qt::blue);
+	//this->paint_widget_->allQPoints2Draw.push_back(vertex_i);
+	//this->paint_widget_->allQPoints2Draw.push_back(vertex_j);
+	//this->paint_widget_->update();
+	//_sleep(2 * 1000);
 	return;
 }
 
 vector<Vertex*> Polygon::getVisibilityGraph()
 {
+	//kernal 及 starpolygon的动画
+	for (size_t i = 0; i < vertices_.size(); ++i) {
+		MyQPoint vertex_i(QPoint(vertices_[i]->point().first, (vertices_[i]->point().second*-1)));
+		if (i == 0)
+			vertex_i.setColor(Qt::red);
+		else
+			vertex_i.setColor(Qt::black);
+		vertex_i.setIndex(vertices_[i]->index());
+		this->paint_widget_->allQPoints2Draw.push_back(vertex_i);
+
+		MyQline edge_i;
+		if (i == vertices_.size() - 1)
+			edge_i.setLine(vertices_[i]->point().first, vertices_[i]->point().second*-1, vertices_[0]->point().first, vertices_[0]->point().second*-1);
+		else
+			edge_i.setLine(vertices_[i]->point().first, vertices_[i]->point().second*-1, vertices_[i + 1]->point().first, vertices_[i + 1]->point().second*-1);
+		this->paint_widget_->allQLines2Draw.push_back(edge_i);
+		this->paint_widget_->repaint();
+		this->paint_widget_->update();
+		_sleep(2 * 1000);
+	}
+
 	vector<Vertex*>::iterator it = vertices_.begin();
 	for (; it != vertices_.end(); ++it) {
 		(*it)->Q_.clear();
 	}
 
 	for (size_t i = 1; i + 1 < vertices_.size(); ++i) {
-		proceedNeighborPoints(vertices_[i], vertices_[i+1]);
+		proceedNeighborPoints(vertices_[i], vertices_[i + 1], vertices_[i]->index(), vertices_[i+1]->index());
 	}
 	return vertices_;
 }

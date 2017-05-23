@@ -25,6 +25,8 @@ LECP::LECP(QWidget *parent)
 	paintWidget = new PaintWidget(width, height);
 	this->setCentralWidget(paintWidget);
 	
+	poly2show->setPaintWidget(paintWidget);
+
 	createToolBar();    //创建工具栏 
 	this->addToolBarBreak();
 
@@ -319,7 +321,10 @@ void LECP::changeSpeedSlot(int newSpeed)
 void LECP::startShowSlot()
 {
 	isStart = true;//演示结束时设为false
-	trans2Poly();
+
+	trans2Poly(3);
+
+	//paintWidget->allQPoints2Draw
 	if (showSort){}
 	else{}
 
@@ -331,6 +336,7 @@ void LECP::startShowSlot()
 
 }
 
+
 void LECP::stopShowSlot()
 {
 	
@@ -341,26 +347,41 @@ Polygon* LECP::trans2Poly(int kernal_index)
 	if (kernal_index < 0)
 		qDebug() << "kernal index should >=0 in Fun trans2Poly(int kernal_index)";
 	//int pointsNum = mesh->sortedVector.size();
+	else{
 	int pointsNum = 1;
 	//循环处理每个点
 	/*for (int points_index = 0; points_index < pointsNum; points_index++)
 	{*/
-	int points_index = 3;
+	//int points_index = 3;
 		//temp 存储用来初始化polygon的vertor<vertex>
 		vector<Vertex*> temp_vertices;
-		int vertexNum = mesh->sortedVector.at(points_index).size();
-		list<Vertex*>::iterator iter_vertex = mesh->sortedVector.at(points_index).begin();
-		while (iter_vertex != mesh->sortedVector.at(points_index).end())
+		int vertexNum = mesh->sortedVector.at(kernal_index).size();
+		list<Vertex*>::iterator iter_vertex = mesh->sortedVector.at(kernal_index).begin();
+		while (iter_vertex != mesh->sortedVector.at(kernal_index).end())
 		{
 			temp_vertices.push_back(*iter_vertex);
 			iter_vertex++;
 		}
 		poly2show->setVertices(temp_vertices);
+
+		//animation
+		poly2show->getPaintWidget()->allQPoints2Draw.clear();
+		for (int i = 0; i < vertexNum;i++){//转化vertex为MyQPoint
+			MyQPoint temp_myqpoint(QPoint(temp_vertices[i]->point().first, temp_vertices[i]->point().second*-1));
+			if (i == 0)
+				temp_myqpoint.setColor(Qt::blue);
+			else
+				temp_myqpoint.setColor(Qt::black);
+			temp_myqpoint.setIndex(temp_vertices[i]->index());
+			poly2show->getPaintWidget()->allQPoints2Draw.push_back(temp_myqpoint);
+		}
+
 		//polygon的返回值 不应该直接修改polygon的vertex吗
 		temp_vertices = poly2show->getVisibilityGraph();
 		temp_vertices = poly2show->getConvexChain();
 		temp_vertices.clear();
 	/*}*/
+	}
 	return poly2show;
 }
 

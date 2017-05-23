@@ -39,6 +39,8 @@ void PaintWidget::paintEvent(QPaintEvent *event){
 	paintAllLine();
 
 	paintIntersectPoints();
+
+	paintAllEdge();
 }
 
 void PaintWidget::timerEvent(QTimerEvent *event){
@@ -51,6 +53,11 @@ void PaintWidget::paintAllPoints(){
 	  MyQPoint *tmpP = myQPoints[i];
 		paintPoint(tmpP);
 	}
+
+  for (long long i = 0; i < allQPoints2Draw.size(); i++){
+	  MyQPoint tmpP = allQPoints2Draw[i];
+	  paintPoint(tmpP);
+  }
 }
 
 
@@ -176,7 +183,7 @@ void PaintWidget::paintPoint(MyQPoint point){
 
 	painter.setBrush(point.getColor());
 	painter.drawEllipse(point.x(), point.y(), 6, 6);
-	painter.drawText(point.x(), point.y(), QString::number(point.getIndex()));
+	painter.drawText(point.x()+5, point.y()+5, QString::number(point.getIndex()));
 	update();
 }
 
@@ -188,7 +195,7 @@ void PaintWidget::paintPoint(MyQPoint *point){
 
 	int index = point->getIndex();
 	if (index != -1){
-		painter.drawText(point->x(), point->y(), QString::number(index));
+		painter.drawText(point->x() + 5, point->y() + 5, QString::number(index));
 	}
 	
 	update();
@@ -403,7 +410,8 @@ void PaintWidget::paintLine(MyQline *line){
 	painter.translate(WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	painter.setBrush(line->getColor());
 	
-	painter.setPen(QPen(line->getColor(),0.2));
+	QPen temp_pen(line->getColor(), 0.2);
+	painter.setPen(temp_pen);
 
 	painter.drawLine(*line);
 	update();
@@ -443,5 +451,34 @@ void PaintWidget::paintIntersectPoints(){
 		painter.drawText(x+10,y+10 , QString::number(point->index));
 	}
 
+	update();
+}
+
+
+
+/////////////show animation///////////////////////////
+void PaintWidget::paintAllEdge()
+{
+	for (long long i = 0; i < allQLines2Draw.size(); i++){
+		MyQline tmpL = allQLines2Draw[i];
+		paintEdge(&tmpL);
+	}
+}
+void PaintWidget::paintEdge(MyQline *line){
+	QPainter painter(this);
+	painter.translate(WIN_WIDTH / 2, WIN_HEIGHT / 2);
+	painter.setBrush(line->getColor());
+
+	QPen temp_pen(line->getColor(), 0.2);
+	QVector<qreal> dashes;
+	qreal space = 3;
+	dashes << 5 << space << 5 << space;
+
+	if (line->getDotStyle())
+		temp_pen.setDashPattern(dashes);
+
+	painter.setPen(temp_pen);
+
+	painter.drawLine(*line);
 	update();
 }
