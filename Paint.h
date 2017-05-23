@@ -4,7 +4,6 @@ All painting operations  are executed by this file.
 
 #ifndef PAINT_H
 #define PAINT_H
-
 #include "vertex.h"
 #include "half_edge.h"
 #include <QtWidgets/QMainWindow>
@@ -24,6 +23,8 @@ private:
 	double scaleX ;
 	double scaleY ;
 	double penWidth;
+
+
 public:
 	PaintWidget();
 	~PaintWidget();
@@ -81,6 +82,12 @@ public:
 	vector<MyQline*> lines;
 
 	vector<LECP_Point*> intersectPoints;//can not use MyQPoint, because there is  Deviation
+
+
+	/*all MYQPoints needed to be draw*/
+	vector<MyQPoint> allQPoints2Draw;
+	/*all MYQLines needed to be draw*/
+	vector<MyQline> allQLines2Draw;
 };
 
 #endif

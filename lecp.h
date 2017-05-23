@@ -39,6 +39,7 @@ private:
 	QCheckBox* sortComboBox;
 	QCheckBox* vgComboBox;
 	QCheckBox* chainComboBox;
+	QPushButton* pSelectButton;
 	QPushButton* startButton;
 	QPushButton* stopButton;
 	QSlider* speedSlider;
@@ -48,6 +49,7 @@ private:
 
 public:
 	void createToolBar();
+	Polygon* trans2Poly(int kernal_index);
 public slots:
 	void polarAngleSortSlot();//对于每个输入点，该点左侧的所有点按照关于该点进行极角排序
 	void showVisibilityGraphSlot();
@@ -73,6 +75,7 @@ public slots:
 public:
 	Mesh *mesh;
 	LECP_Doc* lecp_doc;
+	Polygon* poly2show;
 
 	//show variable
 	enum showMode { finalRes, allPoints, simplePoint };

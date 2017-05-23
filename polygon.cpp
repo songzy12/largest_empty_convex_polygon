@@ -26,7 +26,13 @@ Polygon::Polygon(vector<Vertex*> vertices, PaintWidget* paint_widget) {
 Polygon::~Polygon() {
 
 }
-
+void Polygon::setVertices(vector<Vertex*> vertices)
+{
+	vertices_.clear();
+	vertices_ = vertices;
+	if (vertices_.size() > 0)
+		kernel_ = vertices_[0];
+}
 bool Polygon::comparePolar(Vertex* p, Vertex* q){
 	Vertex *s = kernel_;
 	double px = p->point().first;
@@ -132,9 +138,9 @@ vector<Vertex*> Polygon::getConvexChain() {
 	qDebug() << "max_len for all points:" << max_len << endl;
 	// TODO
 	vector<Vertex*> convex_chain_;
-	convex_chain_.push_back(longest_edge->origin());
+	/*convex_chain_.push_back(longest_edge->origin());
 	while (longest_edge) {
 		convex_chain_.push_back(longest_edge->target());
-	}
+	}*/
 	return convex_chain_;
 }
