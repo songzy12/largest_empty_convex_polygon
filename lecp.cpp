@@ -100,6 +100,9 @@ void LECP::createToolBar()
 	QLabel* spaceLabel2 = new QLabel(tr("     "));
 	stopButton = new QPushButton(this);
 	stopButton->setText(tr("stop"));
+	QLabel* spaceLabel3 = new QLabel(tr("     "));
+	resetButton = new QPushButton(this);
+	resetButton->setText(tr("reset"));
 
 	this->ui.showControl->addWidget(speedLabel);
 	this->ui.showControl->addWidget(pSpinBox);
@@ -110,12 +113,15 @@ void LECP::createToolBar()
 	this->ui.showControl->addWidget(startButton);
 	this->ui.showControl->addWidget(spaceLabel2);
 	this->ui.showControl->addWidget(stopButton);
+	this->ui.showControl->addWidget(spaceLabel3);
+	this->ui.showControl->addWidget(resetButton);
 
 	connect(pSpinBox, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
 	connect(speedSlider, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
 
 	connect(startButton, SIGNAL(clicked()), this, SLOT(startShowSlot()));
 	connect(stopButton, SIGNAL(clicked()), this, SLOT(stopShowSlot()));
+	connect(resetButton, SIGNAL(clicked()), this, SLOT(resetShowSlot()));
 }
 
 
@@ -316,13 +322,17 @@ void LECP::changeSpeedSlot(int newSpeed)
 	pSpinBox->setValue(newSpeed);
 	speedSlider->setValue(newSpeed);
 	showspeed = newSpeed;
+	if (poly2show != NULL)
+	{
+		poly2show->setSleepTime(showSpeedMax - showspeed);
+	}
 }
 
 void LECP::startShowSlot()
 {
 	isStart = true;//演示结束时设为false
 
-	trans2Poly(3);
+	trans2Poly(6);
 
 	//paintWidget->allQPoints2Draw
 	if (showSort){}
@@ -342,6 +352,10 @@ void LECP::stopShowSlot()
 	
 }
 
+void LECP::resetShowSlot()
+{
+	poly2show->getPaintWidget()->clearMyQPandMyQL();
+}
 Polygon* LECP::trans2Poly(int kernal_index)
 {
 	if (kernal_index < 0)

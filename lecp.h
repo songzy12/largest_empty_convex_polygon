@@ -42,6 +42,7 @@ private:
 	QPushButton* pSelectButton;
 	QPushButton* startButton;
 	QPushButton* stopButton;
+	QPushButton* resetButton;
 	QSlider* speedSlider;
 	QSpinBox* pSpinBox;
 
@@ -71,6 +72,7 @@ public slots:
 	void changeSpeedSlot(int newSpeed);
 	void startShowSlot();
 	void stopShowSlot();
+	void resetShowSlot();
 
 public:
 	Mesh *mesh;

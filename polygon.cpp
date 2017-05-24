@@ -11,7 +11,7 @@
 // green:
 ////////////////////////////////////////////
 Polygon::Polygon() {
-	
+	sleepTime_ = 1;
 }
 
 
@@ -19,6 +19,7 @@ Polygon::Polygon(vector<Vertex*> vertices) {
 	vertices_ = vertices;
 	if (vertices_.size() > 0)
 		kernel_ = vertices_[0];
+	sleepTime_ = 1;
 }
 
 Polygon::Polygon(vector<Vertex*> vertices, PaintWidget* paint_widget) {
@@ -26,6 +27,7 @@ Polygon::Polygon(vector<Vertex*> vertices, PaintWidget* paint_widget) {
 	if (vertices_.size() > 0)
 		kernel_ = vertices_[0];
 	paint_widget_ = paint_widget;
+	sleepTime_ = 1;
 }
 
 Polygon::~Polygon() {
@@ -56,6 +58,15 @@ void Polygon::setPaintWidget(PaintWidget* paintWidget)
 PaintWidget* Polygon::getPaintWidget()
 {
 	return paint_widget_;
+}
+
+int Polygon::sleepTime()
+{
+	return sleepTime_;
+}
+void Polygon::setSleepTime(int time)
+{
+	sleepTime_ = time;
 }
 
 bool Polygon::comparePolar(Vertex* p, Vertex* q){
@@ -94,28 +105,54 @@ void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j,int index_i,int index_j
 		i->Q_.pop_front();
 
 		//show animation
-		paint_widget_->allQPoints2Draw[temp_vertex_index].setColor(Qt::black);
+		this->paint_widget_->allQPoints2Draw[temp_vertex_index].setColor(Qt::black);
+		this->paint_widget_->repaint();
+		//_sleep(2 * 1000);
 	}
 	//ADD(ij)
-		//show animation
-	paint_widget_->allQPoints2Draw[index_i].setColor(Qt::yellow);
-	paint_widget_->allQPoints2Draw[index_j].setColor(Qt::green);
-
 	HalfEdge *e = new HalfEdge(i, j);
 	i->outgoing_edges_.push_back(e);
 	j->incoming_edges_.push_back(e);
 	//ENQUEUE(i,Qj)
 	j->Q_.push_back(i);
 
-	//animation
-	//MyQPoint vertex_i(QPoint(i->point().first+10, i->point().second+10));
-	//MyQPoint vertex_j(QPoint(j->point().first+10, j->point().second+10));
-	//vertex_i.setColor(Qt::yellow);
-	//vertex_j.setColor(Qt::blue);
-	//this->paint_widget_->allQPoints2Draw.push_back(vertex_i);
-	//this->paint_widget_->allQPoints2Draw.push_back(vertex_j);
-	//this->paint_widget_->update();
-	//_sleep(2 * 1000);
+
+	//show animation
+	this->paint_widget_->allQPoints2Draw[index_i].setColor(Qt::yellow);
+	this->paint_widget_->allQPoints2Draw[index_j].setColor(Qt::green);
+	this->paint_widget_->repaint();
+	_sleep(sleepTime() * 100);
+
+	//上一次的添加的halfedge转为默认色
+	int last = this->paint_widget_->allQLines2Draw.size()-1;
+	if (this->paint_widget_->allQLines2Draw[last].getColor() == Qt::blue)
+	{
+		this->paint_widget_->allQLines2Draw[last - 1].setColor(Qt::green);
+		this->paint_widget_->allQLines2Draw[last].setColor(Qt::cyan);
+	}
+	int delta_x = 0;
+	int delta_y = 0;
+	if (i->point().first < j->point().first)
+		delta_x = 5;
+	else
+		delta_x = -5;
+	if (i->point().second < j->point().second)
+		delta_y = -5;
+	else
+		delta_y = 5;
+
+	MyQline edge_ij(QLine(i->point().first + delta_x, (i->point().second+ delta_y)*-1 , j->point().first+delta_x, (j->point().second+delta_y)*-1));
+	edge_ij.setColor(Qt::red);
+	edge_ij.setArrowStyle(true);
+	edge_ij.setDotStyle(false);
+	MyQline edge_ji(QLine(j->point().first - delta_x, (j->point().second -delta_y)*-1, i->point().first- delta_x, (i->point().second - delta_y)*-1));
+	edge_ji.setColor(Qt::blue);
+	edge_ji.setArrowStyle(true);
+	edge_ji.setDotStyle(false);
+	this->paint_widget_->allQLines2Draw.push_back(edge_ij);
+	this->paint_widget_->allQLines2Draw.push_back(edge_ji);
+	this->paint_widget_->repaint();
+	_sleep(sleepTime() * 100);
 	return;
 }
 
@@ -136,10 +173,11 @@ vector<Vertex*> Polygon::getVisibilityGraph()
 			edge_i.setLine(vertices_[i]->point().first, vertices_[i]->point().second*-1, vertices_[0]->point().first, vertices_[0]->point().second*-1);
 		else
 			edge_i.setLine(vertices_[i]->point().first, vertices_[i]->point().second*-1, vertices_[i + 1]->point().first, vertices_[i + 1]->point().second*-1);
+		edge_i.setDotStyle(true);
 		this->paint_widget_->allQLines2Draw.push_back(edge_i);
 		this->paint_widget_->repaint();
 		this->paint_widget_->update();
-		_sleep(2 * 1000);
+		_sleep(sleepTime() * 100);
 	}
 
 	vector<Vertex*>::iterator it = vertices_.begin();

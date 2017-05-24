@@ -70,6 +70,7 @@ public:
 	/////////////show animation///////////////////////////
 	void paintAllEdge();
 	void paintEdge(MyQline *line);
+	void clearMyQPandMyQL();
 
 public:
 	QPoint currentPoint;//current kernel

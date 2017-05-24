@@ -1,3 +1,4 @@
+
 #include "Paint.h"
 #include "util.h"
 #include <QtGui/QPen>
@@ -469,16 +470,36 @@ void PaintWidget::paintEdge(MyQline *line){
 	painter.translate(WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	painter.setBrush(line->getColor());
 
-	QPen temp_pen(line->getColor(), 0.2);
+	//虚线
+	QPen temp_pen(line->getColor(), 1);
 	QVector<qreal> dashes;
 	qreal space = 3;
 	dashes << 5 << space << 5 << space;
-
-	if (line->getDotStyle())
+	//设置虚线风格
+	if (line->getDotStyle()){
 		temp_pen.setDashPattern(dashes);
-
+		temp_pen.setWidthF(0.5);
+	}
 	painter.setPen(temp_pen);
 
+	//设置箭头风格
+	if (line->getArrowStyle()){
+
+		double angle = ::acos(line->dx() / line->length());
+		if (line->dy() >= 0)
+			angle = TwoPi - angle;
+		QPointF destArrowP1 = line->p2() + QPointF(sin(angle - Pi / 3) * ARROW_SIZE,
+			cos(angle - Pi / 3) * ARROW_SIZE);
+		QPointF destArrowP2 = line->p2() + QPointF(sin(angle - Pi + Pi / 3) * ARROW_SIZE,
+			cos(angle - Pi + Pi / 3) * ARROW_SIZE);
+		painter.drawLine(QLineF(destArrowP1, line->p2()));
+		painter.drawLine(QLineF(destArrowP2, line->p2()));
+	}
 	painter.drawLine(*line);
 	update();
+}
+void PaintWidget::clearMyQPandMyQL()
+{
+	allQPoints2Draw.clear();
+	allQLines2Draw.clear();
 }
