@@ -31,7 +31,7 @@
      <x>0</x>
      <y>0</y>
      <width>995</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -41,6 +41,7 @@
     <addaction name="polar_angle_sort"/>
     <addaction name="sortedDCEL"/>
     <addaction name="create_VG"/>
+    <addaction name="actionConvex_Chain"/>
     <addaction name="randomPoints"/>
    </widget>
    <widget class="QMenu" name="menu_2">
@@ -155,6 +156,11 @@
   <action name="randomPoints">
    <property name="text">
     <string>随机点生成</string>
+   </property>
+  </action>
+  <action name="actionConvex_Chain">
+   <property name="text">
+    <string>Convex Chain</string>
    </property>
   </action>
  </widget>

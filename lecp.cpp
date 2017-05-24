@@ -125,6 +125,9 @@ void LECP::createToolBar()
 	connect(startButton, SIGNAL(clicked()), this, SLOT(startShowSlot()));
 	connect(stopButton, SIGNAL(clicked()), this, SLOT(stopShowSlot()));
 	connect(resetButton, SIGNAL(clicked()), this, SLOT(resetShowSlot()));
+
+	//TODO: delete this
+	connect(pSelectButton, SIGNAL(clicked()), this, SLOT(showConvexChainSlot()));
 }
 
 
@@ -201,6 +204,10 @@ void LECP::showVisibilityGraphSlot()
 		}
 		break; // TODO: delete this line
 	}
+}
+
+void LECP::showConvexChainSlot() {
+	
 }
 
 void LECP::saveFileSlot() {

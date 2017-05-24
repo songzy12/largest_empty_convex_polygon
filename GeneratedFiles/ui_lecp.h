@@ -27,6 +27,7 @@ class Ui_LECPClass
 {
 public:
     QAction *randomPoints;
+    QAction *actionConvex_Chain;
     QWidget *centralWidget;
     QStatusBar *statusBar;
     QMenuBar *menuBar;
@@ -55,6 +56,8 @@ public:
         LECPClass->resize(995, 605);
         randomPoints = new QAction(LECPClass);
         randomPoints->setObjectName(QStringLiteral("randomPoints"));
+        actionConvex_Chain = new QAction(LECPClass);
+        actionConvex_Chain->setObjectName(QStringLiteral("actionConvex_Chain"));
         centralWidget = new QWidget(LECPClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         statusBar = new QStatusBar(centralWidget);
@@ -63,7 +66,7 @@ public:
         LECPClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(LECPClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 995, 23));
+        menuBar->setGeometry(QRect(0, 0, 995, 21));
         polar_angle_sort = new QAction(menuBar);
         polar_angle_sort->setObjectName(QStringLiteral("polar_angle_sort"));
         create_VG = new QAction(menuBar);
@@ -112,6 +115,7 @@ public:
         menu->addAction(polar_angle_sort);
         menu->addAction(sortedDCEL);
         menu->addAction(create_VG);
+        menu->addAction(actionConvex_Chain);
         menu->addAction(randomPoints);
         menu_2->addAction(saveFile);
         menu_2->addAction(openFile);
@@ -131,6 +135,7 @@ public:
     {
         LECPClass->setWindowTitle(QApplication::translate("LECPClass", "LECP", Q_NULLPTR));
         randomPoints->setText(QApplication::translate("LECPClass", "\351\232\217\346\234\272\347\202\271\347\224\237\346\210\220", Q_NULLPTR));
+        actionConvex_Chain->setText(QApplication::translate("LECPClass", "Convex Chain", Q_NULLPTR));
         polar_angle_sort->setText(QApplication::translate("LECPClass", "\346\236\201\350\247\222\346\216\222\345\272\217\357\274\210naive\357\274\211", Q_NULLPTR));
         create_VG->setText(QApplication::translate("LECPClass", "\347\224\237\346\210\220vg\345\233\276", Q_NULLPTR));
         saveFile->setText(QApplication::translate("LECPClass", "save file", Q_NULLPTR));

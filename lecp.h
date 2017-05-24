@@ -54,6 +54,7 @@ public:
 public slots:
 	void polarAngleSortSlot();//对于每个输入点，该点左侧的所有点按照关于该点进行极角排序
 	void showVisibilityGraphSlot();
+	void showConvexChainSlot();
 	void saveFileSlot();
 	void openFileSlot();
 	void polarAngleSortDCELSlot();
@@ -88,8 +89,6 @@ public:
 	bool isStart = false;
 	bool isStop = false;
 	int showspeed = 1;
-
-	
 };
 
 #endif // LECP_H

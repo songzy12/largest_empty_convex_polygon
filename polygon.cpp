@@ -95,8 +95,6 @@ in creating visibility graph*/
 
 void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j,int index_i,int index_j)
 {
-	
-
 	while ((!(i->Q_.empty())) && toLeft(i->Q_.front(), i, j)){
 		//PROCEED
 		proceedNeighborPoints(i->Q_.front(), j, i->Q_.front()->index(),j->index());
@@ -242,9 +240,20 @@ vector<Vertex*> Polygon::getConvexChain() {
 	qDebug() << "max_len for all points:" << max_len << endl;
 	// TODO
 	vector<Vertex*> convex_chain_;
-	/*convex_chain_.push_back(longest_edge->origin());
+	int delta_x = 3, delta_y = 3;
+
+	qDebug() << "the longest convex chain:";
+	if (longest_edge) {
+		convex_chain_.push_back(longest_edge->origin());
+		qDebug() << longest_edge->origin()->index();
+	}
+	
 	while (longest_edge) {
 		convex_chain_.push_back(longest_edge->target());
-	}*/
+		qDebug() << "<-" << longest_edge->target()->index();	
+		longest_edge = longest_edge->prev_chain_;
+	}
+	qDebug() << endl;
+
 	return convex_chain_;
 }
