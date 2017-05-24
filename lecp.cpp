@@ -319,7 +319,7 @@ void LECP::changeSpeedSlot(int newSpeed)
 void LECP::startShowSlot()
 {
 	isStart = true;//演示结束时设为false
-	trans2Poly();
+	//trans2Poly();
 	if (showSort){}
 	else{}
 
