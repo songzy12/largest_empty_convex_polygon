@@ -20,3 +20,5 @@ bool isConvexTurn(HalfEdge *i, HalfEdge *o);
 list<Vertex*> changeLECO_PointToVertex(vector<LECP_Point> points);
 
 vector<LECP_Point> sortInputPointsFromLeftToRight(LECP_Doc *doc);
+
+vector<LECP_Point>  generateRandomPoints(long long points_number);

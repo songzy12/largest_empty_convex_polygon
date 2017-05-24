@@ -134,6 +134,12 @@ void PaintWidget::init(){
 	intersectPoints.clear();
 }
 
+void PaintWidget::setPoints(vector<LECP_Point> points_){
+	this->points = points_;
+	changeLECP_PointsToQPoints();//坐标变换
+	update();
+}
+
 void PaintWidget::loadPoints(char *fileName){
 	init();
 
@@ -183,7 +189,11 @@ void PaintWidget::paintPoint(MyQPoint point){
 
 	painter.setBrush(point.getColor());
 	painter.drawEllipse(point.x(), point.y(), 6, 6);
-	painter.drawText(point.x()+5, point.y()+5, QString::number(point.getIndex()));
+
+
+	QFont font("宋体", 12, QFont::Bold, false);
+	painter.setFont(font);
+	painter.drawText(point.x()+10, point.y()+5, QString::number(point.getIndex()));
 	update();
 }
 
@@ -194,10 +204,9 @@ void PaintWidget::paintPoint(MyQPoint *point){
 	painter.drawEllipse(point->x(), point->y(), 6, 6);
 
 	int index = point->getIndex();
-	if (index != -1){
-		painter.drawText(point->x() + 5, point->y() + 5, QString::number(index));
-	}
-	
+	QFont font("宋体", 12, QFont::Bold, false);
+	painter.setFont(font);
+	painter.drawText(point->x() + 10, point->y() + 5, QString::number(index));
 	update();
 }
 
@@ -435,19 +444,16 @@ void PaintWidget::addLine(MyQPoint *qPoint){
 void PaintWidget::paintIntersectPoints(){
 	QPainter painter(this);
 	painter.translate(WIN_WIDTH / 2, WIN_HEIGHT / 2);
-	//painter.scale(scaleX, scaleY); //放大两倍
-
+	
 	for (long long i = 0; i < intersectPoints.size(); i++){
 		LECP_Point* point = intersectPoints[i];
-		//paintPoint(qPoint);
-		painter.setPen(QPen(Qt::cyan, 2));
-		painter.setBrush(QBrush(Qt::cyan, Qt::SolidPattern)); //设置画刷形式 
-		//painter.drawPoint(qPoint->x(), qPoint->y());
-		//painter.drawRect()
+		painter.setPen(QPen(Qt::darkBlue, 2));
+		painter.setBrush(QBrush(Qt::darkBlue, Qt::SolidPattern)); //设置画刷形式 
 		double x = point->x*scaleX;
 		double y =- point->y*scaleY;
 		painter.drawEllipse(x, y, 8,8);
-		
+		QFont font("宋体", 12, QFont::Bold, false);
+		painter.setFont(font);
 		painter.drawText(x+10,y+10 , QString::number(point->index));
 	}
 
@@ -482,3 +488,4 @@ void PaintWidget::paintEdge(MyQline *line){
 	painter.drawLine(*line);
 	update();
 }
+

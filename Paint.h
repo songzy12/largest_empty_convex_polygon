@@ -36,6 +36,7 @@ protected:
 public:
 	void init();
 
+	void setPoints(vector<LECP_Point> points_);
 	bool savePoints(char *filename);
 	void loadPoints(char *fileName);
 

@@ -556,12 +556,16 @@ void Mesh::postCalcPolarAngle(){
 			tmpList.push_back(*tmpPoint);
 		}
 
+		/*
 		if (tmpList.size() > 2){
 			reverse(tmpList.begin() + 1, tmpList.end());//µßµ¹ÈÝÆ÷ÖÐÔªËØË³Ðò
 		}
+        */
 
 		//LECP_Point to Vertex*
 		list<Vertex*> polarVextex = changeLECO_PointToVertex(tmpList);// no index
 		sortedVector.push_back(polarVextex);
 	}
+
+	reverse(sortedVector.begin(), sortedVector.end());//reverse kernel
 }

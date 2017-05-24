@@ -5,6 +5,7 @@
 #include <vertex.h>
 #include <util.h>
 #include "lecp_doc.h"
+#include <QInputDialog>
 using namespace std;
 
 LECP::LECP(QWidget *parent)
@@ -35,6 +36,8 @@ LECP::LECP(QWidget *parent)
 	QObject::connect(ui.saveFile, SIGNAL(triggered()), this, SLOT(saveFileSlot()));
 	QObject::connect(ui.openFile, SIGNAL(triggered()), this, SLOT(openFileSlot()));
 	QObject::connect(ui.sortedDCEL, SIGNAL(triggered()), this, SLOT(polarAngleSortDCELSlot()));
+	QObject::connect(ui.randomPoints, SIGNAL(triggered()), this, SLOT(randomPointsGenerationSlot()));
+
 
 	//DCEL ¶¯»­
 	QObject::connect(ui.DCEL_animation, SIGNAL(triggered()), this, SLOT(DCELAnimationSlot()));
@@ -383,5 +386,19 @@ Polygon* LECP::trans2Poly(int kernal_index)
 	/*}*/
 	}
 	return poly2show;
+}
+
+void LECP::randomPointsGenerationSlot(){
+	bool isOK;
+	QString text = QInputDialog::getText(NULL, "Input points number", "Please input the number of points:", QLineEdit::Normal, "points number", &isOK);
+
+	if (isOK){
+		int points_number = text.toInt();
+
+		cout << "random points number:" << points_number << endl;
+
+		vector<LECP_Point> random_points = generateRandomPoints(points_number);
+		paintWidget->setPoints( random_points);
+	}
 }
 
