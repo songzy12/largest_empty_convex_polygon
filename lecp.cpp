@@ -5,6 +5,7 @@
 #include <vertex.h>
 #include <util.h>
 #include "lecp_doc.h"
+#include <QInputDialog>
 using namespace std;
 
 LECP::LECP(QWidget *parent)
@@ -25,6 +26,8 @@ LECP::LECP(QWidget *parent)
 	paintWidget = new PaintWidget(width, height);
 	this->setCentralWidget(paintWidget);
 	
+	poly2show->setPaintWidget(paintWidget);
+
 	createToolBar();    //创建工具栏 
 	this->addToolBarBreak();
 
@@ -33,6 +36,8 @@ LECP::LECP(QWidget *parent)
 	QObject::connect(ui.saveFile, SIGNAL(triggered()), this, SLOT(saveFileSlot()));
 	QObject::connect(ui.openFile, SIGNAL(triggered()), this, SLOT(openFileSlot()));
 	QObject::connect(ui.sortedDCEL, SIGNAL(triggered()), this, SLOT(polarAngleSortDCELSlot()));
+	QObject::connect(ui.randomPoints, SIGNAL(triggered()), this, SLOT(randomPointsGenerationSlot()));
+
 
 	//DCEL 动画
 	QObject::connect(ui.DCEL_animation, SIGNAL(triggered()), this, SLOT(DCELAnimationSlot()));
@@ -98,6 +103,9 @@ void LECP::createToolBar()
 	QLabel* spaceLabel2 = new QLabel(tr("     "));
 	stopButton = new QPushButton(this);
 	stopButton->setText(tr("stop"));
+	QLabel* spaceLabel3 = new QLabel(tr("     "));
+	resetButton = new QPushButton(this);
+	resetButton->setText(tr("reset"));
 
 	this->ui.showControl->addWidget(speedLabel);
 	this->ui.showControl->addWidget(pSpinBox);
@@ -108,12 +116,15 @@ void LECP::createToolBar()
 	this->ui.showControl->addWidget(startButton);
 	this->ui.showControl->addWidget(spaceLabel2);
 	this->ui.showControl->addWidget(stopButton);
+	this->ui.showControl->addWidget(spaceLabel3);
+	this->ui.showControl->addWidget(resetButton);
 
 	connect(pSpinBox, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
 	connect(speedSlider, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
 
 	connect(startButton, SIGNAL(clicked()), this, SLOT(startShowSlot()));
 	connect(stopButton, SIGNAL(clicked()), this, SLOT(stopShowSlot()));
+	connect(resetButton, SIGNAL(clicked()), this, SLOT(resetShowSlot()));
 }
 
 
@@ -314,12 +325,19 @@ void LECP::changeSpeedSlot(int newSpeed)
 	pSpinBox->setValue(newSpeed);
 	speedSlider->setValue(newSpeed);
 	showspeed = newSpeed;
+	if (poly2show != NULL)
+	{
+		poly2show->setSleepTime(showSpeedMax - showspeed);
+	}
 }
 
 void LECP::startShowSlot()
 {
 	isStart = true;//演示结束时设为false
-	//trans2Poly();
+
+	trans2Poly(6);
+
+	//paintWidget->allQPoints2Draw
 	if (showSort){}
 	else{}
 
@@ -331,36 +349,70 @@ void LECP::startShowSlot()
 
 }
 
+
 void LECP::stopShowSlot()
 {
 	
 }
 
+void LECP::resetShowSlot()
+{
+	poly2show->getPaintWidget()->clearMyQPandMyQL();
+}
 Polygon* LECP::trans2Poly(int kernal_index)
 {
 	if (kernal_index < 0)
 		qDebug() << "kernal index should >=0 in Fun trans2Poly(int kernal_index)";
 	//int pointsNum = mesh->sortedVector.size();
+	else{
 	int pointsNum = 1;
 	//循环处理每个点
 	/*for (int points_index = 0; points_index < pointsNum; points_index++)
 	{*/
-	int points_index = 3;
+	//int points_index = 3;
 		//temp 存储用来初始化polygon的vertor<vertex>
 		vector<Vertex*> temp_vertices;
-		int vertexNum = mesh->sortedVector.at(points_index).size();
-		list<Vertex*>::iterator iter_vertex = mesh->sortedVector.at(points_index).begin();
-		while (iter_vertex != mesh->sortedVector.at(points_index).end())
+		int vertexNum = mesh->sortedVector.at(kernal_index).size();
+		list<Vertex*>::iterator iter_vertex = mesh->sortedVector.at(kernal_index).begin();
+		while (iter_vertex != mesh->sortedVector.at(kernal_index).end())
 		{
 			temp_vertices.push_back(*iter_vertex);
 			iter_vertex++;
 		}
 		poly2show->setVertices(temp_vertices);
+
+		//animation
+		poly2show->getPaintWidget()->allQPoints2Draw.clear();
+		for (int i = 0; i < vertexNum;i++){//转化vertex为MyQPoint
+			MyQPoint temp_myqpoint(QPoint(temp_vertices[i]->point().first, temp_vertices[i]->point().second*-1));
+			if (i == 0)
+				temp_myqpoint.setColor(Qt::blue);
+			else
+				temp_myqpoint.setColor(Qt::black);
+			temp_myqpoint.setIndex(temp_vertices[i]->index());
+			poly2show->getPaintWidget()->allQPoints2Draw.push_back(temp_myqpoint);
+		}
+
 		//polygon的返回值 不应该直接修改polygon的vertex吗
 		temp_vertices = poly2show->getVisibilityGraph();
 		temp_vertices = poly2show->getConvexChain();
 		temp_vertices.clear();
 	/*}*/
+	}
 	return poly2show;
+}
+
+void LECP::randomPointsGenerationSlot(){
+	bool isOK;
+	QString text = QInputDialog::getText(NULL, "Input points number", "Please input the number of points:", QLineEdit::Normal, "points number", &isOK);
+
+	if (isOK){
+		int points_number = text.toInt();
+
+		cout << "random points number:" << points_number << endl;
+
+		vector<LECP_Point> random_points = generateRandomPoints(points_number);
+		paintWidget->setPoints( random_points);
+	}
 }
 

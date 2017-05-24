@@ -11,12 +11,18 @@ class Polygon {
 		Polygon(vector<Vertex*> vertices, PaintWidget* paint_widget);
 		~Polygon();
 
+		void clear();
 		void setVertices(vector<Vertex*>);
+		void setPaintWidget(PaintWidget* paintWidget);
+		PaintWidget* getPaintWidget();
 		vector<Vertex*> getStarPolygon();
 		/*create visibility graph
 		starPoly:	star-shaped Polygon with points ordered by angle*/
 		vector<Vertex*> getVisibilityGraph();
+		void proceedNeighborPoints(Vertex* i, Vertex* j, int index_i, int index_j);
 		vector<Vertex*> getConvexChain();
+		int sleepTime();
+		void setSleepTime(int time);
 
 	private:
 		vector<Vertex *> vertices_;	
@@ -24,6 +30,7 @@ class Polygon {
 		bool comparePolar(Vertex* p, Vertex* q);
 
 		PaintWidget* paint_widget_;
+		int sleepTime_;//0.1s
 };
 
 #endif

@@ -26,6 +26,7 @@ QT_BEGIN_NAMESPACE
 class Ui_LECPClass
 {
 public:
+    QAction *randomPoints;
     QWidget *centralWidget;
     QStatusBar *statusBar;
     QMenuBar *menuBar;
@@ -52,6 +53,8 @@ public:
         if (LECPClass->objectName().isEmpty())
             LECPClass->setObjectName(QStringLiteral("LECPClass"));
         LECPClass->resize(995, 605);
+        randomPoints = new QAction(LECPClass);
+        randomPoints->setObjectName(QStringLiteral("randomPoints"));
         centralWidget = new QWidget(LECPClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         statusBar = new QStatusBar(centralWidget);
@@ -102,13 +105,14 @@ public:
         showControl->setObjectName(QStringLiteral("showControl"));
         LECPClass->addToolBar(Qt::TopToolBarArea, showControl);
 
-        menuBar->addAction(menu->menuAction());
         menuBar->addAction(menu_2->menuAction());
+        menuBar->addAction(menu->menuAction());
         menuBar->addAction(menu_3->menuAction());
         menuBar->addAction(menu_show->menuAction());
         menu->addAction(polar_angle_sort);
         menu->addAction(sortedDCEL);
         menu->addAction(create_VG);
+        menu->addAction(randomPoints);
         menu_2->addAction(saveFile);
         menu_2->addAction(openFile);
         menu_2->addAction(reset);
@@ -126,6 +130,7 @@ public:
     void retranslateUi(QMainWindow *LECPClass)
     {
         LECPClass->setWindowTitle(QApplication::translate("LECPClass", "LECP", Q_NULLPTR));
+        randomPoints->setText(QApplication::translate("LECPClass", "\351\232\217\346\234\272\347\202\271\347\224\237\346\210\220", Q_NULLPTR));
         polar_angle_sort->setText(QApplication::translate("LECPClass", "\346\236\201\350\247\222\346\216\222\345\272\217\357\274\210naive\357\274\211", Q_NULLPTR));
         create_VG->setText(QApplication::translate("LECPClass", "\347\224\237\346\210\220vg\345\233\276", Q_NULLPTR));
         saveFile->setText(QApplication::translate("LECPClass", "save file", Q_NULLPTR));

@@ -42,6 +42,7 @@ private:
 	QPushButton* pSelectButton;
 	QPushButton* startButton;
 	QPushButton* stopButton;
+	QPushButton* resetButton;
 	QSlider* speedSlider;
 	QSpinBox* pSpinBox;
 
@@ -56,6 +57,7 @@ public slots:
 	void saveFileSlot();
 	void openFileSlot();
 	void polarAngleSortDCELSlot();
+	void randomPointsGenerationSlot();
 
 	//DCEL ¶¯»­
 	void DCELAnimationSlot();
@@ -71,6 +73,7 @@ public slots:
 	void changeSpeedSlot(int newSpeed);
 	void startShowSlot();
 	void stopShowSlot();
+	void resetShowSlot();
 
 public:
 	Mesh *mesh;
