@@ -57,6 +57,7 @@ public slots:
 	void saveFileSlot();
 	void openFileSlot();
 	void polarAngleSortDCELSlot();
+	void randomPointsGenerationSlot();
 
 	//DCEL ¶¯»­
 	void DCELAnimationSlot();

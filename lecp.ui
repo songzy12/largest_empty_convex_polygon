@@ -41,6 +41,7 @@
     <addaction name="polar_angle_sort"/>
     <addaction name="sortedDCEL"/>
     <addaction name="create_VG"/>
+    <addaction name="randomPoints"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -124,8 +125,8 @@
      <string>重置</string>
     </property>
    </action>
-   <addaction name="menu"/>
    <addaction name="menu_2"/>
+   <addaction name="menu"/>
    <addaction name="menu_3"/>
    <addaction name="menu_show"/>
   </widget>
@@ -151,6 +152,11 @@
     <bool>false</bool>
    </attribute>
   </widget>
+  <action name="randomPoints">
+   <property name="text">
+    <string>随机点生成</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
