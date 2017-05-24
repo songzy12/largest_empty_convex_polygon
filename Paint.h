@@ -64,7 +64,7 @@ public:
 	void paintAllLine();
 	void paintLine(MyQline *line);
 	void paintIntersectPoints();
-	void addLine(MyQPoint *point);
+	MyQline* addLine(MyQPoint *point);
 	QLine getPaintLine(MyQPoint *qPoint);
 	void displayIntersectionPoint(vector<pair<LECP_Point*, LECP_Point*>> lecp_points);
 	void getSuitCoordinate(double a,double  b,double &x1,double &y1,double &x2,double &y2);
