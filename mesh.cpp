@@ -38,6 +38,7 @@ void Mesh::ConnectVertices(Vertex *v1, Vertex *v2) {
 
 //屏幕上增加一个点，对应的对偶图中增加一条线
 vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
+	//The first is intersection,and the second is corresponding original user input point.
 	vector<pair<LECP_Point*, LECP_Point*>> return_intersections;
 
 	list<LECP_Point*> sortedAngle;// kernel point's sorted result.
@@ -125,7 +126,7 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 	//判断当前的交点是否在bounding box上
 	bool onBB = onBoundingBox(newIntersection);
 
-	while (!onBB){
+	while (!onBB){ //死循环
 		//---------------start add new pair--------------------------------------------------------
 		// add a new intersection vertex to the return vector.
 		LECP_Point* first = new LECP_Point();
@@ -210,10 +211,47 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 	//最后一个交点
 	boundingBox.push_back(intersectHalfEdgeRight);
 
+	// 交点的顺序可能正好相反，和新插入的直线与哪个bounding box首先相交有关（每条新插入的直线都和两个bounding box相交）
+
+	postAjustIntersections(sortedAngle);// 2017-05-24添加
+	postAjustIntersections(return_intersections);// 2017-05-24添加
+
 	//save current kernel's polar angle sorted result
 	sortedPoint.push_back(sortedAngle);
 
 	return return_intersections;
+}
+
+// 2017-05-24添加
+void Mesh::postAjustIntersections(list<LECP_Point*>  &return_intersections){
+	if (return_intersections.size() <= 2)
+		return;
+
+	vector<LECP_Point*> tmpVector{ return_intersections.begin(), return_intersections.end() };
+	
+	LECP_Point* p1 = tmpVector[1];
+	LECP_Point* p2 = tmpVector[2];
+	if (p1->x > p2->x){
+		reverse(return_intersections.begin(), return_intersections.end());
+	}
+	else if (p1->x == p1->x && p1->y > p2->y){
+		reverse(++return_intersections.begin(), return_intersections.end());
+	}
+}
+
+// 2017-05-24添加
+void Mesh::postAjustIntersections(vector<pair<LECP_Point*, LECP_Point*>>  &return_intersections){
+	if (return_intersections.size() < 2)
+		return;
+
+	LECP_Point* p1 = return_intersections[0].first;
+	LECP_Point* p2 = return_intersections[1].first;
+	if (p1->x > p2->x){
+		reverse(return_intersections.begin(), return_intersections.end());
+	}
+	else if (p1->x == p1->x && p1->y > p2->y){
+		reverse(++return_intersections.begin(), return_intersections.end());
+	}
 }
 
 //最外围的墙，no twins,翻不出去
@@ -366,7 +404,6 @@ Vertex*  Mesh::intersectWithBoundingBox(HalfEdge* tmp, double a, double b){
 				p.second = -half_y;
 				re->set_point(p);
 
-
 				return re;
 			}
 		}
@@ -392,6 +429,7 @@ Vertex*  Mesh::intersectWithBoundingBox(HalfEdge* tmp, double a, double b){
 }
 
 //判断half_edge与直线y=ax-b是否有交点，if intersect,return the Vertex,else return null
+// half_edge没有next
 Vertex* intersaction(HalfEdge *half_edge, double a, double b){
 	//线段的起点和终点
 	Vertex* start = half_edge->origin();
@@ -430,10 +468,6 @@ Vertex* intersaction(HalfEdge *half_edge, double a, double b){
 	else{
 		resultY = a*resultX - b;
 	}
-
-
-
-
 
 	Vertex* v = new Vertex();
 	pair<double, double> p;
@@ -507,11 +541,10 @@ HalfEdge*  Mesh::getIntersectBundingBox(double a, double b, Vertex &vertex){
 		firstHalfEdge = *it++;
 
 		//判断半边与直线是否有交点
-		Vertex *re = intersectWithBoundingBox(firstHalfEdge, a, b);//？？？
+		Vertex *re = intersectWithBoundingBox(firstHalfEdge, a, b);
 
 		if (re != NULL){
 			vertex = *re;
-
 
 			return firstHalfEdge;
 		}
@@ -567,12 +600,6 @@ void Mesh::postCalcPolarAngle(){
 			LECP_Point* tmpPoint = *it++;
 			tmpList.push_back(*tmpPoint);
 		}
-
-		/*
-		if (tmpList.size() > 2){
-			reverse(tmpList.begin() + 1, tmpList.end());//颠倒容器中元素顺序
-		}
-        */
 
 		//LECP_Point to Vertex*
 		list<Vertex*> polarVextex = changeLECO_PointToVertex(tmpList);// no index

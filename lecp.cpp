@@ -6,6 +6,8 @@
 #include <util.h>
 #include "lecp_doc.h"
 #include <QInputDialog>
+#include"time.h"
+#include <QMessageBox>
 using namespace std;
 
 LECP::LECP(QWidget *parent)
@@ -149,6 +151,8 @@ bool compareVertex(Vertex* p, Vertex* q){
 }
 //极角排序
 void LECP::polarAngleSortSlot() {
+	time_t start = clock();
+
 	lecp_doc->points = paintWidget->points;
 	//首先将输入的所有点按照从左到右的顺序排列
 	vector<LECP_Point> points = lecp_doc->points;
@@ -166,6 +170,14 @@ void LECP::polarAngleSortSlot() {
 
 		mesh->sortedVector.push_back(subV);
 	}
+
+	time_t end = clock();
+	double runTime = double(end - start) * 1000 / CLOCKS_PER_SEC;
+
+	QString msg = QString::number(runTime)+"ms";
+	QMessageBox box;
+	box.about(this, "running time", msg);
+	box.show();
 }
 
 void LECP::polarAngleSortDCELSlot() {
@@ -271,6 +283,8 @@ void LECP::clearDCELAnimationSlot(){
 
 void LECP::resetSlot(){
 	paintWidget->init();
+	mesh->clear();
+	mesh = new Mesh();
 }
 
 //动画演示Menu Slot
