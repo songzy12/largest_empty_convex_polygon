@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <list>
 #include <util.h>
+#include <qDebug.h>
 using namespace std;
 
 #define  INFINITY  999999999999
@@ -45,6 +46,8 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 	double a = point->x;
 	double b = point->y;
 
+	qDebug() << "AddLine:" << a << b;
+
 	Vertex vRet;
 
 	//找到新插入的直线和bounding box的哪个线段相交
@@ -53,6 +56,8 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 	//找到交点，并且更新boudingBox
 	Vertex* v = new Vertex();
 	v->set_point(vRet.point());
+
+	qDebug() << "vRet: " << vRet.point().first << vRet.point().second;
 	
 	HalfEdge* newHalf = new HalfEdge();// belong to bounding box
 	HalfEdge* poH = new HalfEdge();
@@ -97,6 +102,7 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 	intersectHalfEdgeLeft = getIntersection(a, b, *newHalf, *newIntersection, *intersectHalfEdgeRight);//返回直线和面中有交点的半边和交点坐标
 
 	// for polar angle sort 
+	// TODO: check whether intersectHalfEdgeLeft->lecp_point is set?
 	intersectHalfEdgeRight->lecp_point = intersectHalfEdgeLeft->lecp_point;
 
 	//后加
@@ -127,6 +133,9 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 		first->setY(newIntersection->point().second);
 
 		LECP_Point* second = intersectHalfEdgeRight->lecp_point;
+
+		qDebug() << "first" << newIntersection->point().first << newIntersection->point().first;
+		qDebug() << "second:" << (intersectHalfEdgeRight->lecp_point)->x << (intersectHalfEdgeRight->lecp_point)->y;
 
 		pair<LECP_Point*, LECP_Point*> intersectionPair;
 		intersectionPair.first = first;
@@ -168,11 +177,12 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 		//此步newHalf已经改变，之后不再用
 		Vertex tmpV;
 		HalfEdge *newRight = new HalfEdge();
+		// TODO: here is where everything begins
 		intersectHalfEdgeLeft = getIntersection(a, b, *newHalf, tmpV, *newRight);
 
 		// for polar angle sort
+		// TODO: newRight->lecp_point may not be set
 		newRight->lecp_point = intersectHalfEdgeLeft->lecp_point;
-
 
 		Vertex *intersection = new Vertex();
 		intersection->set_point(tmpV.point());
@@ -385,6 +395,7 @@ Vertex*  Mesh::intersectWithBoundingBox(HalfEdge* tmp, double a, double b){
 Vertex* intersaction(HalfEdge *half_edge, double a, double b){
 	//线段的起点和终点
 	Vertex* start = half_edge->origin();
+	// TODO: how can half_edge->next()->origin() not set?
 	Vertex* end = half_edge->next()->origin();
 
 	double x1 = start->point().first;
@@ -458,6 +469,7 @@ HalfEdge* Mesh::getIntersection(double a, double b, HalfEdge newHalf, Vertex &ne
 
 	while (inter == NULL){
 		newInectHalfEdge = newInectHalfEdge->next();
+		// TODO: how can newInectHalfEdge->next()->origin() not set?
 		inter = intersaction(newInectHalfEdge, a, b);//
 	}
 
@@ -487,10 +499,10 @@ bool Mesh::onBoundingBox(Vertex* newIntersection){
 		return true;
 	return false;
 }
-
+// store the intersection point of line: ax-b with bounding box to vertex, then return the intersected bounding edge
 HalfEdge*  Mesh::getIntersectBundingBox(double a, double b, Vertex &vertex){
 	list<HalfEdge*>::iterator it = boundingBox.begin();
-	HalfEdge *firstHalfEdge = new HalfEdge();
+	HalfEdge *firstHalfEdge = new HalfEdge(); // TODO: code refactor: do not new a HalfEdge here
 	while (it != boundingBox.end()){
 		firstHalfEdge = *it++;
 

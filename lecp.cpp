@@ -168,7 +168,7 @@ void LECP::polarAngleSortSlot() {
 	}
 }
 
-void LECP::polarAngleSortDCELSlot(){
+void LECP::polarAngleSortDCELSlot() {
 	lecp_doc->points = paintWidget->points;
 	//首先将输入的所有点按照从左到右的顺序排列
 	vector<LECP_Point> points = lecp_doc->points;
