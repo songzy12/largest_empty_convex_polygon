@@ -23,6 +23,11 @@ class Polygon {
 		void proceedNeighborPoints(Vertex* i, Vertex* j, int index_i, int index_j);
 		vector<Vertex*> getConvexChain();
 		HalfEdge* ConvexChainPoint(Vertex * p, int &len);
+		////带动画显示的版本
+		//vector<Vertex*> getVisibilityGraph_a();
+		//void proceedNeighborPoints_a(Vertex* i, Vertex* j, int index_i, int index_j);
+		//vector<Vertex*> getConvexChain_a();
+		//HalfEdge* ConvexChainPoint_a(Vertex * p, int &len);
 		int sleepTime();
 		void setSleepTime(int time);
 

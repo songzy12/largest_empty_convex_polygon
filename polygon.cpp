@@ -37,6 +37,31 @@ Polygon::~Polygon() {
 
 void Polygon::clear()
 {
+	//L值设为0
+	vector<Vertex*>::iterator it_v = vertices_.begin();
+	while (it_v != vertices_.end())
+	{
+		(*it_v)->incoming_edges_.clear();
+		(*it_v)->outgoing_edges_.clear();
+		it_v++;
+	}
+
+	/*while (it_v != vertices_.end())
+	{
+		vector<HalfEdge *>::iterator it_e = (*it_v)->incoming_edges_.begin();
+		while (it_e != (*it_v)->incoming_edges_.end())
+		{
+			(*it_e)->set_L(0);
+			it_e++;
+		}
+		it_e = (*it_v)->outgoing_edges_.begin();
+		while (it_e != (*it_v)->outgoing_edges_.end())
+		{
+			(*it_e)->set_L(0);
+			it_e++;
+		}
+		it_v++;
+	}*/
 	vertices_.clear();
 	paint_widget_->allQLines2Draw.clear();
 	paint_widget_->allQPoints2Draw.clear();
@@ -126,6 +151,7 @@ void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j,int index_i,int index_j
 	this->paint_widget_->allQPoints2Draw[index_i].setColor(Qt::yellow);
 	this->paint_widget_->allQPoints2Draw[index_j].setColor(Qt::green);
 	this->paint_widget_->repaint();
+	this->paint_widget_->update();
 	_sleep(sleepTime() * 100);
 
 	//上一次的添加的halfedge转为默认色
@@ -219,6 +245,8 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 		halfedge.setColor(Qt::green);
 		halfedge.setArrowStyle(true);
 		halfedge.setDotStyle(false);
+		halfedge.setL(temp_halfedge->L());
+		halfedge.setShowL(true);
 		this->paint_widget_->allQLines2Draw.push_back(halfedge);
 	}
 		//in edges
@@ -231,6 +259,8 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 		halfedge.setColor(Qt::yellow);
 		halfedge.setArrowStyle(true);
 		halfedge.setDotStyle(false);
+		halfedge.setL(temp_halfedge->L());
+		halfedge.setShowL(true);
 		this->paint_widget_->allQLines2Draw.push_back(halfedge);
 	}
 	this->paint_widget_->repaint();
@@ -246,18 +276,19 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 	int m = 0;
 
 	//outedgeIndex inedgeIndex added for animation
-	int inedgeIndexBase = this->paint_widget_->allQLines2Draw.size() - 1 - inedgeNum;
+	int inedgeIndexBase = this->paint_widget_->allQLines2Draw.size() - inedgeNum;
 	int outedgeIndexBase = inedgeIndexBase - outedgeNum;
 	if (inedgeNum!=0)
 		longest_edge = *in_edges.begin();
 	for (it_i = in_edges.rbegin(); it_i != in_edges.rend(); it_i++) {
 		//animation for current in_edge
-		int inedgeIndex = inedgeIndexBase+inedgeNum - (it_i - in_edges.rbegin());
+		int inedgeIndex = inedgeIndexBase+inedgeNum-1 - (it_i - in_edges.rbegin());
 		this->paint_widget_->allQLines2Draw.at(inedgeIndex).setColor(Qt::red);
 		this->paint_widget_->repaint();
 		/*_sleep(sleepTime() * 50);*/
 		_sleep(500);
 		//animation for current in_edge end//
+
 		// we compute the L for incoming edge i.
 		qDebug() << "in edge:" << (*it_i)->target()->index() << "<-" << (*it_i)->origin()->index();
 		if (it_o != out_edges.end()) {
@@ -266,12 +297,13 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 		}
 		while (it_o != out_edges.end() && isConvexTurn(*it_i, *it_o)) {
 			//animation for current out_edge
-			int outedgeIndex = outedgeIndexBase + outedgeNum - (it_o - out_edges.begin());
+			int outedgeIndex = outedgeIndexBase + outedgeNum-1 - (it_o - out_edges.begin());
 			this->paint_widget_->allQLines2Draw.at(outedgeIndex).setColor(Qt::blue);
 			this->paint_widget_->repaint();
 			/*_sleep(sleepTime() * 100);*/
 			_sleep(500);
 			//animation for current out_edge end //
+
 			if ((*it_o)->L() > m) {
 				m = (*it_o)->L();
 				longest_edge = *it_i;
@@ -289,12 +321,16 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 	{
 		this->paint_widget_->allQLines2Draw.at(outedgeIndexBase + i).setColor(Qt::green);
 		this->paint_widget_->allQLines2Draw.at(outedgeIndexBase + i).setDotStyle(true);
+		this->paint_widget_->allQLines2Draw.at(outedgeIndexBase + i).setShowL(false);
+		this->paint_widget_->repaint();
 	}
 	//in_edge
 	for (int i = 0; i < inedgeNum; i++)
 	{
 		this->paint_widget_->allQLines2Draw.at(inedgeIndexBase + i).setColor(Qt::green);
 		this->paint_widget_->allQLines2Draw.at(inedgeIndexBase + i).setDotStyle(true);
+		this->paint_widget_->allQLines2Draw.at(inedgeIndexBase + i).setShowL(false);
+		this->paint_widget_->repaint();
 	}
 	//animation state clear end
 
@@ -315,9 +351,12 @@ vector<Vertex*> Polygon::getConvexChain() {
 		Vertex *p = vertices_[i];
 		int len = 0;
 		/*animation  current point*/
+		this->paint_widget_->repaint();
+		this->paint_widget_->update();
 		this->paint_widget_->allQPoints2Draw[i].setColor(Qt::yellow);
 		if (i != vertices_.size() - 1)
-			this->paint_widget_->allQPoints2Draw[i + 1].setColor(Qt::black);
+			this->paint_widget_->allQPoints2Draw[i + 1].setColor(Qt::blue);
+		this->paint_widget_->repaint();
 		//this->paint_widget_->repaint();
 		/* animation  current point end*/
 		HalfEdge *temp_edge = ConvexChainPoint(p, len);
@@ -333,9 +372,11 @@ vector<Vertex*> Polygon::getConvexChain() {
 			MyQline halfedge(QLine(animation_longest_edge->origin()->point().first , animation_longest_edge->origin()->point().second *-1, animation_longest_edge->target()->point().first, animation_longest_edge->target()->point().second*-1));
 			halfedge.setColor(Qt::black);
 			halfedge.setArrowStyle(true);
+			halfedge.setShowL(true);
+			halfedge.setL(animation_longest_edge->L());
 			this->paint_widget_->allQLines2Draw.push_back(halfedge);
 			animation_longest_edge = animation_longest_edge->prev_chain_;
-			animation_largest_chain_len++;
+			animation_largest_chain_len++; 
 			this->paint_widget_->repaint();
 			_sleep(300);
 		}
@@ -365,6 +406,8 @@ vector<Vertex*> Polygon::getConvexChain() {
 		MyQline halfedge(QLine(longest_edge->origin()->point().first, longest_edge->origin()->point().second *-1, longest_edge->target()->point().first, longest_edge->target()->point().second*-1));
 		halfedge.setColor(Qt::black);
 		halfedge.setArrowStyle(true);
+		halfedge.setShowL(true);
+		halfedge.setL(longest_edge->L());
 		this->paint_widget_->allQLines2Draw.push_back(halfedge);
 		animation_largest_chain_len++;
 		this->paint_widget_->repaint();
@@ -380,6 +423,7 @@ vector<Vertex*> Polygon::getConvexChain() {
 	for (int i = 0; i < animation_largest_chain_len; i++)
 	{
 		it_chain->setArrowStyle(false);
+		it_chain->setShowL(false);
 		it_chain++;
 	}
 	MyQline halfedge01(QLine(vertices_[0]->point().first, vertices_[0]->point().second *-1, chain_start->point().first, chain_start->point().second*-1));

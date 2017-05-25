@@ -3,7 +3,8 @@
 
 #include<QPoint>
 #include<QColor>
-
+#include <vector>
+using namespace std;
 class MyQPoint:public QPoint{
 public:
 	MyQPoint();
@@ -14,9 +15,13 @@ public:
 	void setColor(QColor color);
 	long long getIndex();
 	QColor getColor();
+	vector<int> getQ();
+	void setQ(vector<int> Q);
+
 public:
 	long long index_;
 	QColor color_;
+	vector<int> Q_;
 
 };
 

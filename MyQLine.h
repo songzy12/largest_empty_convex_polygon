@@ -20,12 +20,19 @@ public:
 	void setArrowStyle(bool use);
 	bool getArrowStyle();
 	float length();
+	int L();
+	void setL(int l);
+	bool showL();
+	void setShowL(bool showL);
 public:
 	QColor color_;
 	//是否使用虚线风格
 	bool use_dot_style_;
 	//是否带箭头
 	bool have_arrow_;
+	//是否显示数值L
+	bool show_l_;
+	int L_;
 };
 
 #endif

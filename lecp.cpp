@@ -378,7 +378,8 @@ void LECP::stopShowSlot()
 
 void LECP::resetShowSlot()
 {
-	poly2show->getPaintWidget()->clearMyQPandMyQL();
+	//poly2show->getPaintWidget()->clearMyQPandMyQL();
+	poly2show->clear();
 }
 Polygon* LECP::trans2Poly(int kernal_index)
 {

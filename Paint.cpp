@@ -525,6 +525,13 @@ void PaintWidget::paintEdges(MyQline *line){
 		temp_pen.setDashPattern(dashes);
 		temp_pen.setWidthF(0.5);
 	}
+
+	//ÏÔÊ¾L
+	if (line->showL()){
+		QFont font("ËÎÌå", 12, QFont::Bold, false);
+		painter.setFont(font);
+		painter.drawText((line->x1() + line->x2()) / 2, (line->y1() + line->y2()) / 2, QString::number(line->L()));
+	}
 	painter.setPen(temp_pen);
 	painter.drawLine(*line);
 	update();

@@ -3,6 +3,8 @@ MyQline::MyQline(){
 	color_ = Qt::black;
 	use_dot_style_ = false;
 	have_arrow_ = false;
+	show_l_ = false;
+	L_ = 1;
 }
 MyQline::MyQline(QLine line){
 	this->setLine(line.x1(),line.y1(),line.x2(),line.y2());
@@ -10,6 +12,8 @@ MyQline::MyQline(QLine line){
 	color_ = Qt::black;
 	use_dot_style_ = false;
 	have_arrow_ = false;
+	show_l_ = false;
+	L_ = 1;
 }
 
 QColor MyQline::getColor(){
@@ -35,4 +39,20 @@ bool MyQline::getArrowStyle(){
 float MyQline::length(){
 	float length = sqrt(this->dx()*this->dx() + this->dy()*this->dy());
 	return length;
+}
+int MyQline::L()
+{
+	return L_;
+}
+void MyQline::setL(int l)
+{
+	L_ = l;
+}
+bool MyQline::showL()
+{
+	return show_l_;
+}
+void MyQline::setShowL(bool showL)
+{
+	show_l_ = showL;
 }

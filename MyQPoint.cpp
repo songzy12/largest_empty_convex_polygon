@@ -33,3 +33,12 @@ long long MyQPoint::getIndex(){
 QColor MyQPoint::getColor(){
 	return color_;
 }
+vector<int> MyQPoint::getQ()
+{
+	return Q_;
+}
+void MyQPoint::setQ(vector<int> Q)
+{
+	Q_.clear();
+	Q_ = Q;
+}
