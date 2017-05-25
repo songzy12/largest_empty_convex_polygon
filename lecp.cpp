@@ -356,7 +356,7 @@ void LECP::startShowSlot()
 {
 	isStart = true;//演示结束时设为false
 
-	trans2Poly(6);
+	trans2Poly(0);
 
 	//paintWidget->allQPoints2Draw
 	if (showSort){}
@@ -402,20 +402,55 @@ Polygon* LECP::trans2Poly(int kernal_index)
 		}
 		poly2show->setVertices(temp_vertices);
 
-		//animation
+		//animation_kernal & starpolygon
 		poly2show->getPaintWidget()->allQPoints2Draw.clear();
-		for (int i = 0; i < vertexNum;i++){//转化vertex为MyQPoint
+
+			//kernal:
+		MyQPoint kernal(QPoint(temp_vertices[0]->point().first, temp_vertices[0]->point().second*-1));
+		kernal.setColor(Qt::red);
+		kernal.setIndex(temp_vertices[0]->index());
+		poly2show->getPaintWidget()->allQPoints2Draw.push_back(kernal);
+			//other points
+		for (int i = 1; i < vertexNum;i++){//转化vertex为MyQPoint
 			MyQPoint temp_myqpoint(QPoint(temp_vertices[i]->point().first, temp_vertices[i]->point().second*-1));
-			if (i == 0)
-				temp_myqpoint.setColor(Qt::blue);
-			else
-				temp_myqpoint.setColor(Qt::black);
+			temp_myqpoint.setColor(Qt::blue);
 			temp_myqpoint.setIndex(temp_vertices[i]->index());
 			poly2show->getPaintWidget()->allQPoints2Draw.push_back(temp_myqpoint);
-		}
+			poly2show->getPaintWidget()->repaint();
+			_sleep(showspeed * 50);
 
-		//polygon的返回值 不应该直接修改polygon的vertex吗
+			MyQline edge_i(QLine(poly2show->vertices()->at(i-1)->point().first, poly2show->vertices()->at(i-1)->point().second*-1, poly2show->vertices()->at(i)->point().first, poly2show->vertices()->at(i)->point().second*-1));
+			edge_i.setDotStyle(true);
+			poly2show->getPaintWidget()->allQLines2Draw.push_back(edge_i);
+			poly2show->getPaintWidget()->repaint();
+			//this->paint_widget_->update();
+			_sleep(showspeed * 100);
+		}
+		MyQline edge_i(QLine(poly2show->vertices()->at(vertexNum - 1)->point().first, poly2show->vertices()->at(vertexNum-1)->point().second*-1, poly2show->vertices()->at(0)->point().first, poly2show->vertices()->at(0)->point().second*-1));
+		edge_i.setDotStyle(true);
+		poly2show->getPaintWidget()->allQLines2Draw.push_back(edge_i);
+		poly2show->getPaintWidget()->repaint();
+		//animation_kernal & starpolygon end//
+
+//polygon的返回值 不应该直接修改polygon的vertex吗
 		temp_vertices = poly2show->getVisibilityGraph();
+		
+		//animation_做chain之前把点和半边的状态更新一下
+		for (int i = 1; i < vertexNum; i++){
+			poly2show->getPaintWidget()->allQPoints2Draw.at(i).setColor(Qt::blue);
+		}
+		int last_index =poly2show->getPaintWidget()->allQLines2Draw.size()-1;
+		//poly2show->getPaintWidget()->allQLines2Draw.at(last_index - 1).setColor(Qt::green);
+		//poly2show->getPaintWidget()->allQLines2Draw.at(last_index).setColor(Qt::cyan);
+		poly2show->getPaintWidget()->allQLines2Draw.at(last_index).setColor(Qt::green);
+		int lineNum = poly2show->getPaintWidget()->allQLines2Draw.size();
+		for (int i = 0; i < lineNum ; i++)
+		{
+			poly2show->getPaintWidget()->allQLines2Draw.at(i).setDotStyle(true);
+		}
+		poly2show->getPaintWidget()->repaint();
+		//animation_做chain之前把点和半边的状态更新一下 end//
+
 		temp_vertices = poly2show->getConvexChain();
 		temp_vertices.clear();
 	/*}*/

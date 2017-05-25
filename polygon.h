@@ -12,6 +12,7 @@ class Polygon {
 		~Polygon();
 
 		void clear();
+		vector<Vertex *>* vertices();
 		void setVertices(vector<Vertex*>);
 		void setPaintWidget(PaintWidget* paintWidget);
 		PaintWidget* getPaintWidget();
@@ -21,6 +22,7 @@ class Polygon {
 		vector<Vertex*> getVisibilityGraph();
 		void proceedNeighborPoints(Vertex* i, Vertex* j, int index_i, int index_j);
 		vector<Vertex*> getConvexChain();
+		HalfEdge* ConvexChainPoint(Vertex * p, int &len);
 		int sleepTime();
 		void setSleepTime(int time);
 
@@ -32,5 +34,5 @@ class Polygon {
 		PaintWidget* paint_widget_;
 		int sleepTime_;//0.1s
 };
-
+int delta(int data1, int data2,int delta);
 #endif

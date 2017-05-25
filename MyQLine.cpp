@@ -1,9 +1,13 @@
 #include "MyQLine.h"
-MyQline::MyQline(){}
+MyQline::MyQline(){
+	color_ = Qt::black;
+	use_dot_style_ = false;
+	have_arrow_ = false;
+}
 MyQline::MyQline(QLine line){
 	this->setLine(line.x1(),line.y1(),line.x2(),line.y2());
 
-	color_ = Qt::blue;
+	color_ = Qt::black;
 	use_dot_style_ = false;
 	have_arrow_ = false;
 }
