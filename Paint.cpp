@@ -325,12 +325,10 @@ void PaintWidget::animationPoint(MyQPoint  *qPoint, vector<pair<LECP_Point*, LEC
 	update();
 
 	// draw the corresponding 
-	addLine(qPoint);
+	MyQline* qLine=addLine(qPoint);
 
 	displayIntersectionPoint(lecp_points);//挨个显示交点以及对应的用户输入的point
-
-	//draw dual graph
-	//displayDCEL->addLine(qPoint);
+	qLine->setColor(Qt::blue);
 }
 
 void PaintWidget::displayIntersectionPoint(vector<pair<LECP_Point*, LECP_Point*>> lecp_points){
@@ -363,14 +361,24 @@ void PaintWidget::paintAllLine(){
 	QPainter painter(this);
 	painter.translate(WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	
-	painter.scale(scaleX, scaleY); //放大两倍
+	painter.scale(scaleX, scaleY); 
 	
 	for (long long i = 0; i < lines.size(); i++){
 		MyQline *line = lines[i];
 		//paintLine(line);
 
+		double dy = abs(line->p2().y() - line->p1().y());
+		double dx = abs(line->p2().x() - line->p1().x());
+		//画笔的宽度应该和直线的斜率成比例
+		if (dy == 0 || dx == 0)
+			penWidth = 2;
+		else{
+			penWidth = 2*dx / dy + 1 / scaleX;
+		}
+		painter.setRenderHint(QPainter::Antialiasing, true);//反走样
 		painter.setPen(QPen(line->getColor(),penWidth));
 
+		
 		painter.drawLine(*line);
 	}
 	update();
@@ -429,7 +437,7 @@ void PaintWidget::paintLine(MyQline *line){
 	update();
 }
 
-void PaintWidget::addLine(MyQPoint *qPoint){
+MyQline* PaintWidget::addLine(MyQPoint *qPoint){
 	QLine line = getPaintLine(qPoint);// calculate the dual line according to qPoint
 	MyQline *qLine = new MyQline(line);//change QLine to self defined structure MyQline
 	qLine->setColor(Qt::green);
@@ -440,7 +448,7 @@ void PaintWidget::addLine(MyQPoint *qPoint){
 
 	_sleep(2 * 1000);
 
-	qLine->setColor(Qt::blue);
+	return qLine;
 }
 
 // draw the intersect points
@@ -450,11 +458,11 @@ void PaintWidget::paintIntersectPoints(){
 	
 	for (long long i = 0; i < intersectPoints.size(); i++){
 		LECP_Point* point = intersectPoints[i];
-		painter.setPen(QPen(Qt::darkBlue, 2));
-		painter.setBrush(QBrush(Qt::darkBlue, Qt::SolidPattern)); //设置画刷形式 
+		painter.setPen(QPen(Qt::magenta, 2));
+		painter.setBrush(QBrush(Qt::magenta, Qt::SolidPattern)); //设置画刷形式 
 		double x = point->x*scaleX;
 		double y =- point->y*scaleY;
-		painter.drawEllipse(x, y, 8,8);
+		painter.drawEllipse(x-4, y-4, 8,8);
 		QFont font("宋体", 12, QFont::Bold, false);
 		painter.setFont(font);
 		painter.drawText(x+10,y+10 , QString::number(point->index));

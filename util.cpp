@@ -75,7 +75,17 @@ vector<LECP_Point>  generateRandomPoints(long long points_number){
 		double y = rand() % (ny - my + 1) + my;
 		point.setX(x);
 		point.setY(y);
-		points.push_back(point);
+
+		vector<LECP_Point>::iterator it;
+		it = std::find(points.begin(), points.end(), point);
+
+		if (it == points.end()){
+			points.push_back(point);
+		}
+		else{
+			int tmp = it - points.begin();
+		}
+		
 	}
 	return points;
 }

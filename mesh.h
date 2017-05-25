@@ -45,6 +45,9 @@ public:
 
 	void  postCalcPolarAngle();
 
+	void postAjustIntersections(list<LECP_Point*>  &return_intersections);// 2017-05-24Ìí¼Ó
+	void postAjustIntersections(vector<pair<LECP_Point*, LECP_Point*>>  &return_intersections);// 2017-05-24Ìí¼Ó
+
 private:
 	list<Vertex*> vertices_;
 	list<HalfEdge*> half_edges_;

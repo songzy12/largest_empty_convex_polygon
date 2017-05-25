@@ -118,7 +118,7 @@
    </action>
    <action name="clearDCELAnimation">
     <property name="text">
-     <string>清楚DCEL动画演示</string>
+     <string>清除DCEL动画演示</string>
     </property>
    </action>
    <action name="reset">
