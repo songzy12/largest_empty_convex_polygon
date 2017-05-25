@@ -374,7 +374,7 @@ void PaintWidget::paintAllLine(){
 			penWidth = 2*dx / dy + 1 / scaleX;
 		}
 		painter.setRenderHint(QPainter::Antialiasing, true);//反走样
-		painter.setPen(QPen(line->getColor(),penWidth));
+		painter.setPen(QPen(line->getColor(), penWidth));
 
 		
 		painter.drawLine(*line);
@@ -460,6 +460,10 @@ void PaintWidget::paintIntersectPoints(){
 		painter.setBrush(QBrush(Qt::magenta, Qt::SolidPattern)); //设置画刷形式 
 		double x = point->x*scaleX;
 		double y =- point->y*scaleY;
+
+		//double x = point->x;
+		//double y = -point->y;
+
 		painter.drawEllipse(x-4, y-4, 8,8);
 		QFont font("宋体", 12, QFont::Bold, false);
 		painter.setFont(font);
