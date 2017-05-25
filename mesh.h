@@ -34,7 +34,7 @@ public:
 	//从newHalfEdge的next开始判断是否有交点
 	//返回的newIntersection中保存交点Vertex
 	//返回的intersectHalfEdge保存当前face的哪条half_edge和直线y=ax-b相交
-	HalfEdge* getIntersection(double a, double b, HalfEdge newHalf, Vertex &newIntersection, HalfEdge &intersectHalfEdgeRight);
+	HalfEdge* getIntersection(double a, double b, HalfEdge newHalf, Vertex &newIntersection);
 	bool onBoundingBox(Vertex* newIntersection);
 
 	HalfEdge* getIntersectBundingBox(double a, double b, Vertex &vertex);
@@ -47,6 +47,11 @@ public:
 
 	void postAjustIntersections(list<LECP_Point*>  &return_intersections);// 2017-05-24添加
 	void postAjustIntersections(vector<pair<LECP_Point*, LECP_Point*>>  &return_intersections);// 2017-05-24添加
+
+	// Added by zyx,2017-05-25
+	// return the new halfEdge
+	HalfEdge* splitEdge(HalfEdge* half_edge,Vertex* vertex);
+	void connectTwoNewVertices(HalfEdge* h1,HalfEdge* h2,LECP_Point *point);
 
 private:
 	list<Vertex*> vertices_;

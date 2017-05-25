@@ -6,8 +6,8 @@
 
 #define WIN_WIDTH  1200
 #define WIN_HEIGHT 800
-#define MAX_X 20000000000
-#define MAX_Y 10000000000
+#define MAX_X 80000000000
+#define MAX_Y 60000000000
 
 //按照横坐标从左向右排列
 bool comparePoint(LECP_Point a, LECP_Point b);

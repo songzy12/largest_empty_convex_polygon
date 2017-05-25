@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <list>
 #include <util.h>
+#include <qDebug.h>
 using namespace std;
 
 #define  INFINITY  999999999999
@@ -46,6 +47,8 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 	double a = point->x;
 	double b = point->y;
 
+	qDebug() << "AddLine:" << a << b;
+
 	Vertex vRet;
 
 	//找到新插入的直线和bounding box的哪个线段相交
@@ -54,34 +57,11 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 	//找到交点，并且更新boudingBox
 	Vertex* v = new Vertex();
 	v->set_point(vRet.point());
+
+	qDebug() << "vRet: " << vRet.point().first << vRet.point().second;
 	
-	HalfEdge* newHalf = new HalfEdge();// belong to bounding box
-	HalfEdge* poH = new HalfEdge();
-	HalfEdge* neH = new HalfEdge();
-
-	// for polar angle sort
-	LECP_Point *tmpPoint = new  LECP_Point();
-	tmpPoint->x = point->x;
-	tmpPoint->y = point->y;
-	poH->lecp_point = tmpPoint;//新插入的边
-	neH->lecp_point = tmpPoint;//新插入的边
-
-	newHalf->set_next(firstIntersect->next());
-	newHalf->set_origin(v);
-	newHalf->set_prev(neH);
-
-	firstIntersect->next()->set_prev(newHalf);//2017-05-18添加
-
-	poH->set_origin(v);
-	poH->set_prev(firstIntersect);
-	poH->set_twin(neH);
-
-	neH->set_next(newHalf);
-	neH->set_twin(poH);
-
-	firstIntersect->set_next(poH);
-
-	v->set_half_edge(newHalf);
+	HalfEdge* newHalf = splitEdge(firstIntersect,v); // belongs to bounding box
+	boundingBox.push_back(newHalf);
 
 	vertices_.push_back(v);
 
@@ -91,31 +71,17 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 
 	Vertex* newIntersection = new Vertex();
 	HalfEdge* intersectHalfEdgeLeft;//原来的
-	HalfEdge* intersectHalfEdgeRight = new HalfEdge();//新增的
+	
+	// right暂时不考虑
+	intersectHalfEdgeLeft = getIntersection(a, b, *newHalf, *newIntersection);//返回直线和面中有交点的半边和交点坐标
 
-	half_edges_.push_back(intersectHalfEdgeRight);
+	HalfEdge* intersectHalfEdgeRight = splitEdge(intersectHalfEdgeLeft,newIntersection);
 
-	intersectHalfEdgeLeft = getIntersection(a, b, *newHalf, *newIntersection, *intersectHalfEdgeRight);//返回直线和面中有交点的半边和交点坐标
+	connectTwoNewVertices(newHalf,intersectHalfEdgeRight,point);
 
 	// for polar angle sort 
+	// TODO: check whether intersectHalfEdgeLeft->lecp_point is set?
 	intersectHalfEdgeRight->lecp_point = intersectHalfEdgeLeft->lecp_point;
-
-	//后加
-	intersectHalfEdgeLeft->next()->set_prev(intersectHalfEdgeRight);
-
-	newIntersection->set_half_edge(neH);//新产生的Vertex的half_edge设置为逆着插入直线。随意设置
-
-	poH->set_next(intersectHalfEdgeRight);
-	neH->set_prev(intersectHalfEdgeLeft);
-	neH->set_origin(newIntersection);
-
-	boundingBox.push_back(newHalf);
-	half_edges_.push_back(newHalf);
-	half_edges_.push_back(poH);
-	half_edges_.push_back(neH);
-
-	intersectHalfEdgeLeft->set_next(neH);
-	intersectHalfEdgeRight->set_prev(poH);
 
 	//判断当前的交点是否在bounding box上
 	bool onBB = onBoundingBox(newIntersection);
@@ -129,6 +95,9 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 
 		LECP_Point* second = intersectHalfEdgeRight->lecp_point;
 
+		qDebug() << "first" << newIntersection->point().first << newIntersection->point().first;
+		qDebug() << "second:" << (intersectHalfEdgeRight->lecp_point)->x << (intersectHalfEdgeRight->lecp_point)->y;
+
 		pair<LECP_Point*, LECP_Point*> intersectionPair;
 		intersectionPair.first = first;
 		intersectionPair.second = second;
@@ -136,59 +105,35 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 		return_intersections.push_back(intersectionPair);
 		//-----------end add new pair--------------------------------------------------
 
-
-
 		sortedAngle.push_back(intersectHalfEdgeLeft->lecp_point);
 
-
-		HalfEdge* newPoH = new HalfEdge();
-		HalfEdge* newNeH = new HalfEdge();
-
-		//处理中间的交点
-		//poH和neH存储返回值
-		//newIntersection, intersectHalfEdgeLeft, intersectHalfEdgeRight共线 Yes
-		dealWithNormalIntersection(newIntersection, intersectHalfEdgeLeft, intersectHalfEdgeRight, newPoH, newNeH);
+		// return tmpV and left,right
 		newHalf = intersectHalfEdgeLeft->twin();
 
-		// for polar angle sort
 		newHalf->lecp_point = intersectHalfEdgeLeft->lecp_point;
-		newPoH->lecp_point = tmpPoint;// a new half edge which belongs to the added line 
-		newNeH->lecp_point = tmpPoint;// a new half edge which belongs to the added line 
 
-		//遗漏
-		newHalf->next()->set_prev(newHalf);
-
-
-		half_edges_.push_back(newHalf);
-		half_edges_.push_back(newPoH);
-		half_edges_.push_back(newNeH);
-
-
-		//返回直线和面中有交点的半边和交点坐标
-		//newIntersection，intersectHalfEdgeRight为新的
-		//此步newHalf已经改变，之后不再用
 		Vertex tmpV;
+
+		intersectHalfEdgeLeft = getIntersection(a, b, *newHalf, tmpV);
+
 		HalfEdge *newRight = new HalfEdge();
-		intersectHalfEdgeLeft = getIntersection(a, b, *newHalf, tmpV, *newRight);
+		// TODO: here is where everything begins
+		intersectHalfEdgeLeft = getIntersection(a, b, *newHalf, tmpV);
 
 		// for polar angle sort
+		// TODO: newRight->lecp_point may not be set
 		newRight->lecp_point = intersectHalfEdgeLeft->lecp_point;
 
 
 		Vertex *intersection = new Vertex();
 		intersection->set_point(tmpV.point());
 
-		//half_edges_.push_back(intersectHalfEdgeLeft);
-		half_edges_.push_back(newRight);
+	    newRight = splitEdge(intersectHalfEdgeLeft,intersection);
 
-		intersection->set_half_edge(newNeH);//新产生的Vertex的half_edge设置为逆着插入直线。随意设置
+		// for polar angle sort
+		newRight->lecp_point = intersectHalfEdgeLeft->lecp_point;
 
-		newPoH->set_next(newRight);
-		newNeH->set_prev(intersectHalfEdgeLeft);
-		newNeH->set_origin(intersection);
-
-		intersectHalfEdgeLeft->set_next(newNeH);
-		newRight->set_prev(newPoH);
+	    connectTwoNewVertices(newHalf,newRight,point);
 
 		//判断当前的交点是否在bounding box上
 		onBB = onBoundingBox(intersection);
@@ -199,6 +144,7 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 	}
 
 	//最后一个交点
+	intersectHalfEdgeRight->set_twin(NULL);
 	boundingBox.push_back(intersectHalfEdgeRight);
 
 	// 交点的顺序可能正好相反，和新插入的直线与哪个bounding box首先相交有关（每条新插入的直线都和两个bounding box相交）
@@ -217,14 +163,14 @@ void Mesh::postAjustIntersections(list<LECP_Point*>  &return_intersections){
 	if (return_intersections.size() <= 2)
 		return;
 
-	vector<LECP_Point*> tmpVector{ return_intersections.begin(), return_intersections.end() };
+	vector<LECP_Point*> tmpVector( return_intersections.begin(), return_intersections.end() );
 	
 	LECP_Point* p1 = tmpVector[1];
 	LECP_Point* p2 = tmpVector[2];
 	if (p1->x > p2->x){
 		reverse(return_intersections.begin(), return_intersections.end());
 	}
-	else if (p1->x == p1->x && p1->y > p2->y){
+	else if (p1->x == p2->x && p1->y > p2->y){
 		reverse(++return_intersections.begin(), return_intersections.end());
 	}
 }
@@ -239,8 +185,8 @@ void Mesh::postAjustIntersections(vector<pair<LECP_Point*, LECP_Point*>>  &retur
 	if (p1->x > p2->x){
 		reverse(return_intersections.begin(), return_intersections.end());
 	}
-	else if (p1->x == p1->x && p1->y > p2->y){
-		reverse(++return_intersections.begin(), return_intersections.end());
+	else if (p1->x == p2->x && p1->y > p2->y){
+		reverse(return_intersections.begin(), return_intersections.end());
 	}
 }
 
@@ -297,15 +243,19 @@ void Mesh::init(){
 	//relation between the four half edges
 	h1->set_next(h2);
 	h1->set_prev(h4);
+	h1->set_twin(NULL);
 
 	h2->set_next(h3);
 	h2->set_prev(h1);
+	h2->set_twin(NULL);
 
 	h3->set_next(h4);
 	h3->set_prev(h2);
+	h3->set_twin(NULL);
 
 	h4->set_next(h1);
 	h4->set_prev(h3);
+	h4->set_twin(NULL);
 
 	vertices_.push_back(v1);
 	vertices_.push_back(v2);
@@ -423,7 +373,9 @@ Vertex*  Mesh::intersectWithBoundingBox(HalfEdge* tmp, double a, double b){
 Vertex* intersaction(HalfEdge *half_edge, double a, double b){
 	//线段的起点和终点
 	Vertex* start = half_edge->origin();
-	Vertex* end = half_edge->next()->origin();
+
+	HalfEdge* tmpHalf = half_edge->next();
+	Vertex* end = tmpHalf->origin();
 
 	double x1 = start->point().first;
 	double y1 = start->point().second;
@@ -484,7 +436,7 @@ Vertex* intersaction(HalfEdge *half_edge, double a, double b){
 }
 
 //newIntersection,intersectHalfEdge,intersectHalfEdgeRight作为返回结果
-HalfEdge* Mesh::getIntersection(double a, double b, HalfEdge newHalf, Vertex &newIntersection, HalfEdge &intersectHalfEdgeRight){
+HalfEdge* Mesh::getIntersection(double a, double b, HalfEdge newHalf, Vertex &newIntersection){
 	//沿着新产生的half_edge找到当前face中与直线y=ax-b有交点的half_edge
 	HalfEdge *newInectHalfEdge = newHalf.next();
 
@@ -492,22 +444,15 @@ HalfEdge* Mesh::getIntersection(double a, double b, HalfEdge newHalf, Vertex &ne
 
 	while (inter == NULL){
 		newInectHalfEdge = newInectHalfEdge->next();
+
+		inter = intersaction(newInectHalfEdge, a, b);
+
+		// TODO: how can newInectHalfEdge->next() not set?
 		inter = intersaction(newInectHalfEdge, a, b);//
+
 	}
 
 	newIntersection = *inter;
-
-	intersectHalfEdgeRight.set_next(newInectHalfEdge->next());
-
-	Vertex* tmp = new Vertex();
-	tmp->set_point(newIntersection.point());
-
-	intersectHalfEdgeRight.set_origin(tmp);//此处有问题
-	intersectHalfEdgeRight.set_twin(newInectHalfEdge->twin());
-
-	intersectHalfEdgeRight.next()->set_prev(&intersectHalfEdgeRight);
-
-
 
 	return newInectHalfEdge;
 }
@@ -521,10 +466,10 @@ bool Mesh::onBoundingBox(Vertex* newIntersection){
 		return true;
 	return false;
 }
-
+// store the intersection point of line: ax-b with bounding box to vertex, then return the intersected bounding edge
 HalfEdge*  Mesh::getIntersectBundingBox(double a, double b, Vertex &vertex){
 	list<HalfEdge*>::iterator it = boundingBox.begin();
-	HalfEdge *firstHalfEdge = new HalfEdge();
+	HalfEdge *firstHalfEdge = new HalfEdge(); // TODO: code refactor: do not new a HalfEdge here
 	while (it != boundingBox.end()){
 		firstHalfEdge = *it++;
 
@@ -559,7 +504,7 @@ void Mesh::dealWithNormalIntersection(Vertex* newIntersection, HalfEdge* interse
 	alHL->set_origin(newIntersection);
 	alHL->set_prev(newNeH);
 	if (alHR != NULL){
-		alHL->set_next(alHR->next());//此处有bug
+		alHL->set_next(alHR->next());
 	}
 
 	alHL->set_twin(intersectHalfEdgeLeft);
@@ -595,4 +540,91 @@ void Mesh::postCalcPolarAngle(){
 	}
 
 	reverse(sortedVector.begin(), sortedVector.end());//reverse kernel
+}
+
+// add a new vertex to a half_edge
+HalfEdge* Mesh::splitEdge(HalfEdge* half_edge,Vertex* vertex){
+	HalfEdge* newLeft = new HalfEdge();
+	HalfEdge* newRight = new HalfEdge();
+
+	//for animation
+	newLeft->lecp_point = half_edge->lecp_point;
+	newRight->lecp_point = half_edge->lecp_point;
+
+	HalfEdge* half_twin = half_edge->twin();
+	bool bb= (half_twin == NULL);
+
+	half_edges_.push_back(newLeft);
+
+	if (!bb){
+		half_edges_.push_back(newRight);
+	}
+	else{
+		newRight = NULL;
+	}
+	
+	
+
+	newLeft->set_next (half_edge->next());
+	newLeft->set_origin(vertex);
+	newLeft->set_prev(half_edge);
+	newLeft->set_twin(half_edge->twin());
+
+	if(!bb){
+		newRight->set_next(half_twin->next());
+	}
+	
+	if (!bb){
+		newRight->set_origin(vertex);
+		newRight->set_prev(half_twin);
+		newRight->set_twin(half_edge);
+	}
+	
+	//遗漏
+	half_edge->next()->set_prev(newLeft);
+
+	half_edge->set_next(newLeft);
+	half_edge->set_twin(newRight);
+
+	if(!bb){
+
+		//遗漏
+		half_twin->next()->set_prev(newRight);
+
+		half_twin->set_next(newRight);
+		half_twin->set_twin(newLeft);
+	}
+	
+
+	return newLeft;
+}
+
+// Added by zyx,2015-05-25
+void Mesh::connectTwoNewVertices(HalfEdge* h1,HalfEdge* h2,LECP_Point *point){
+	HalfEdge* half_up = new HalfEdge();
+	HalfEdge* half_down = new HalfEdge();
+
+	half_up->lecp_point = point;
+	half_down->lecp_point = point;
+
+	half_edges_.push_back(half_up);
+	half_edges_.push_back(half_down);
+
+	half_up->set_next(h2);
+	half_up->set_origin(h1->origin());
+	half_up->set_prev(h1->prev());
+	half_up->set_twin(half_down);
+
+	half_down->set_next(h1);
+	half_down->set_origin(h2->origin());
+	half_down->set_prev(h2->prev());
+	half_down->set_twin(half_up);
+
+	//遗漏
+	h1->prev()->set_next(half_up);
+	h2->prev()->set_next(half_down);
+
+	h1->set_prev(half_down);
+
+	h2->set_prev(half_up);
 }

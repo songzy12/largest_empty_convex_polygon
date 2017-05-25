@@ -270,10 +270,11 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 	qDebug() << p->index() << "# in edges:" << in_edges.size() << "," << "# out edges:" << out_edges.size();
 	
 	vector<HalfEdge*>::reverse_iterator it_i;
-	vector<HalfEdge*>::iterator it_o = out_edges.begin();
+	vector<HalfEdge*>::reverse_iterator it_o = out_edges.rbegin();
 
 	HalfEdge *longest_edge;
 	int m = 0;
+	HalfEdge *prev_chain_ = nullptr;
 
 	//outedgeIndex inedgeIndex added for animation
 	int inedgeIndexBase = this->paint_widget_->allQLines2Draw.size() - inedgeNum;
@@ -291,27 +292,28 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 
 		// we compute the L for incoming edge i.
 		qDebug() << "in edge:" << (*it_i)->target()->index() << "<-" << (*it_i)->origin()->index();
-		if (it_o != out_edges.end()) {
-			qDebug() << "out edge:" << (*it_o)->origin()->index() << "->" << (*it_o)->target()->index();
-			qDebug() << "convex turn:" << isConvexTurn(*it_i, *it_o);
-		}
-		while (it_o != out_edges.end() && isConvexTurn(*it_i, *it_o)) {
+
+		while (it_o != out_edges.rend() && isConvexTurn(*it_i, *it_o)) {
 			//animation for current out_edge
-			int outedgeIndex = outedgeIndexBase + outedgeNum-1 - (it_o - out_edges.begin());
+			//int outedgeIndex = outedgeIndexBase + outedgeNum-1 - (it_o - out_edges.begin());
+			int outedgeIndex = outedgeIndexBase + outedgeNum-1 - (it_o - out_edges.rbegin());
 			this->paint_widget_->allQLines2Draw.at(outedgeIndex).setColor(Qt::blue);
 			this->paint_widget_->repaint();
 			/*_sleep(sleepTime() * 100);*/
 			_sleep(500);
 			//animation for current out_edge end //
 
+			qDebug() << "out edge:" << (*it_o)->origin()->index() << "->" << (*it_o)->target()->index();
+			qDebug() << "convex turn:" << isConvexTurn(*it_i, *it_o);
 			if ((*it_o)->L() > m) {
 				m = (*it_o)->L();
+				prev_chain_ = *it_o;
 				longest_edge = *it_i;
-				(*it_i)->prev_chain_ = *it_o;
 			}
 			it_o++;
 		}
-		qDebug() << (*it_i)->target()->index() << "<-" << (*it_i)->origin()->index() << " L:" << m + 1;
+		qDebug() << (*it_i)->target()->index() << "<-" << (*it_i)->origin()->index() << " L updated:" << m + 1;
+		(*it_i)->prev_chain_ = prev_chain_;
 		(*it_i)->set_L(m + 1);
 	}
 	len = m + 1;
