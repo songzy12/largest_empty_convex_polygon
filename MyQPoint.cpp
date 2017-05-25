@@ -3,6 +3,7 @@
 MyQPoint::MyQPoint(){
 	color_ = Qt::red;
 	index_ = 0;
+	showQ_ = true;
 }
 
 MyQPoint::MyQPoint(QPoint point){
@@ -10,6 +11,7 @@ MyQPoint::MyQPoint(QPoint point){
 	this->setY(point.y());
 	this->color_ = Qt::red;
 	this->index_ = 0;
+	showQ_ = true;
 }
 
 
@@ -41,4 +43,26 @@ void MyQPoint::setQ(vector<int> Q)
 {
 	Q_.clear();
 	Q_ = Q;
+}
+void MyQPoint::setQ(deque<Vertex*> Q)
+{
+	Q_.clear();
+
+	Vertex * temp_v;
+	deque<Vertex*>::iterator it_v = Q.begin();
+	while (it_v != Q.end())
+	{
+		temp_v = *it_v;
+		Q_.push_back(temp_v->index());
+		it_v++;
+	}
+}
+
+bool MyQPoint::showQ()
+{
+	return showQ_;
+}
+void MyQPoint::setShowQ(bool showQ)
+{
+	showQ_ = showQ;
 }

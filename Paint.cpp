@@ -489,6 +489,18 @@ void PaintWidget::paintPoints(MyQPoint* point){
 	QFont font("ËÎÌו", 12, QFont::Bold, false);
 	painter.setFont(font);
 	painter.drawText(point->x()+10, point->y()+10, QString::number(point->getIndex()));
+
+	if (point->showQ())
+	{
+		QString q = "(";
+		for (int i = 0; i < point->getQ().size(); i++)
+		{
+			q.append(QString::number(point->getQ().at(i)));
+			q.append(",");
+		}
+		q.append(")");
+		painter.drawText(point->x() + 30, point->y() + 15, q);
+	}
 	update();
 }
 void PaintWidget::paintAllEdges()

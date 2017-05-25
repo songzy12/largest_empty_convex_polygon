@@ -134,6 +134,7 @@ void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j,int index_i,int index_j
 		int temp_vertex_index = i->Q_.front()->index();
 		i->Q_.pop_front();
 
+		this->paint_widget_->allQPoints2Draw[temp_vertex_index].setQ(i->Q_);//animation
 		//show animation
 		this->paint_widget_->allQPoints2Draw[temp_vertex_index].setColor(Qt::blue);
 		this->paint_widget_->repaint();
@@ -145,6 +146,7 @@ void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j,int index_i,int index_j
 	j->incoming_edges_.push_back(e);
 	//ENQUEUE(i,Qj)
 	j->Q_.push_back(i);
+	this->paint_widget_->allQPoints2Draw[index_j].setQ(j->Q_);//animation
 
 
 	//show animation

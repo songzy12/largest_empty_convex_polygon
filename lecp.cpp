@@ -420,6 +420,8 @@ Polygon* LECP::trans2Poly(int kernal_index)
 			MyQPoint temp_myqpoint(QPoint(temp_vertices[i]->point().first, temp_vertices[i]->point().second*-1));
 			temp_myqpoint.setColor(Qt::blue);
 			temp_myqpoint.setIndex(temp_vertices[i]->index());
+			temp_myqpoint.setQ(temp_vertices[i]->Q_);
+			temp_myqpoint.setShowQ(true);
 			poly2show->getPaintWidget()->allQPoints2Draw.push_back(temp_myqpoint);
 			poly2show->getPaintWidget()->repaint();
 			_sleep(showspeed * 50);
@@ -443,6 +445,7 @@ Polygon* LECP::trans2Poly(int kernal_index)
 		//animation_做chain之前把点和半边的状态更新一下
 		for (int i = 1; i < vertexNum; i++){
 			poly2show->getPaintWidget()->allQPoints2Draw.at(i).setColor(Qt::blue);
+			poly2show->getPaintWidget()->allQPoints2Draw.at(i).setShowQ(false);
 		}
 		int last_index =poly2show->getPaintWidget()->allQLines2Draw.size()-1;
 		//poly2show->getPaintWidget()->allQLines2Draw.at(last_index - 1).setColor(Qt::green);
