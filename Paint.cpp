@@ -35,13 +35,15 @@ PaintWidget::~PaintWidget() {
 
 //绘制points中所有点
 void PaintWidget::paintEvent(QPaintEvent *event){
-	paintAllPoints();
 	
+	paintAllPoints();
 	paintAllLine();
 
 	paintIntersectPoints();
 
-	paintAllEdge();
+	paintAllEdges();
+
+	
 }
 
 void PaintWidget::timerEvent(QTimerEvent *event){
@@ -57,7 +59,7 @@ void PaintWidget::paintAllPoints(){
 
   for (long long i = 0; i < allQPoints2Draw.size(); i++){
 	  MyQPoint tmpP = allQPoints2Draw[i];
-	  paintPoint(tmpP);
+	  paintPoints(&tmpP);
   }
 }
 
@@ -192,9 +194,9 @@ void PaintWidget::paintPoint(MyQPoint point){
 	painter.drawEllipse(point.x(), point.y(), 6, 6);
 
 
-	QFont font("宋体", 12, QFont::Bold, false);
+	/*QFont font("宋体", 12, QFont::Bold, false);
 	painter.setFont(font);
-	painter.drawText(point.x()+10, point.y()+5, QString::number(point.getIndex()));
+	painter.drawText(point.x()+10, point.y()+5, QString::number(point.getIndex()));*/
 	update();
 }
 
@@ -476,33 +478,37 @@ void PaintWidget::paintIntersectPoints(){
 
 
 /////////////show animation///////////////////////////
-void PaintWidget::paintAllEdge()
+void PaintWidget::paintPoints(MyQPoint* point){
+	QPainter painter(this);
+	painter.translate(WIN_WIDTH / 2, WIN_HEIGHT / 2);
+
+	painter.setBrush(point->getColor());
+	painter.drawEllipse(point->x()-4, point->y()-4, 12, 12);
+
+
+	QFont font("宋体", 12, QFont::Bold, false);
+	painter.setFont(font);
+	painter.drawText(point->x()+10, point->y()+10, QString::number(point->getIndex()));
+	update();
+}
+void PaintWidget::paintAllEdges()
 {
 	for (long long i = 0; i < allQLines2Draw.size(); i++){
 		MyQline tmpL = allQLines2Draw[i];
-		paintEdge(&tmpL);
+		paintEdges(&tmpL);
 	}
 }
-void PaintWidget::paintEdge(MyQline *line){
+void PaintWidget::paintEdges(MyQline *line){
 	QPainter painter(this);
 	painter.translate(WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	painter.setBrush(line->getColor());
 
-	//虚线
 	QPen temp_pen(line->getColor(), 1);
-	QVector<qreal> dashes;
-	qreal space = 3;
-	dashes << 5 << space << 5 << space;
-	//设置虚线风格
-	if (line->getDotStyle()){
-		temp_pen.setDashPattern(dashes);
-		temp_pen.setWidthF(0.5);
-	}
-	painter.setPen(temp_pen);
 
 	//设置箭头风格
 	if (line->getArrowStyle()){
-
+		temp_pen.setWidthF(2);
+		painter.setPen(temp_pen);
 		double angle = ::acos(line->dx() / line->length());
 		if (line->dy() >= 0)
 			angle = TwoPi - angle;
@@ -513,6 +519,17 @@ void PaintWidget::paintEdge(MyQline *line){
 		painter.drawLine(QLineF(destArrowP1, line->p2()));
 		painter.drawLine(QLineF(destArrowP2, line->p2()));
 	}
+
+	//虚线风格
+	QVector<qreal> dashes;
+	qreal space = 3;
+	dashes << 5 << space << 5 << space;
+	//设置虚线风格
+	if (line->getDotStyle()){
+		temp_pen.setDashPattern(dashes);
+		temp_pen.setWidthF(0.5);
+	}
+	painter.setPen(temp_pen);
 	painter.drawLine(*line);
 	update();
 }
