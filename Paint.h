@@ -69,8 +69,9 @@ public:
 	void displayIntersectionPoint(vector<pair<LECP_Point*, LECP_Point*>> lecp_points);
 	void getSuitCoordinate(double a,double  b,double &x1,double &y1,double &x2,double &y2);
 	/////////////show animation///////////////////////////
-	void paintAllEdge();
-	void paintEdge(MyQline *line);
+	void paintPoints(MyQPoint *point);
+	void paintAllEdges();
+	void paintEdges(MyQline *line);
 	void clearMyQPandMyQL();
 
 public:
@@ -94,5 +95,6 @@ public:
 	/*all MYQLines needed to be draw*/
 	vector<MyQline> allQLines2Draw;
 };
+
 
 #endif
