@@ -36,12 +36,8 @@ private:
 	PaintWidget *paintWidget;
 
 	//toolbar content:
-	QCheckBox* sortComboBox,*vgComboBox,*chainComboBox;
-
-
-	QPushButton* startButton;
-	QPushButton* stopButton;
-	QPushButton* resetButton;
+	QCheckBox *sortComboBox,*vgComboBox,*chainComboBox,*dcelComboBox,*qComboBox,*lComboBox;
+	QPushButton* startButton,* resetButton;
 	QSlider* speedSlider;
 	QSpinBox *speedSpinBox,*pointSpinBox;
 
@@ -103,9 +99,10 @@ public:
 	Mesh *mesh;
 	LECP_Doc* lecp_doc;
 	Polygon* poly2show;
-
+	int lastSelectedPoint;
 	//show variable
-	enum showMode { finalRes, allPoints, simplePoint };
+	enum showMode { finalRes, allPoints, singlePoint };
+	showMode currMode;
 	bool showSort = false;
 	bool showVG = false;
 	bool showChain = false;

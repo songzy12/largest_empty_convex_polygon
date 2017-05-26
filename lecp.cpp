@@ -21,6 +21,7 @@ LECP::LECP(QWidget *parent)
 	
 	int width = this->width();
 	int height = this->height();
+	lastSelectedPoint = 0;
 
 	mesh = new Mesh();
 	poly2show = new Polygon();
@@ -77,9 +78,12 @@ void LECP::createToolBar()
 	this->ui.showControlTB->hide();
 
 	//pointSelectTB 点选择-工具栏
+	QLabel* psLabel= new QLabel(tr("select a point to show animation: "));
 	pointSpinBox = new QSpinBox(this);
+	pointSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
+	pointSpinBox->setValue(0);
 	pointSpinBox->setMinimum(0);
-	pointSpinBox->setMaximum(10);
+	pointSpinBox->setMaximum(10000);
 	pointSpinBox->setSingleStep(1);
 	this->ui.pointSelectTB->insertWidget(this->ui.nextPoint, pointSpinBox);
 
@@ -98,13 +102,19 @@ void LECP::createToolBar()
 	connect(chainComboBox, SIGNAL(stateChanged(int)), this, SLOT(onChainSelected(int)));
 
 	//sortTB 排序-工具栏
-
+	dcelComboBox = new QCheckBox(tr("dcel sort"));
+	this->ui.sortTB->addWidget(dcelComboBox);
+	connect(dcelComboBox, SIGNAL(stateChanged(int)), this, SLOT(onDCELSelected(int)));
 
 	//qTB vg-工具栏
-
+	qComboBox = new QCheckBox(tr("show Q"));
+	this->ui.qTB->addWidget(qComboBox);
+	connect(qComboBox, SIGNAL(stateChanged(int)), this, SLOT(onQueueSelected(int)));
 
 	//lTB chain-工具栏
-
+	lComboBox = new QCheckBox(tr("show L"));
+	this->ui.lTB->addWidget(lComboBox);
+	connect(lComboBox, SIGNAL(stateChanged(int)), this, SLOT(onLSelected(int)));
 
 	//showControlTB 速度控制-工具栏
 	QLabel* speedLabel = new QLabel(tr("show speed:    "));
@@ -193,34 +203,71 @@ void LECP::randomPointsGenerationSlot(){
 
 void LECP::finalResultShowSlot()
 {
+	//控件显示控制
+	this->ui.pointSelectTB->hide();
+	this->ui.strartShowTB->show();
 	this->ui.showContentTB->hide();
+	this->ui.sortTB->hide();
+	this->ui.qTB->hide();
+	this->ui.lTB->hide();
 	this->ui.showControlTB->show();
+	
+	//演示模式设置
+	currMode = finalRes;
 }
 
 void LECP::allPointsShowSlot()
 {
+	//控件显示控制
+	this->ui.pointSelectTB->hide();
+	this->ui.strartShowTB->hide();
 	this->ui.showContentTB->show();
+	this->ui.sortTB->hide();
+	this->ui.qTB->hide();
+	this->ui.lTB->hide();
 	this->ui.showControlTB->show();
+
+	//演示模式设置
+	currMode = allPoints;
 }
 
 void LECP::singlePointShowSlot()
 {
+	//控件显示控制
+	this->ui.pointSelectTB->show();
+	this->ui.strartShowTB->hide();
 	this->ui.showContentTB->show();
+	this->ui.sortTB->hide();
+	this->ui.qTB->hide();
+	this->ui.lTB->hide();
 	this->ui.showControlTB->show();
+
+	//演示模式设置
+	currMode = singlePoint;
 }
 
 
 //pointSelectTB 点选择-工具栏:slot
 void LECP::lastPointSlot()
 {
-	int val = pointSpinBox->value() - 1 < 1 ? 1 : pointSpinBox->value() - 1;
+	int val = pointSpinBox->value() - 1 < 0 ? 0 : pointSpinBox->value() - 1;
 	pointSpinBox->setValue(val);
+	paintWidget->myQPoints.at(lastSelectedPoint)->setColor(Qt::red);
+	paintWidget->myQPoints.at(val)->setColor(Qt::green);
+	lastSelectedPoint = val;
+	paintWidget->repaint();
+	_sleep(1000);
 }
 
 void LECP::nextPointSlot()
 {    //TODO change 20 to point_num
-	int val = pointSpinBox->value() + 1 > 20 ? 20 : pointSpinBox->value() + 1;
+	int val = pointSpinBox->value() + 1 > poly2show->getPaintWidget()->points.size() - 1 ? poly2show->getPaintWidget()->points.size() - 1 : pointSpinBox->value() + 1;
 	pointSpinBox->setValue(val);
+	paintWidget->myQPoints.at(lastSelectedPoint)->setColor(Qt::red);
+	paintWidget->myQPoints.at(val)->setColor(Qt::green);
+	lastSelectedPoint = val;
+	paintWidget->repaint();
+	_sleep(1000);
 }
 
 
@@ -229,7 +276,39 @@ void LECP::startShowSlot()
 {
 	isStart = true;//演示结束时设为false
 
-	trans2Poly(0);
+	int kernalNum = mesh->sortedVector.size();
+	//dcel
+	polarAngleSortDCELSlot();
+
+	//mode 选择
+	switch (currMode)
+	{
+	case finalRes:
+
+		break;
+
+	case allPoints:
+		//循环处理每个点
+		for (int kernal_index = 0; kernal_index < kernalNum; kernal_index++)
+			trans2Poly(kernal_index);
+		_sleep(1000);
+		poly2show->clear();
+		break;
+
+	case singlePoint:
+		poly2show->clear();
+		int kernalSelected = pointSpinBox->value();//TODO 需要改
+		trans2Poly(kernalSelected);
+
+		break;
+	}
+	//all points
+	//for (int kernal_index = 0;kernal_index<)
+
+
+	//certain point
+
+
 
 	//paintWidget->allQPoints2Draw
 	if (showSort){}
@@ -266,6 +345,11 @@ void LECP::onSortSelected(int flag)
 		this->ui.strartShowTB->hide();
 	else
 		this->ui.strartShowTB->show();
+
+	if (showSort)
+		this->ui.sortTB->show();
+	else
+		this->ui.sortTB->hide();
 }
 
 void LECP::onVGSelected(int flag)
@@ -283,6 +367,11 @@ void LECP::onVGSelected(int flag)
 		this->ui.strartShowTB->hide();
 	else
 		this->ui.strartShowTB->show();
+
+	if (showVG)
+		this->ui.qTB->show();
+	else
+		this->ui.qTB->hide();
 }
 
 void LECP::onChainSelected(int flag)
@@ -300,6 +389,11 @@ void LECP::onChainSelected(int flag)
 		this->ui.strartShowTB->hide();
 	else
 		this->ui.strartShowTB->show();
+
+	if (showChain)
+		this->ui.lTB->show();
+	else
+		this->ui.lTB->hide();
 }
 
 
@@ -483,6 +577,10 @@ Polygon* LECP::trans2Poly(int kernal_index)
 		//temp 存储用来初始化polygon的vertor<vertex>
 		vector<Vertex*> temp_vertices;
 		int vertexNum = mesh->sortedVector.at(kernal_index).size();
+
+		if (vertexNum < 3)//不存在一个凸包
+			return NULL;
+
 		list<Vertex*>::iterator iter_vertex = mesh->sortedVector.at(kernal_index).begin();
 		while (iter_vertex != mesh->sortedVector.at(kernal_index).end())
 		{
