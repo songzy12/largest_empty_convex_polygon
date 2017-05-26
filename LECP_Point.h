@@ -18,6 +18,7 @@ class LECP_Point{
 public:
 	double x, y;
 	long long index;
+	long long sortedIndex;//from left to right according to x coordinate
 	QColor color; //default color is red
 public:
 	LECP_Point();

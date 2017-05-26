@@ -31,6 +31,7 @@ public:
     QAction *startShow;
     QAction *lastPoint;
     QAction *nextPoint;
+    QAction *actiontest;
     QWidget *centralWidget;
     QStatusBar *statusBar;
     QMenuBar *menuBar;
@@ -84,6 +85,8 @@ public:
         QIcon icon3;
         icon3.addFile(QStringLiteral("Resources/right.ico"), QSize(), QIcon::Normal, QIcon::Off);
         nextPoint->setIcon(icon3);
+        actiontest = new QAction(LECPClass);
+        actiontest->setObjectName(QStringLiteral("actiontest"));
         centralWidget = new QWidget(LECPClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         statusBar = new QStatusBar(centralWidget);
@@ -173,6 +176,7 @@ public:
         menu->addAction(sortedDCEL);
         menu_3->addAction(clearDCELAnimation);
         menu_3->addAction(DCEL_animation);
+        menu_3->addAction(actiontest);
         operationsTB->addAction(openFile);
         operationsTB->addAction(saveFile);
         operationsTB->addAction(reset);
@@ -200,6 +204,7 @@ public:
 #endif // QT_NO_TOOLTIP
         lastPoint->setText(QApplication::translate("LECPClass", "\344\270\212\344\270\200\347\202\271", Q_NULLPTR));
         nextPoint->setText(QApplication::translate("LECPClass", "\344\270\213\344\270\200\347\202\271", Q_NULLPTR));
+        actiontest->setText(QApplication::translate("LECPClass", "test", Q_NULLPTR));
         polar_angle_sort->setText(QApplication::translate("LECPClass", "\346\236\201\350\247\222\346\216\222\345\272\217\357\274\210naive\357\274\211", Q_NULLPTR));
         create_VG->setText(QApplication::translate("LECPClass", "\347\224\237\346\210\220vg\345\233\276", Q_NULLPTR));
         saveFile->setText(QApplication::translate("LECPClass", "\344\277\235\345\255\230\346\226\207\344\273\266", Q_NULLPTR));
