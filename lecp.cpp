@@ -290,6 +290,7 @@ void LECP::startShowSlot()
 	//dcel
 	polarAngleSortDCELSlot();
 
+	vector<Vertex *> longest_convex_chain;
 	//mode 选择
 	switch (currMode)
 	{
@@ -299,8 +300,14 @@ void LECP::startShowSlot()
 
 	case allPoints:
 		//循环处理每个点
-		for (int kernal_index = 0; kernal_index < kernalNum; kernal_index++)
+		longest_convex_chain.clear();
+		for (int kernal_index = 0; kernal_index < kernalNum; kernal_index++) {
 			trans2Poly(kernal_index);
+			if (poly2show->convex_chain_.size() > longest_convex_chain.size()) {
+				longest_convex_chain = poly2show->convex_chain_;
+			}
+		}
+		qDebug() << "longest_convex_chain length:" << longest_convex_chain.size();
 		_sleep(1000);
 		poly2show->clear();
 		break;
@@ -439,9 +446,6 @@ void LECP::changeSpeedSlot(int newSpeed)
 	}
 }
 
-
-
-
 //未归正slots
 Vertex* pole;
 bool compareVertex(Vertex* p, Vertex* q){
@@ -466,7 +470,23 @@ vector<LECP_Point*>   LECP::preprocessingPolarAngleSort(){
 	vector<LECP_Point*> points = paintWidget->points;
 	sort(points.begin(), points.end(), comparePoint);
 
+	for (long long i = 0; i < points.size(); i++){
+		LECP_Point* point = points[i];
+		point->sortedIndex = i;
+	}
+
 	return points;
+}
+
+// if not exit,return -1
+long long  LECP::getSortedIndex(long long displayIndex){
+	for (long long i = 0; i < paintWidget->points.size(); i++){
+		LECP_Point* point = paintWidget->points[i];
+		if (point->index == displayIndex)
+			return point->sortedIndex;
+	}
+
+	return -1;
 }
 
 //polar angle sort: naive method
@@ -663,7 +683,7 @@ Polygon* LECP::trans2Poly(int kernal_index)
 		//animation_做chain之前把点和半边的状态更新一下 end//
 
 		temp_vertices = poly2show->getConvexChain();
-		temp_vertices.clear();
+		temp_vertices.clear(); // why?
 		/*}*/
 	}
 	return poly2show;

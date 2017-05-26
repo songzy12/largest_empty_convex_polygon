@@ -81,7 +81,8 @@ public slots:
 	//showControlTB 速度控制-工具栏:slot
 	void changeSpeedSlot(int newSpeed);
 
-
+	//已知屏幕上显示的每个点的label(index)获取该点对应的排好序后的index(start with 0)
+	long long getSortedIndex(long long displayIndex);
 
 	void polarAngleSortSlot();//对于每个输入点，该点左侧的所有点按照关于该点进行极角排序
 	void showVisibilityGraphSlot();
@@ -92,8 +93,6 @@ public slots:
 	void DCELAnimationSlot();
 	void clearDCELAnimationSlot();
 	void resetSlot();
-
-
 
 public:
 	Mesh *mesh;
