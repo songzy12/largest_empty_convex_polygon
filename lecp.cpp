@@ -63,7 +63,10 @@ LECP::LECP(QWidget *parent)
 
 LECP::~LECP()
 {
-
+	delete lecp_doc;
+	delete mesh;
+	delete poly2show;
+	delete paintWidget;
 }
 
 void LECP::createToolBar()
@@ -183,8 +186,7 @@ void LECP::resetPointsSlot()
 	mesh->clear();
 	poly2show->clear();
 	paintWidget->clearMyQPandMyQL();
-	poly2show->setPaintWidget(paintWidget);
-	
+	poly2show->setPaintWidget(paintWidget);	
 }
 
 void LECP::randomPointsGenerationSlot(){
