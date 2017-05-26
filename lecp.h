@@ -103,12 +103,15 @@ public:
 	//show variable
 	enum showMode { finalRes, allPoints, singlePoint };
 	showMode currMode;
-	bool showSort = false;
-	bool showVG = false;
-	bool showChain = false;
-	bool isStart = false;
-	bool isStop = false;
-	int showspeed = 1;
+	bool showSort ;
+	bool showVG ;
+	bool showChain;
+	bool showDCEL;
+	bool showQ;
+	bool showL;
+	bool isStart ;
+	bool isStop ;
+	int showspeed;
 };
 
 #endif // LECP_H

@@ -22,6 +22,16 @@ LECP::LECP(QWidget *parent)
 	int width = this->width();
 	int height = this->height();
 	lastSelectedPoint = 0;
+	showSort = false;
+	showVG = false;
+	showChain = false;
+	isStart = false;
+	isStop = false;
+	showDCEL=false;
+	showQ=false;
+	showL=false;
+	showspeed = 1;
+
 
 	mesh = new Mesh();
 	poly2show = new Polygon();
@@ -398,7 +408,18 @@ void LECP::onChainSelected(int flag)
 
 
 //sortTB 排序-工具栏:slot
-void  LECP::onDCELSelected(int flag){}
+void  LECP::onDCELSelected(int flag)
+{
+	switch (flag)
+	{
+	case 0:
+		showSort = false;
+		break;
+	case 2:
+		showSort = true;
+		break;
+	}
+}
 
 //qTB vg-工具栏:slot
 void  LECP::onQueueSelected(int flag){}
