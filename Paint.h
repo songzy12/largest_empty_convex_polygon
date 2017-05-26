@@ -36,7 +36,7 @@ protected:
 public:
 	void init();
 
-	void setPoints(vector<LECP_Point> points_);
+	void setPoints(vector<LECP_Point*> points_);
 	bool savePoints(char *filename);
 	void loadPoints(char *fileName);
 
@@ -44,11 +44,11 @@ public:
 	void paintPoint(MyQPoint *point);
 	void paintEdge(HalfEdge* edge);
 
-	bool addPoint(LECP_Point point);//double x, double y
+	bool addPoint(LECP_Point *point);//double x, double y
 	void removeRepeatPoints(); //remove one of the same point to ensure every point in points is unique.
 
-	LECP_Point changeMyQPointToLECP_Point(MyQPoint *qPoint);
-	MyQPoint* changeLECP_PointToMyQPoint(LECP_Point point);
+	LECP_Point* changeMyQPointToLECP_Point(MyQPoint *qPoint);
+	MyQPoint* changeLECP_PointToMyQPoint(LECP_Point *point);
 	
 	void changeLECP_PointsToQPoints();//坐标变换
 
@@ -79,7 +79,7 @@ public:
 
 	bool drawKernel;//whether to draw kernel
 
-	vector<LECP_Point> points;// store all of the points user input.Calculated  coordinate system
+	vector<LECP_Point*> points;// store all of the points user input.Calculated  coordinate system
 	//vector<QPoint> qPoints; //which are under Qt coordinate system
 	vector<MyQPoint*> myQPoints;//绘制都用它，与points的区别在于y（取负）
 

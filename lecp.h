@@ -60,6 +60,8 @@ public slots:
 	void polarAngleSortDCELSlot();
 	void randomPointsGenerationSlot();
 
+	vector<LECP_Point*>  preprocessingPolarAngleSort();
+
 	//DCEL ¶¯»­
 	void DCELAnimationSlot();
 	void clearDCELAnimationSlot();

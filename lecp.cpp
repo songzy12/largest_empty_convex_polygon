@@ -145,20 +145,27 @@ bool compareVertex(Vertex* p, Vertex* q){
 
 
 	double area = px*qy - py*qx + qx*sy - qy*sx + sx*py - sy*px;
-	if (area < 0)
+	if (area > 0)
 		return true;
 	return false;
 }
-//极角排序
+
+vector<LECP_Point*>   LECP::preprocessingPolarAngleSort(){
+	mesh = new Mesh();
+
+	//首先将输入的所有点按照从左到右的顺序排列
+	vector<LECP_Point*> points = paintWidget->points;
+	sort(points.begin(), points.end(), comparePoint);
+
+	return points;
+}
+
+//polar angle sort: naive method
 void LECP::polarAngleSortSlot() {
 	time_t start = clock();
 
-	mesh = new Mesh();
-
-	lecp_doc->points = paintWidget->points;
-	//首先将输入的所有点按照从左到右的顺序排列
-	vector<LECP_Point> points = lecp_doc->points;
-	sort(points.begin(), points.end(), comparePoint);
+	vector<LECP_Point*> points = preprocessingPolarAngleSort();
+	
 	list<Vertex*> polarVextex = changeLECO_PointToVertex(points);
 
 	list<Vertex*>::iterator it = polarVextex.begin();
@@ -176,28 +183,36 @@ void LECP::polarAngleSortSlot() {
 	time_t end = clock();
 	double runTime = double(end - start) * 1000 / CLOCKS_PER_SEC;
 
-	QString msg = QString::number(runTime)+"ms";
+	QString msg = "Naive methon for polar angle sort:"+QString::number(runTime)+"ms"+","+QString::number(points.size())+" points";
 	QMessageBox box;
 	box.about(this, "running time", msg);
 	box.show();
 }
 
+//DCEL algorithm for polar angle sort result
 void LECP::polarAngleSortDCELSlot() {
-	mesh = new Mesh();
+	time_t start = clock();
 
-	lecp_doc->points = paintWidget->points;
-	//首先将输入的所有点按照从左到右的顺序排列
-	vector<LECP_Point> points = lecp_doc->points;
-	sort(points.begin(), points.end(), comparePoint);
-
-	//from right to left ,get the polar angle sorted list
+	vector<LECP_Point*> points = preprocessingPolarAngleSort();
 
 	for (long long i = points.size()-1; i>= 0; i--){
-		LECP_Point *point = &points[i];
-		mesh->AddLine(point);
+		LECP_Point *point = points[i];
+		vector<pair<LECP_Point*, LECP_Point*>> lecp_points = mesh->AddLine(point);
+
+		//将交点加上当前点存入mesh的sortedPoint中，并处理横坐标相同的点的情况
+		mesh->addCurrentAngleSortedResultToVector(point, lecp_points, points);
+
 	}
 
 	mesh->postCalcPolarAngle();
+
+	time_t end = clock();
+	double runTime = double(end - start) * 1000 / CLOCKS_PER_SEC;
+
+	QString msg = "DCEL polar angle sort:" + QString::number(runTime) + "ms" + "," + QString::number(points.size()) + " points";
+	QMessageBox box;
+	box.about(this, "running time", msg);
+	box.show();
 }
 
 void LECP::showVisibilityGraphSlot()
@@ -262,23 +277,25 @@ void LECP::openFileSlot() {
 
 //DCEL 动画
 void LECP::DCELAnimationSlot(){
-	lecp_doc->points = paintWidget->points;
-	//首先将输入的所有点按照从左到右的顺序排列
-	vector<LECP_Point> points = lecp_doc->points;
-	sort(points.begin(), points.end(), comparePoint);
+	vector<LECP_Point*> points = preprocessingPolarAngleSort();
 
 	for (long long i = points.size() - 1; i >= 0; i--){
-		LECP_Point *point = &points[i];
+		LECP_Point *point = points[i];
 
-		MyQPoint  *qPoint = paintWidget->changeLECP_PointToMyQPoint(*point);
+		MyQPoint  *qPoint = paintWidget->changeLECP_PointToMyQPoint(point);
 
 		vector<pair<LECP_Point*, LECP_Point*>> lecp_points = mesh->AddLine(point);
+
+		//将交点加上当前点存入mesh的sortedPoint中，并处理横坐标相同的点的情况
+		mesh->addCurrentAngleSortedResultToVector(point,lecp_points,points);
+
 		paintWidget->animationPoint(qPoint, lecp_points);
 		_sleep(3 * 1000);
 		qPoint->setColor(Qt::red);
 		paintWidget->update();
 	}
 
+	mesh->postCalcPolarAngle();
 }
 
 void LECP::clearDCELAnimationSlot(){
@@ -475,7 +492,7 @@ void LECP::randomPointsGenerationSlot(){
 
 		cout << "random points number:" << points_number << endl;
 
-		vector<LECP_Point> random_points = generateRandomPoints(points_number);
+		vector<LECP_Point*> random_points = generateRandomPoints(points_number);
 		paintWidget->setPoints( random_points);
 	}
 }
