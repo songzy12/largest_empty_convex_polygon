@@ -43,6 +43,7 @@ public:
 	//newPoH和new neH是该步新产生的边对应的两个half_edge
 	void dealWithNormalIntersection(Vertex* newIntersection, HalfEdge* intersectHalfEdgeLeft, HalfEdge* intersectHalfEdgeRight, HalfEdge* newPoH, HalfEdge* newNeH);//处理中间的交点
 
+	//void  preprocessingPolarAngleSort();
 	void  postCalcPolarAngle();
 
 	void postAjustIntersections(list<LECP_Point*>  &return_intersections);// 2017-05-24添加
@@ -52,6 +53,9 @@ public:
 	// return the new halfEdge
 	HalfEdge* splitEdge(HalfEdge* half_edge,Vertex* vertex);
 	void connectTwoNewVertices(HalfEdge* h1,HalfEdge* h2,LECP_Point *point);
+
+	//将新插入的直线构成的交点list存放到sortedPoint中，并处理三点共x的情况
+	void addCurrentAngleSortedResultToVector(LECP_Point *point, vector<pair<LECP_Point*, LECP_Point*>> lecp_points, vector<LECP_Point*> points);
 
 private:
 	list<Vertex*> vertices_;

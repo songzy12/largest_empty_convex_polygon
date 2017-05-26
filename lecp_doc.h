@@ -10,7 +10,7 @@ public:
 	~LECP_Doc(); 
 	
 	vector<Vertex*> vertices_;
-	vector<LECP_Point> points;//all of the points user input Calculated coordinate system
+	vector<LECP_Point*> points;//all of the points user input Calculated coordinate system
 
 	//vector<LECP_Point> sortVerticesOnX();
 	

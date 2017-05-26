@@ -71,11 +71,11 @@ void PaintWidget::mousePressEvent(QMouseEvent *event){
 		MyQPoint *mp = new MyQPoint(p);
 		
 
-		LECP_Point point = changeMyQPointToLECP_Point(mp);
+		LECP_Point* point = changeMyQPointToLECP_Point(mp);
 
 		if (addPoint(point)){
 		
-			point.index = points.size();
+			point->index = points.size();
 			points.push_back(point);
 
 			mp->setX(p.x() - 600);
@@ -89,13 +89,13 @@ void PaintWidget::mousePressEvent(QMouseEvent *event){
 	}
 }
 
-bool PaintWidget::addPoint(LECP_Point point) {
-	vector<LECP_Point>::iterator it;
+bool PaintWidget::addPoint(LECP_Point *point) {
+	vector<LECP_Point*>::iterator it;
 	it = std::find(points.begin(), points.end(), point);
 
 	if (it == points.end())
 	{
-		std::cout << points.size() << " point：" << point.x << "," << point.y << endl;
+		std::cout << points.size() << " point：" << point->x << "," << point->y << endl;
 
 		return true;
 	}
@@ -121,8 +121,8 @@ bool PaintWidget::savePoints(char *filename){
 	outFile << points.size() << endl;
 
 	for (long long i = 0; i < points.size(); i++){
-		LECP_Point point = points[i];
-		outFile << point.x << " " << point.y << endl;
+		LECP_Point *point = points[i];
+		outFile << point->x << " " << point->y << endl;
 	}
 
 	outFile.close();
@@ -137,7 +137,7 @@ void PaintWidget::init(){
 	intersectPoints.clear();
 }
 
-void PaintWidget::setPoints(vector<LECP_Point> points_){
+void PaintWidget::setPoints(vector<LECP_Point*> points_){
 	this->points = points_;
 	changeLECP_PointsToQPoints();//坐标变换
 	update();
@@ -171,12 +171,12 @@ void PaintWidget::loadPoints(char *fileName){
 
 		y = atof(cy);
 
-		LECP_Point point;
-		point.setX(x);
-		point.setY(y);
-		point.index = points.size();
+		LECP_Point *point = new LECP_Point();
+		point->setX(x);
+		point->setY(y);
+		point->index = points.size();
 
-		std::cout << point.index << ":" << point.x << "," << point.y << endl;
+		std::cout << point->index << ":" << point->x << "," << point->y << endl;
 
 		points.push_back(point);
 	}
@@ -223,19 +223,19 @@ void PaintWidget::paintEdge(HalfEdge* edge_) {
 }
 
 //采用index 的 method
-LECP_Point PaintWidget::changeMyQPointToLECP_Point(MyQPoint *qPoint){
+LECP_Point* PaintWidget::changeMyQPointToLECP_Point(MyQPoint *qPoint){
 	vector<MyQPoint*>::iterator it;
 	it = std::find(myQPoints.begin(), myQPoints.end(), qPoint);
 
 	long long index = it - myQPoints.begin();
 
-	LECP_Point point;
+	LECP_Point* point = new LECP_Point();
 	if (index >= points.size()){
 		double half_x = WIN_WIDTH / 2.0;
 		double half_y = WIN_HEIGHT / 2.0;
 
-		point.x = qPoint->x() - half_x;
-		point.y = -qPoint->y() + half_y;
+		point->x = qPoint->x() - half_x;
+		point->y = -qPoint->y() + half_y;
 		//point.x = qPoint->x();
 		//point.y = -qPoint->y();
 		
@@ -252,12 +252,12 @@ LECP_Point PaintWidget::changeMyQPointToLECP_Point(MyQPoint *qPoint){
 //Attention: the order of points and myQPoints can not be changed!!!!
 
 // y坐标相反
-MyQPoint* PaintWidget::changeLECP_PointToMyQPoint(LECP_Point p){
+MyQPoint* PaintWidget::changeLECP_PointToMyQPoint(LECP_Point *p){
 	
 	MyQPoint *mp;
 
 
-	vector<LECP_Point>::iterator it;
+	vector<LECP_Point*>::iterator it;
 	it = std::find(points.begin(), points.end(), p);
 	long long index = it - points.begin();
 
@@ -266,8 +266,8 @@ MyQPoint* PaintWidget::changeLECP_PointToMyQPoint(LECP_Point p){
 	   double half_y = WIN_HEIGHT / 2.0;
 
 	   QPoint qp;
-	   qp.setX(p.x);
-	   qp.setY(-p.y); 
+	   qp.setX(p->x);
+	   qp.setY(-p->y); 
 	   //qp.setX(half_x + p.x);
 	   //qp.setY(half_y - p.y);
 	  mp = new MyQPoint(qp);
@@ -285,7 +285,7 @@ void PaintWidget::changeLECP_PointsToQPoints(){
 
 	for (long long i = 0; i < points.size(); i++)
 	{
-		LECP_Point p = points[i];
+		LECP_Point *p = points[i];
 		//QPoint qp;
 		//qp.setX(half_x + p.x);
 		//qp.setY(half_y - p.y);
@@ -339,7 +339,7 @@ void PaintWidget::displayIntersectionPoint(vector<pair<LECP_Point*, LECP_Point*>
 		LECP_Point* originPoint = p.second;
 		
 		//MyQPoint *qPoint = changeLECP_PointToMyQPoint(*intersectPoint);
-		MyQPoint *origQPoint = changeLECP_PointToMyQPoint(*originPoint);
+		MyQPoint *origQPoint = changeLECP_PointToMyQPoint(originPoint);
 		long long index = getOriginPointIndex(origQPoint);
 
 		//qPoint->setColor(Qt::yellow);
@@ -395,10 +395,10 @@ void PaintWidget::getSuitCoordinate(double a, double  b, double &x1, double &y1,
 }
 
 QLine PaintWidget::getPaintLine(MyQPoint *qPoint){
-	LECP_Point point = changeMyQPointToLECP_Point(qPoint);
+	LECP_Point* point = changeMyQPointToLECP_Point(qPoint);
 	double a, b;
-	a = point.x;
-	b = point.y;
+	a = point->x;
+	b = point->y;
 
 	//以QPoint坐标为主
 
@@ -411,11 +411,12 @@ QLine PaintWidget::getPaintLine(MyQPoint *qPoint){
 	//x2 = 500;
 	//y2 = x2*a - b;
 
-	LECP_Point startP, endP;
-	startP.setX(x1);
-	startP.setY(y1);
-	endP.setX(x2);
-	endP.setY(y2);
+	LECP_Point *startP = new LECP_Point();
+	LECP_Point *endP = new LECP_Point();
+	startP->setX(x1);
+	startP->setY(y1);
+	endP->setX(x2);
+	endP->setY(y2);
 
 	QPoint *start, *end;
 	start = changeLECP_PointToMyQPoint(startP);

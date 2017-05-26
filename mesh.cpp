@@ -41,13 +41,10 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 	//The first is intersection,and the second is corresponding original user input point.
 	vector<pair<LECP_Point*, LECP_Point*>> return_intersections;
 
-	list<LECP_Point*> sortedAngle;// kernel point's sorted result.
-	sortedAngle.push_back(point);
-	
 	double a = point->x;
 	double b = point->y;
 
-	qDebug() << "AddLine:" << a << b;
+	//qDebug() << "AddLine:" << a << b;
 
 	Vertex vRet;
 
@@ -58,7 +55,7 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 	Vertex* v = new Vertex();
 	v->set_point(vRet.point());
 
-	qDebug() << "vRet: " << vRet.point().first << vRet.point().second;
+	//qDebug() << "vRet: " << vRet.point().first << vRet.point().second;
 	
 	HalfEdge* newHalf = splitEdge(firstIntersect,v); // belongs to bounding box
 	boundingBox.push_back(newHalf);
@@ -95,8 +92,8 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 
 		LECP_Point* second = intersectHalfEdgeRight->lecp_point;
 
-		qDebug() << "first" << newIntersection->point().first << newIntersection->point().first;
-		qDebug() << "second:" << (intersectHalfEdgeRight->lecp_point)->x << (intersectHalfEdgeRight->lecp_point)->y;
+		//qDebug() << "first" << newIntersection->point().first << newIntersection->point().first;
+		//qDebug() << "second:" << (intersectHalfEdgeRight->lecp_point)->x << (intersectHalfEdgeRight->lecp_point)->y;
 
 		pair<LECP_Point*, LECP_Point*> intersectionPair;
 		intersectionPair.first = first;
@@ -105,7 +102,7 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 		return_intersections.push_back(intersectionPair);
 		//-----------end add new pair--------------------------------------------------
 
-		sortedAngle.push_back(intersectHalfEdgeLeft->lecp_point);
+		//sortedAngle.push_back(intersectHalfEdgeLeft->lecp_point);
 
 		// return tmpV and left,right
 		newHalf = intersectHalfEdgeLeft->twin();
@@ -149,11 +146,11 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 
 	// 交点的顺序可能正好相反，和新插入的直线与哪个bounding box首先相交有关（每条新插入的直线都和两个bounding box相交）
 
-	postAjustIntersections(sortedAngle);// 2017-05-24添加
+	//postAjustIntersections(sortedAngle);// 2017-05-24添加
 	postAjustIntersections(return_intersections);// 2017-05-24添加
 
 	//save current kernel's polar angle sorted result
-	sortedPoint.push_back(sortedAngle);
+	//sortedPoint.push_back(sortedAngle);
 
 	return return_intersections;
 }
@@ -521,17 +518,17 @@ void Mesh::dealWithNormalIntersection(Vertex* newIntersection, HalfEdge* interse
 
 void Mesh::postCalcPolarAngle(){
 	for (long long i = 0; i < sortedPoint.size(); i++){
-		vector<LECP_Point> tmpList;
+		vector<LECP_Point*> tmpList;
 
 		list<LECP_Point*> tmpPoints = sortedPoint[i];
 		list<LECP_Point*>::iterator it = tmpPoints.begin();
 		LECP_Point *pole = *it++;//标杆点
 
-		tmpList.push_back(*pole);
+		tmpList.push_back(pole);
 
 		while (it != tmpPoints.end()){//对其后的每个点进行处理
 			LECP_Point* tmpPoint = *it++;
-			tmpList.push_back(*tmpPoint);
+			tmpList.push_back(tmpPoint);
 		}
 
 		//LECP_Point to Vertex*
@@ -627,4 +624,31 @@ void Mesh::connectTwoNewVertices(HalfEdge* h1,HalfEdge* h2,LECP_Point *point){
 	h1->set_prev(half_down);
 
 	h2->set_prev(half_up);
+}
+
+//将新插入的直线构成的交点list存放到sortedPoint中，并处理三点共x的情况
+void Mesh::addCurrentAngleSortedResultToVector(LECP_Point *point, vector<pair<LECP_Point*, LECP_Point*>> lecp_points, vector<LECP_Point*> points){
+
+	list<LECP_Point*> sortedAngle;// kernel point's sorted result.
+	sortedAngle.push_back(point);// kernel point
+
+	// add all intersect line to the list
+	for (long long i = 0; i < lecp_points.size(); i++){
+		LECP_Point* line = lecp_points[i].second;//origin user input point
+		sortedAngle.push_back(line);
+	}
+
+	// three points which xs are the same
+	vector<LECP_Point*>::iterator it;
+	it = find(points.begin(), points.end(), point);
+	long long index = it - points.begin();
+	index++;
+	// y越小，极角越小
+	while (index<points.size() && points[index]->x == point->x){
+		sortedAngle.push_back(points[index]);
+		index++;
+	}
+
+	// add the sorted list to the vector
+	sortedPoint.push_back(sortedAngle);
 }

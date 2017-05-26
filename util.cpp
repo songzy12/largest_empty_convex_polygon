@@ -4,13 +4,13 @@
 #include"time.h"
 
 //按照横坐标从左向右排列
-bool comparePoint(LECP_Point a, LECP_Point b){
-	if (a.x < b.x)
+bool comparePoint(LECP_Point* a, LECP_Point* b){
+	if (a->x < b->x)
 		return true;
-	else if (a.x >b.x)
+	else if (a->x >b->x)
 		return false;
 	else{
-		return a.y < b.y;
+		return a->y < b->y;
 	}
 }
 
@@ -32,15 +32,15 @@ bool isConvexTurn(HalfEdge *i, HalfEdge *o)
 	return toLeft(i->origin(), i->target(), o->target());
 }
 
-list<Vertex*> changeLECO_PointToVertex(vector<LECP_Point> points){
+list<Vertex*> changeLECO_PointToVertex(vector<LECP_Point*> points){
 	list<Vertex*> re;
 
 	for (long long i = 0; i < points.size(); i++){
-		LECP_Point point = points[i];
+		LECP_Point *point = points[i];
 		Vertex *v = new Vertex();
 		pair<double, double> p;
-		p.first = point.x;
-		p.second = point.y;
+		p.first = point->x;
+		p.second = point->y;
 		v->set_point(p);
 		v->set_index(i);
 		re.push_back(v);
@@ -49,8 +49,8 @@ list<Vertex*> changeLECO_PointToVertex(vector<LECP_Point> points){
 	return re;
 }
 
-vector<LECP_Point> sortInputPointsFromLeftToRight(PaintWidget *paint){
-	vector<LECP_Point> points= paint->points;
+vector<LECP_Point*> sortInputPointsFromLeftToRight(PaintWidget *paint){
+	vector<LECP_Point*> points= paint->points;
 	
 	sort(points.begin(), points.end(), comparePoint);
 
@@ -58,8 +58,8 @@ vector<LECP_Point> sortInputPointsFromLeftToRight(PaintWidget *paint){
 }
 
 
-vector<LECP_Point>  generateRandomPoints(long long points_number){
-	vector<LECP_Point> points;
+vector<LECP_Point*>  generateRandomPoints(long long points_number){
+	vector<LECP_Point*> points;
 
 	int mx = -WIN_WIDTH / 2;
 	int nx = WIN_WIDTH / 2;
@@ -70,13 +70,13 @@ vector<LECP_Point>  generateRandomPoints(long long points_number){
 
 	for (long long i = 0; i < points_number; i++){
 		
-		LECP_Point point;
+		LECP_Point *point = new LECP_Point();
 		double x = rand() % (nx - mx + 1) + mx;
 		double y = rand() % (ny - my + 1) + my;
-		point.setX(x);
-		point.setY(y);
+		point->setX(x);
+		point->setY(y);
 
-		vector<LECP_Point>::iterator it;
+		vector<LECP_Point*>::iterator it;
 		it = std::find(points.begin(), points.end(), point);
 
 		if (it == points.end()){
