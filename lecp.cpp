@@ -427,9 +427,6 @@ void LECP::changeSpeedSlot(int newSpeed)
 	}
 }
 
-
-
-
 //Î´¹éÕýslots
 Vertex* pole;
 bool compareVertex(Vertex* p, Vertex* q){
@@ -454,7 +451,23 @@ vector<LECP_Point*>   LECP::preprocessingPolarAngleSort(){
 	vector<LECP_Point*> points = paintWidget->points;
 	sort(points.begin(), points.end(), comparePoint);
 
+	for (long long i = 0; i < points.size(); i++){
+		LECP_Point* point = points[i];
+		point->sortedIndex = i;
+	}
+
 	return points;
+}
+
+// if not exit,return -1
+long long  LECP::getSortedIndex(long long displayIndex){
+	for (long long i = 0; i < paintWidget->points.size(); i++){
+		LECP_Point* point = paintWidget->points[i];
+		if (point->index == displayIndex)
+			return point->sortedIndex;
+	}
+
+	return -1;
 }
 
 //polar angle sort: naive method
