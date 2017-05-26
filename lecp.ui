@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>995</width>
+    <width>961</width>
     <height>605</height>
    </rect>
   </property>
@@ -30,8 +30,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>995</width>
-     <height>21</height>
+     <width>961</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -40,32 +40,18 @@
     </property>
     <addaction name="polar_angle_sort"/>
     <addaction name="sortedDCEL"/>
-    <addaction name="create_VG"/>
-    <addaction name="actionConvex_Chain"/>
-    <addaction name="randomPoints"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
      <string>文件</string>
     </property>
-    <addaction name="saveFile"/>
-    <addaction name="openFile"/>
-    <addaction name="reset"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
      <string>动画演示</string>
     </property>
-    <addaction name="DCEL_animation"/>
     <addaction name="clearDCELAnimation"/>
-   </widget>
-   <widget class="QMenu" name="menu_show">
-    <property name="title">
-     <string>动画演示</string>
-    </property>
-    <addaction name="sortMenu"/>
-    <addaction name="vgMenu"/>
-    <addaction name="chainMenu"/>
+    <addaction name="DCEL_animation"/>
    </widget>
    <action name="polar_angle_sort">
     <property name="text">
@@ -79,16 +65,26 @@
    </action>
    <action name="saveFile">
     <property name="icon">
-     <iconset resource="lecp.qrc">
-      <normaloff>:/Resources/save.ico</normaloff>:/Resources/save.ico</iconset>
+     <iconset>
+      <normaloff>Resources/save.ico</normaloff>Resources/save.ico</iconset>
     </property>
     <property name="text">
-     <string>save file</string>
+     <string>保存文件</string>
+    </property>
+    <property name="toolTip">
+     <string>保存文件</string>
     </property>
    </action>
    <action name="openFile">
+    <property name="icon">
+     <iconset>
+      <normaloff>Resources/open.ico</normaloff>Resources/open.ico</iconset>
+    </property>
     <property name="text">
-     <string>open file</string>
+     <string>打开文件</string>
+    </property>
+    <property name="toolTip">
+     <string>保存文件</string>
     </property>
    </action>
    <action name="sortedDCEL">
@@ -96,19 +92,40 @@
      <string>极角排序（DCEL）</string>
     </property>
    </action>
-   <action name="sortMenu">
+   <action name="finalResultShow">
+    <property name="icon">
+     <iconset>
+      <normaloff>Resources/final.ico</normaloff>Resources/final.ico</iconset>
+    </property>
     <property name="text">
-     <string>final result</string>
+     <string>显示最终结果</string>
+    </property>
+    <property name="toolTip">
+     <string>显示最终结果</string>
     </property>
    </action>
-   <action name="vgMenu">
+   <action name="allPointsShow">
+    <property name="icon">
+     <iconset>
+      <normaloff>Resources/points.ico</normaloff>Resources/points.ico</iconset>
+    </property>
     <property name="text">
-     <string>all points animation</string>
+     <string>所有点演示</string>
+    </property>
+    <property name="toolTip">
+     <string>所有点演示</string>
     </property>
    </action>
-   <action name="chainMenu">
+   <action name="singlePointShow">
+    <property name="icon">
+     <iconset>
+      <normaloff>Resources/point.ico</normaloff>Resources/point.ico</iconset>
+    </property>
     <property name="text">
-     <string>simple point animation</string>
+     <string>单点演示</string>
+    </property>
+    <property name="toolTip">
+     <string>单点演示</string>
     </property>
    </action>
    <action name="DCEL_animation">
@@ -122,6 +139,10 @@
     </property>
    </action>
    <action name="reset">
+    <property name="icon">
+     <iconset>
+      <normaloff>Resources/clear.ico</normaloff>Resources/clear.ico</iconset>
+    </property>
     <property name="text">
      <string>重置</string>
     </property>
@@ -129,9 +150,65 @@
    <addaction name="menu_2"/>
    <addaction name="menu"/>
    <addaction name="menu_3"/>
-   <addaction name="menu_show"/>
   </widget>
-  <widget class="QToolBar" name="showContent">
+  <widget class="QToolBar" name="operationsTB">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="toolTip">
+    <string extracomment="打开文件"/>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="openFile"/>
+   <addaction name="saveFile"/>
+   <addaction name="reset"/>
+   <addaction name="randomPoints"/>
+   <addaction name="finalResultShow"/>
+   <addaction name="allPointsShow"/>
+   <addaction name="singlePointShow"/>
+  </widget>
+  <widget class="QToolBar" name="pointSelectTB">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="lastPoint"/>
+   <addaction name="nextPoint"/>
+  </widget>
+  <widget class="QToolBar" name="strartShowTB">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="startShow"/>
+  </widget>
+  <widget class="QToolBar" name="showContentTB">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>true</bool>
+   </attribute>
+  </widget>
+  <widget class="QToolBar" name="sortTB">
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
@@ -142,7 +219,29 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <widget class="QToolBar" name="showControl">
+  <widget class="QToolBar" name="qTB">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QToolBar" name="lTB">
+   <property name="windowTitle">
+    <string>toolBar_2</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QToolBar" name="showControlTB">
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
@@ -154,6 +253,10 @@
    </attribute>
   </widget>
   <action name="randomPoints">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/rpoints.ico</normaloff>Resources/rpoints.ico</iconset>
+   </property>
    <property name="text">
     <string>随机点生成</string>
    </property>
@@ -161,6 +264,36 @@
   <action name="actionConvex_Chain">
    <property name="text">
     <string>Convex Chain</string>
+   </property>
+  </action>
+  <action name="startShow">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/start.ico</normaloff>Resources/start.ico</iconset>
+   </property>
+   <property name="text">
+    <string>开始动画演示</string>
+   </property>
+   <property name="toolTip">
+    <string>开始动画演示</string>
+   </property>
+  </action>
+  <action name="lastPoint">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/left.ico</normaloff>Resources/left.ico</iconset>
+   </property>
+   <property name="text">
+    <string>上一点</string>
+   </property>
+  </action>
+  <action name="nextPoint">
+   <property name="icon">
+    <iconset>
+     <normaloff>Resources/right.ico</normaloff>Resources/right.ico</iconset>
+   </property>
+   <property name="text">
+    <string>下一点</string>
    </property>
   </action>
  </widget>

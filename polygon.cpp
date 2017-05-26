@@ -134,7 +134,7 @@ void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j,int index_i,int index_j
 		int temp_vertex_index = i->Q_.front()->index();
 		i->Q_.pop_front();
 
-		this->paint_widget_->allQPoints2Draw[temp_vertex_index].setQ(i->Q_);//animation
+		this->paint_widget_->allQPoints2Draw[index_i].setQ(i->Q_);//animation
 		//show animation
 		this->paint_widget_->allQPoints2Draw[temp_vertex_index].setColor(Qt::blue);
 		this->paint_widget_->repaint();
@@ -147,14 +147,13 @@ void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j,int index_i,int index_j
 	//ENQUEUE(i,Qj)
 	j->Q_.push_back(i);
 	this->paint_widget_->allQPoints2Draw[index_j].setQ(j->Q_);//animation
-
+	this->paint_widget_->repaint();
 
 	//show animation
 	this->paint_widget_->allQPoints2Draw[index_i].setColor(Qt::yellow);
 	this->paint_widget_->allQPoints2Draw[index_j].setColor(Qt::green);
 	this->paint_widget_->repaint();
-	this->paint_widget_->update();
-	_sleep(sleepTime() * 100);
+	//_sleep(sleepTime() * 100);
 
 	//上一次的添加的halfedge转为默认色
 	int last = this->paint_widget_->allQLines2Draw.size()-1;

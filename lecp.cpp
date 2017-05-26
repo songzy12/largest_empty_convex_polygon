@@ -33,23 +33,30 @@ LECP::LECP(QWidget *parent)
 	createToolBar();    //创建工具栏 
 	this->addToolBarBreak();
 
+	//operationTB:action
+	QObject::connect(ui.openFile, SIGNAL(triggered()), this, SLOT(openFileSlot()));
+	QObject::connect(ui.saveFile, SIGNAL(triggered()), this, SLOT(saveFileSlot()));
+	QObject::connect(ui.reset, SIGNAL(triggered()), this, SLOT(resetPointsSlot()));
+	QObject::connect(ui.randomPoints, SIGNAL(triggered()), this, SLOT(randomPointsGenerationSlot()));
+	QObject::connect(ui.finalResultShow, SIGNAL(triggered()), this, SLOT(finalResultShowSlot()));
+	QObject::connect(ui.allPointsShow, SIGNAL(triggered()), this, SLOT(allPointsShowSlot()));
+	QObject::connect(ui.singlePointShow, SIGNAL(triggered()), this, SLOT(singlePointShowSlot()));
+
+	//pointSelectTB 点选择-工具栏:action
+	QObject::connect(ui.lastPoint, SIGNAL(triggered()), this, SLOT(lastPointSlot()));
+	QObject::connect(ui.nextPoint, SIGNAL(triggered()), this, SLOT(nextPointSlot()));
+
+	//strartShowTB 开始演示-工具栏:action
+	QObject::connect(ui.startShow, SIGNAL(triggered()), this, SLOT(startShowSlot()));
+
+
 	QObject::connect(ui.polar_angle_sort, SIGNAL(triggered()), this, SLOT(polarAngleSortSlot()));
 	QObject::connect(ui.create_VG, SIGNAL(triggered()), this, SLOT(showVisibilityGraphSlot()));
-	QObject::connect(ui.saveFile, SIGNAL(triggered()), this, SLOT(saveFileSlot()));
-	QObject::connect(ui.openFile, SIGNAL(triggered()), this, SLOT(openFileSlot()));
 	QObject::connect(ui.sortedDCEL, SIGNAL(triggered()), this, SLOT(polarAngleSortDCELSlot()));
-	QObject::connect(ui.randomPoints, SIGNAL(triggered()), this, SLOT(randomPointsGenerationSlot()));
-
-
 	//DCEL 动画
 	QObject::connect(ui.DCEL_animation, SIGNAL(triggered()), this, SLOT(DCELAnimationSlot()));
 	QObject::connect(ui.clearDCELAnimation, SIGNAL(triggered()), this, SLOT(clearDCELAnimationSlot()));
 	QObject::connect(ui.reset, SIGNAL(triggered()), this, SLOT(resetSlot()));
-
-	//动画演示
-	QObject::connect(ui.sortMenu, SIGNAL(triggered()), this, SLOT(sortMenuSlot()));
-	QObject::connect(ui.vgMenu, SIGNAL(triggered()), this, SLOT(vgMenuSlot()));
-	QObject::connect(ui.chainMenu, SIGNAL(triggered()), this, SLOT(chainMenuSlot()));
 
 }
 
@@ -60,80 +67,267 @@ LECP::~LECP()
 
 void LECP::createToolBar()
 {
-	//工具栏  
-	this->ui.showContent->hide();
-	this->ui.showControl->hide();
+	//工具栏 
+	this->ui.pointSelectTB->hide();
+	this->ui.strartShowTB->hide();
+	this->ui.showContentTB->hide();
+	this->ui.sortTB->hide();
+	this->ui.qTB->hide();
+	this->ui.lTB->hide();
+	this->ui.showControlTB->hide();
 
-	//演示内容 工具栏
-	QLabel* contentLabel = new QLabel(tr("show contents:      "));    
-	sortComboBox = new QCheckBox(tr("1.sort     "));
-	vgComboBox = new QCheckBox(tr("2.VG     "));
-	chainComboBox = new QCheckBox(tr("3.chain     "));
-	this->ui.showContent->addWidget(contentLabel);
-	this->ui.showContent->addWidget(sortComboBox);
-	this->ui.showContent->addWidget(vgComboBox);
-	this->ui.showContent->addWidget(chainComboBox);
+	//pointSelectTB 点选择-工具栏
+	pointSpinBox = new QSpinBox(this);
+	pointSpinBox->setMinimum(0);
+	pointSpinBox->setMaximum(10);
+	pointSpinBox->setSingleStep(1);
+	this->ui.pointSelectTB->insertWidget(this->ui.nextPoint, pointSpinBox);
+
+	//showContentTB 演示内容-工具栏
+	QLabel* contentLabel = new QLabel(tr("show contents:     "));
+	sortComboBox = new QCheckBox(tr("1.sort    "));
+	vgComboBox = new QCheckBox(tr("2.VG    "));
+	chainComboBox = new QCheckBox(tr("3.chain    "));
+	this->ui.showContentTB->addWidget(contentLabel);
+	this->ui.showContentTB->addWidget(sortComboBox);
+	this->ui.showContentTB->addWidget(vgComboBox);
+	this->ui.showContentTB->addWidget(chainComboBox);
 
 	connect(sortComboBox, SIGNAL(stateChanged(int)), this, SLOT(onSortSelected(int)));
 	connect(vgComboBox, SIGNAL(stateChanged(int)), this, SLOT(onVGSelected(int)));
 	connect(chainComboBox, SIGNAL(stateChanged(int)), this, SLOT(onChainSelected(int)));
 
+	//sortTB 排序-工具栏
 
-	//演示控制 工具栏
-	QLabel* speedLabel = new QLabel(tr("show speed:     "));
 
-	pSpinBox = new QSpinBox(this);
-	pSpinBox->setMinimum(showSpeedMin); 
-	pSpinBox->setMaximum(showSpeedMax);  
-	pSpinBox->setSingleStep(1);  
+	//qTB vg-工具栏
 
-	speedSlider=new QSlider(this);
+
+	//lTB chain-工具栏
+
+
+	//showControlTB 速度控制-工具栏
+	QLabel* speedLabel = new QLabel(tr("show speed:    "));
+
+	speedSpinBox = new QSpinBox(this);
+	speedSpinBox->setMinimum(showSpeedMin);
+	speedSpinBox->setMaximum(showSpeedMax);
+	speedSpinBox->setSingleStep(1);
+
+	speedSlider = new QSlider(this);
 	speedSlider->setOrientation(Qt::Horizontal);
 	speedSlider->setMinimum(showSpeedMin);
 	speedSlider->setMaximum(showSpeedMax);
 	speedSlider->setSingleStep(1);
-	speedSlider->setTickInterval(1); 
+	speedSlider->setTickInterval(1);
 	speedSlider->setTickPosition(QSlider::TicksAbove);
 	speedSlider->setFixedWidth(240);
 
-	QLabel* spaceLabel0 = new QLabel(tr("     "));
-	pSelectButton = new QPushButton(this);
-	pSelectButton->setText(tr("select point"));
-	QLabel* spaceLabel1 = new QLabel(tr("     "));
-	startButton = new QPushButton(this);
-	startButton->setText(tr("start"));
-	QLabel* spaceLabel2 = new QLabel(tr("     "));
-	stopButton = new QPushButton(this);
-	stopButton->setText(tr("stop"));
-	QLabel* spaceLabel3 = new QLabel(tr("     "));
-	resetButton = new QPushButton(this);
-	resetButton->setText(tr("reset"));
+	this->ui.showControlTB->addWidget(speedLabel);
+	this->ui.showControlTB->addWidget(speedSpinBox);
+	this->ui.showControlTB->addWidget(speedSlider);
 
-	this->ui.showControl->addWidget(speedLabel);
-	this->ui.showControl->addWidget(pSpinBox);
-	this->ui.showControl->addWidget(speedSlider);
-	this->ui.showControl->addWidget(spaceLabel0);
-	this->ui.showControl->addWidget(pSelectButton);
-	this->ui.showControl->addWidget(spaceLabel1);
-	this->ui.showControl->addWidget(startButton);
-	this->ui.showControl->addWidget(spaceLabel2);
-	this->ui.showControl->addWidget(stopButton);
-	this->ui.showControl->addWidget(spaceLabel3);
-	this->ui.showControl->addWidget(resetButton);
-
-	connect(pSpinBox, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
+	connect(speedSpinBox, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
 	connect(speedSlider, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
+	
+}
 
-	connect(startButton, SIGNAL(clicked()), this, SLOT(startShowSlot()));
-	connect(stopButton, SIGNAL(clicked()), this, SLOT(stopShowSlot()));
-	connect(resetButton, SIGNAL(clicked()), this, SLOT(resetShowSlot()));
 
-	//TODO: delete this
-	connect(pSelectButton, SIGNAL(clicked()), this, SLOT(showConvexChainSlot()));
+//operationTB:slot
+void LECP::openFileSlot() {
+	QDir dir;
+	QString fileName = QFileDialog::getOpenFileName(this, QString("Open File"), dir.absolutePath());
+	if (fileName.isEmpty()){
+		return;
+	}
+
+	QByteArray ba = fileName.toLocal8Bit();
+	char* fileName_str = ba.data();
+
+	paintWidget->loadPoints(fileName_str);
+}
+
+void LECP::saveFileSlot() {
+	QString saveFileName;
+	saveFileName = QFileDialog::getSaveFileName(this, tr("save file"));
+
+	if (!saveFileName.isNull())
+	{
+		char *str = (char *)malloc(255);
+		QByteArray ba = saveFileName.toLatin1();
+		strcpy(str, ba.data());
+
+		bool re = paintWidget->savePoints(str);
+		if (re)
+		{
+			QMessageBox box;
+			box.about(paintWidget, "Success", "Save successfull!");
+			box.show();
+			paintWidget->update();
+		}
+	}
+}
+
+void LECP::resetPointsSlot()
+{
+	mesh->clear();
+	poly2show->clear();
+	paintWidget->clearMyQPandMyQL();
+	poly2show->setPaintWidget(paintWidget);
+	
+}
+
+void LECP::randomPointsGenerationSlot(){
+	bool isOK;
+	QString text = QInputDialog::getText(NULL, "Input points number", "Please input the number of points:", QLineEdit::Normal, "points number", &isOK);
+
+	if (isOK){
+		int points_number = text.toInt();
+
+		cout << "random points number:" << points_number << endl;
+
+		vector<LECP_Point> random_points = generateRandomPoints(points_number);
+		paintWidget->setPoints(random_points);
+	}
+}
+
+void LECP::finalResultShowSlot()
+{
+	this->ui.showContentTB->hide();
+	this->ui.showControlTB->show();
+}
+
+void LECP::allPointsShowSlot()
+{
+	this->ui.showContentTB->show();
+	this->ui.showControlTB->show();
+}
+
+void LECP::singlePointShowSlot()
+{
+	this->ui.showContentTB->show();
+	this->ui.showControlTB->show();
+}
+
+
+//pointSelectTB 点选择-工具栏:slot
+void LECP::lastPointSlot()
+{
+	int val = pointSpinBox->value() - 1 < 1 ? 1 : pointSpinBox->value() - 1;
+	pointSpinBox->setValue(val);
+}
+
+void LECP::nextPointSlot()
+{    //TODO change 20 to point_num
+	int val = pointSpinBox->value() + 1 > 20 ? 20 : pointSpinBox->value() + 1;
+	pointSpinBox->setValue(val);
+}
+
+
+//strartShowTB 开始演示-工具栏:slot
+void LECP::startShowSlot()
+{
+	isStart = true;//演示结束时设为false
+
+	trans2Poly(0);
+
+	//paintWidget->allQPoints2Draw
+	if (showSort){}
+	else{}
+
+	if (showVG){}
+	else{}
+
+	if (showChain){}
+	else{}
+
+}
+
+void LECP::resetShowSlot()
+{
+	//poly2show->getPaintWidget()->clearMyQPandMyQL();
+	poly2show->clear();
+}
+
+//showContentTB 演示内容-工具栏:slot
+void LECP::onSortSelected(int flag)
+{
+	switch (flag)
+	{
+	case 0:
+		showSort = false;
+		break;
+	case 2:
+		showSort = true;
+		break;
+	}
+
+	if ((!showSort) && (!showChain) && (!showVG))
+		this->ui.strartShowTB->hide();
+	else
+		this->ui.strartShowTB->show();
+}
+
+void LECP::onVGSelected(int flag)
+{
+	switch (flag)
+	{
+	case 0:
+		showVG = false;
+		break;
+	case 2:
+		showVG = true;
+		break;
+	}
+	if ((!showSort) && (!showChain) && (!showVG))
+		this->ui.strartShowTB->hide();
+	else
+		this->ui.strartShowTB->show();
+}
+
+void LECP::onChainSelected(int flag)
+{
+	switch (flag)
+	{
+	case 0:
+		showChain = false;
+		break;
+	case 2:
+		showChain = true;
+		break;
+	}
+	if ((!showSort) && (!showChain) && (!showVG))
+		this->ui.strartShowTB->hide();
+	else
+		this->ui.strartShowTB->show();
+}
+
+
+//sortTB 排序-工具栏:slot
+void  LECP::onDCELSelected(int flag){}
+
+//qTB vg-工具栏:slot
+void  LECP::onQueueSelected(int flag){}
+
+//lTB chain-工具栏:slot
+void  LECP::onLSelected(int flag){}
+
+//showControlTB 速度控制-工具栏:slot
+void LECP::changeSpeedSlot(int newSpeed)
+{
+	speedSpinBox->setValue(newSpeed);
+	speedSlider->setValue(newSpeed);
+	showspeed = newSpeed;
+	if (poly2show != NULL)
+	{
+		poly2show->setSleepTime(showSpeedMax - showspeed);
+	}
 }
 
 
 
+
+//未归正slots
 Vertex* pole;
 bool compareVertex(Vertex* p, Vertex* q){
 	double px = p->point().first;
@@ -176,7 +370,7 @@ void LECP::polarAngleSortSlot() {
 	time_t end = clock();
 	double runTime = double(end - start) * 1000 / CLOCKS_PER_SEC;
 
-	QString msg = QString::number(runTime)+"ms";
+	QString msg = QString::number(runTime) + "ms";
 	QMessageBox box;
 	box.about(this, "running time", msg);
 	box.show();
@@ -192,7 +386,7 @@ void LECP::polarAngleSortDCELSlot() {
 
 	//from right to left ,get the polar angle sorted list
 
-	for (long long i = points.size()-1; i>= 0; i--){
+	for (long long i = points.size() - 1; i >= 0; i--){
 		LECP_Point *point = &points[i];
 		mesh->AddLine(point);
 	}
@@ -223,41 +417,7 @@ void LECP::showVisibilityGraphSlot()
 }
 
 void LECP::showConvexChainSlot() {
-	
-}
 
-void LECP::saveFileSlot() {
-	QString saveFileName;
-	saveFileName = QFileDialog::getSaveFileName(this, tr("save file"));
-
-	if (!saveFileName.isNull())
-	{
-		char *str = (char *)malloc(255);
-		QByteArray ba = saveFileName.toLatin1();
-		strcpy(str, ba.data());
-		
-		bool re = paintWidget->savePoints(str);
-		if (re)
-		{
-			QMessageBox box;
-			box.about(paintWidget, "Success", "Save successfull!");
-			box.show();
-			paintWidget->update();
-		}
-	}
-}
-
-void LECP::openFileSlot() {
-	QDir dir;
-	QString fileName = QFileDialog::getOpenFileName(this, QString("Open File"), dir.absolutePath());
-	if (fileName.isEmpty()){
-		return;
-	}
-
-	QByteArray ba = fileName.toLocal8Bit();
-	char* fileName_str = ba.data();
-
-	paintWidget->loadPoints(fileName_str);
 }
 
 //DCEL 动画
@@ -291,111 +451,20 @@ void LECP::resetSlot(){
 	mesh = new Mesh();
 }
 
-//动画演示Menu Slot
-void LECP::sortMenuSlot()
-{
-	this->ui.showContent->hide();
-	this->ui.showControl->show();
-}
-void LECP::vgMenuSlot()
-{
-	this->ui.showContent->show();
-	this->ui.showControl->show();
-}
-void LECP::chainMenuSlot()
-{
-	this->ui.showContent->show();
-	this->ui.showControl->show();
-}
 
-void LECP::onSortSelected(int flag)
-{
-	switch (flag)
-	{
-	case 0:
-		showSort = false;
-		break;
-	case 2:
-		showSort = true;
-		break;
-	}
-}
-void LECP::onVGSelected(int flag)
-{
-	switch (flag)
-	{
-	case 0:
-		showVG = false;
-		break;
-	case 2:
-		showVG = true;
-		break;
-	}
-}
-void LECP::onChainSelected(int flag)
-{
-	switch (flag)
-	{
-	case 0:
-		showChain = false;
-		break;
-	case 2:
-		showChain = true;
-		break;
-	}
-}
+////////////////////////////////////////////////////////////////////////////
 
-void LECP::changeSpeedSlot(int newSpeed)
-{
-	pSpinBox->setValue(newSpeed);
-	speedSlider->setValue(newSpeed);
-	showspeed = newSpeed;
-	if (poly2show != NULL)
-	{
-		poly2show->setSleepTime(showSpeedMax - showspeed);
-	}
-}
-
-void LECP::startShowSlot()
-{
-	isStart = true;//演示结束时设为false
-
-	trans2Poly(0);
-
-	//paintWidget->allQPoints2Draw
-	if (showSort){}
-	else{}
-
-	if (showVG){}
-	else{}
-
-	if (showChain){}
-	else{}
-
-}
-
-
-void LECP::stopShowSlot()
-{
-	
-}
-
-void LECP::resetShowSlot()
-{
-	//poly2show->getPaintWidget()->clearMyQPandMyQL();
-	poly2show->clear();
-}
 Polygon* LECP::trans2Poly(int kernal_index)
 {
 	if (kernal_index < 0)
 		qDebug() << "kernal index should >=0 in Fun trans2Poly(int kernal_index)";
 	//int pointsNum = mesh->sortedVector.size();
 	else{
-	int pointsNum = 1;
-	//循环处理每个点
-	/*for (int points_index = 0; points_index < pointsNum; points_index++)
-	{*/
-	//int points_index = 3;
+		int pointsNum = 1;
+		//循环处理每个点
+		/*for (int points_index = 0; points_index < pointsNum; points_index++)
+		{*/
+		//int points_index = 3;
 		//temp 存储用来初始化polygon的vertor<vertex>
 		vector<Vertex*> temp_vertices;
 		int vertexNum = mesh->sortedVector.at(kernal_index).size();
@@ -410,13 +479,13 @@ Polygon* LECP::trans2Poly(int kernal_index)
 		//animation_kernal & starpolygon
 		poly2show->getPaintWidget()->allQPoints2Draw.clear();
 
-			//kernal:
+		//kernal:
 		MyQPoint kernal(QPoint(temp_vertices[0]->point().first, temp_vertices[0]->point().second*-1));
 		kernal.setColor(Qt::red);
 		kernal.setIndex(temp_vertices[0]->index());
 		poly2show->getPaintWidget()->allQPoints2Draw.push_back(kernal);
-			//other points
-		for (int i = 1; i < vertexNum;i++){//转化vertex为MyQPoint
+		//other points
+		for (int i = 1; i < vertexNum; i++){//转化vertex为MyQPoint
 			MyQPoint temp_myqpoint(QPoint(temp_vertices[i]->point().first, temp_vertices[i]->point().second*-1));
 			temp_myqpoint.setColor(Qt::blue);
 			temp_myqpoint.setIndex(temp_vertices[i]->index());
@@ -426,33 +495,33 @@ Polygon* LECP::trans2Poly(int kernal_index)
 			poly2show->getPaintWidget()->repaint();
 			_sleep(showspeed * 50);
 
-			MyQline edge_i(QLine(poly2show->vertices()->at(i-1)->point().first, poly2show->vertices()->at(i-1)->point().second*-1, poly2show->vertices()->at(i)->point().first, poly2show->vertices()->at(i)->point().second*-1));
+			MyQline edge_i(QLine(poly2show->vertices()->at(i - 1)->point().first, poly2show->vertices()->at(i - 1)->point().second*-1, poly2show->vertices()->at(i)->point().first, poly2show->vertices()->at(i)->point().second*-1));
 			edge_i.setDotStyle(true);
 			poly2show->getPaintWidget()->allQLines2Draw.push_back(edge_i);
 			poly2show->getPaintWidget()->repaint();
 			//this->paint_widget_->update();
 			_sleep(showspeed * 100);
 		}
-		MyQline edge_i(QLine(poly2show->vertices()->at(vertexNum - 1)->point().first, poly2show->vertices()->at(vertexNum-1)->point().second*-1, poly2show->vertices()->at(0)->point().first, poly2show->vertices()->at(0)->point().second*-1));
+		MyQline edge_i(QLine(poly2show->vertices()->at(vertexNum - 1)->point().first, poly2show->vertices()->at(vertexNum - 1)->point().second*-1, poly2show->vertices()->at(0)->point().first, poly2show->vertices()->at(0)->point().second*-1));
 		edge_i.setDotStyle(true);
 		poly2show->getPaintWidget()->allQLines2Draw.push_back(edge_i);
 		poly2show->getPaintWidget()->repaint();
 		//animation_kernal & starpolygon end//
 
-//polygon的返回值 不应该直接修改polygon的vertex吗
+		//polygon的返回值 不应该直接修改polygon的vertex吗
 		temp_vertices = poly2show->getVisibilityGraph();
-		
+
 		//animation_做chain之前把点和半边的状态更新一下
 		for (int i = 1; i < vertexNum; i++){
 			poly2show->getPaintWidget()->allQPoints2Draw.at(i).setColor(Qt::blue);
 			poly2show->getPaintWidget()->allQPoints2Draw.at(i).setShowQ(false);
 		}
-		int last_index =poly2show->getPaintWidget()->allQLines2Draw.size()-1;
+		int last_index = poly2show->getPaintWidget()->allQLines2Draw.size() - 1;
 		//poly2show->getPaintWidget()->allQLines2Draw.at(last_index - 1).setColor(Qt::green);
 		//poly2show->getPaintWidget()->allQLines2Draw.at(last_index).setColor(Qt::cyan);
 		poly2show->getPaintWidget()->allQLines2Draw.at(last_index).setColor(Qt::green);
 		int lineNum = poly2show->getPaintWidget()->allQLines2Draw.size();
-		for (int i = 0; i < lineNum ; i++)
+		for (int i = 0; i < lineNum; i++)
 		{
 			poly2show->getPaintWidget()->allQLines2Draw.at(i).setDotStyle(true);
 		}
@@ -461,22 +530,8 @@ Polygon* LECP::trans2Poly(int kernal_index)
 
 		temp_vertices = poly2show->getConvexChain();
 		temp_vertices.clear();
-	/*}*/
+		/*}*/
 	}
 	return poly2show;
-}
-
-void LECP::randomPointsGenerationSlot(){
-	bool isOK;
-	QString text = QInputDialog::getText(NULL, "Input points number", "Please input the number of points:", QLineEdit::Normal, "points number", &isOK);
-
-	if (isOK){
-		int points_number = text.toInt();
-
-		cout << "random points number:" << points_number << endl;
-
-		vector<LECP_Point> random_points = generateRandomPoints(points_number);
-		paintWidget->setPoints( random_points);
-	}
 }
 

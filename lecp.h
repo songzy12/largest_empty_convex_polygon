@@ -36,15 +36,14 @@ private:
 	PaintWidget *paintWidget;
 
 	//toolbar content:
-	QCheckBox* sortComboBox;
-	QCheckBox* vgComboBox;
-	QCheckBox* chainComboBox;
-	QPushButton* pSelectButton;
+	QCheckBox* sortComboBox,*vgComboBox,*chainComboBox;
+
+
 	QPushButton* startButton;
 	QPushButton* stopButton;
 	QPushButton* resetButton;
 	QSlider* speedSlider;
-	QSpinBox* pSpinBox;
+	QSpinBox *speedSpinBox,*pointSpinBox;
 
 	QAction *openAction;
 
@@ -52,29 +51,53 @@ public:
 	void createToolBar();
 	Polygon* trans2Poly(int kernal_index);
 public slots:
+	//operationTB:slot
+	void openFileSlot();
+	void saveFileSlot();
+	void resetPointsSlot();
+	void randomPointsGenerationSlot();
+	void finalResultShowSlot();
+	void allPointsShowSlot();
+	void singlePointShowSlot();
+
+	//pointSelectTB 点选择-工具栏:slot
+	void lastPointSlot();
+	void nextPointSlot();
+
+	//strartShowTB 开始演示-工具栏:slot
+	void startShowSlot();
+	void resetShowSlot();
+
+	//showContentTB 演示内容-工具栏:slot
+	void onSortSelected(int flag);
+	void onVGSelected(int flag);
+	void onChainSelected(int flag);
+
+	//sortTB 排序-工具栏:slot
+	void onDCELSelected(int flag);
+
+	//qTB vg-工具栏:slot
+	void onQueueSelected(int flag);
+
+	//lTB chain-工具栏:slot
+	void onLSelected(int flag);
+
+	//showControlTB 速度控制-工具栏:slot
+	void changeSpeedSlot(int newSpeed);
+
+
+
 	void polarAngleSortSlot();//对于每个输入点，该点左侧的所有点按照关于该点进行极角排序
 	void showVisibilityGraphSlot();
 	void showConvexChainSlot();
-	void saveFileSlot();
-	void openFileSlot();
-	void polarAngleSortDCELSlot();
-	void randomPointsGenerationSlot();
 
+	void polarAngleSortDCELSlot();
 	//DCEL 动画
 	void DCELAnimationSlot();
 	void clearDCELAnimationSlot();
 	void resetSlot();
-	//动画演示
-	void sortMenuSlot();
-	void vgMenuSlot();
-	void chainMenuSlot();
-	void onSortSelected(int flag);
-	void onVGSelected(int flag);
-	void onChainSelected(int flag);
-	void changeSpeedSlot(int newSpeed);
-	void startShowSlot();
-	void stopShowSlot();
-	void resetShowSlot();
+
+
 
 public:
 	Mesh *mesh;
