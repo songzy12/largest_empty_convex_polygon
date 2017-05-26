@@ -31,6 +31,8 @@ class Polygon {
 		int sleepTime();
 		void setSleepTime(int time);
 
+		vector<Vertex*> convex_chain_;
+
 	private:
 		vector<Vertex *> vertices_;	
 		Vertex* kernel_; // which is vertices[0]

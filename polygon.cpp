@@ -341,6 +341,7 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 }
 
 vector<Vertex*> Polygon::getConvexChain() {
+	convex_chain_.clear();
 	int animation_largest_chain_len = 0;//animation current largest chain
 	int max_len = 0;
 	HalfEdge *longest_edge;
@@ -390,7 +391,6 @@ vector<Vertex*> Polygon::getConvexChain() {
 	_sleep(1000);
 	qDebug() << "max_len for all points:" << max_len << endl;
 	// TODO
-	vector<Vertex*> convex_chain_;
 	int delta_x = 3, delta_y = 3;
 
 	qDebug() << "the longest convex chain:";
