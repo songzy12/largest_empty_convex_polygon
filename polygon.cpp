@@ -345,6 +345,7 @@ vector<Vertex*> Polygon::getConvexChain() {
 	int animation_largest_chain_len = 0;//animation current largest chain
 	int max_len = 0;
 	HalfEdge *longest_edge;
+	qDebug() << "the kernel is now:" << kernel_->point().first << kernel_->point().second << endl;
 	for (size_t i = vertices_.size() - 1; i > 0; --i) {
 		//animation current largest chain clean
 		for (int j = 0; j < animation_largest_chain_len; j++)

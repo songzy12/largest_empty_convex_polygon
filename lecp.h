@@ -45,6 +45,7 @@ private:
 
 public:
 	void createToolBar();
+	void clearToolBar();
 	Polygon* trans2Poly(int kernal_index);
 public slots:
 	//operationTB:slot

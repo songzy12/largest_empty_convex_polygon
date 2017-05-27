@@ -176,7 +176,6 @@ public:
         menu->addAction(sortedDCEL);
         menu_3->addAction(clearDCELAnimation);
         menu_3->addAction(DCEL_animation);
-        menu_3->addAction(actiontest);
         operationsTB->addAction(openFile);
         operationsTB->addAction(saveFile);
         operationsTB->addAction(reset);

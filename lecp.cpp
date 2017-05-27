@@ -67,6 +67,7 @@ LECP::~LECP()
 	delete mesh;
 	delete poly2show;
 	delete paintWidget;
+	clearToolBar();
 }
 
 void LECP::createToolBar()
@@ -143,6 +144,10 @@ void LECP::createToolBar()
 	connect(speedSpinBox, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
 	connect(speedSlider, SIGNAL(valueChanged(int)), this, SLOT(changeSpeedSlot(int)));
 	
+}
+
+void LECP::clearToolBar() {
+	// some label are not class variable?
 }
 
 
@@ -281,8 +286,6 @@ void LECP::startShowSlot()
 	int kernalNum = mesh->sortedVector.size();
 	//dcel
 	polarAngleSortDCELSlot();
-
-	vector<Vertex *> longest_convex_chain;
 	//mode 选择
 	switch (currMode)
 	{
@@ -290,20 +293,25 @@ void LECP::startShowSlot()
 
 		break;
 
-	case allPoints:
+	case allPoints: {
 		//循环处理每个点
+		vector<Vertex *> longest_convex_chain;
 		longest_convex_chain.clear();
+		Vertex * longest_chain_kernel = nullptr;
 		for (int kernal_index = 0; kernal_index < kernalNum; kernal_index++) {
 			trans2Poly(kernal_index);
 			if (poly2show->convex_chain_.size() > longest_convex_chain.size()) {
 				longest_convex_chain = poly2show->convex_chain_;
+				longest_chain_kernel = poly2show->kernel();
 			}
 		}
 		qDebug() << "longest_convex_chain length:" << longest_convex_chain.size();
+		if (longest_chain_kernel)
+			qDebug() << "longest chain kernel:" << longest_chain_kernel->point().first << longest_chain_kernel->point().second;
 		_sleep(1000);
 		poly2show->clear();
 		break;
-
+	}
 	case singlePoint:
 		poly2show->clear();
 		int kernalSelected = pointSpinBox->value();//TODO 需要改

@@ -30,7 +30,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &, const QString &
 
 int main(int argc, char *argv[])
 {
-	//qInstallMessageHandler(myMessageOutput); // Install the handler
+	qInstallMessageHandler(myMessageOutput); // 注意在当前目录下新建文件夹为 Log
 	QApplication a(argc, argv);
 	LECP w;
 	w.show();
