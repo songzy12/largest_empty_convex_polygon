@@ -361,7 +361,7 @@ Vertex*  Mesh::intersectWithBoundingBox(HalfEdge* tmp, double a, double b){
 			}
 		}
 	}
-
+	delete re;
 	return NULL;
 }
 
