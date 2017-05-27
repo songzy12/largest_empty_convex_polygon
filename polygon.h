@@ -19,9 +19,9 @@ class Polygon {
 		vector<Vertex*> getStarPolygon();
 		/*create visibility graph
 		starPoly:	star-shaped Polygon with points ordered by angle*/
-		vector<Vertex*> getVisibilityGraph();
-		void proceedNeighborPoints(Vertex* i, Vertex* j, int index_i, int index_j);
-		vector<Vertex*> getConvexChain();
+		vector<Vertex*> getVisibilityGraph(bool showVG, bool showQ, bool showL);
+		void proceedNeighborPoints(Vertex* i, Vertex* j, int index_i, int index_j, bool showVG, bool showQ, bool showL);
+		vector<Vertex*> getConvexChain(bool showChain,bool showL);
 		HalfEdge* ConvexChainPoint(Vertex * p, int &len);
 		////带动画显示的版本
 		//vector<Vertex*> getVisibilityGraph_a();

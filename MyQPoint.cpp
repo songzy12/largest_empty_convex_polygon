@@ -3,7 +3,7 @@
 MyQPoint::MyQPoint(){
 	color_ = Qt::red;
 	index_ = 0;
-	showQ_ = true;
+	showQ_ = false;
 }
 
 MyQPoint::MyQPoint(QPoint point){
@@ -11,7 +11,7 @@ MyQPoint::MyQPoint(QPoint point){
 	this->setY(point.y());
 	this->color_ = Qt::red;
 	this->index_ = 0;
-	showQ_ = true;
+	showQ_ = false;
 }
 
 

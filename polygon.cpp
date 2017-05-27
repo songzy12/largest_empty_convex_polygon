@@ -63,6 +63,7 @@ void Polygon::clear()
 		it_v++;
 	}*/
 	vertices_.clear();
+	convex_chain_.clear();
 	paint_widget_->allQLines2Draw.clear();
 	paint_widget_->allQPoints2Draw.clear();
 }
@@ -125,20 +126,21 @@ vector<Vertex*> Polygon::getStarPolygon() {
 /*process bewteen vertex i&j (counterclockwise order:i->j)
 in creating visibility graph*/
 
-void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j,int index_i,int index_j)
+void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j, int index_i, int index_j, bool showVG, bool showQ,bool showL)
 {
 	while ((!(i->Q_.empty())) && toLeft(i->Q_.front(), i, j)){
 		//PROCEED
-		proceedNeighborPoints(i->Q_.front(), j, i->Q_.front()->index(),j->index());
+		proceedNeighborPoints(i->Q_.front(), j, i->Q_.front()->index(), j->index(), showVG, showQ,showL);
 		//DEQUEUE(Qi)
 		int temp_vertex_index = i->Q_.front()->index();
 		i->Q_.pop_front();
 
-		this->paint_widget_->allQPoints2Draw[index_i].setQ(i->Q_);//animation
-		//show animation
-		this->paint_widget_->allQPoints2Draw[temp_vertex_index].setColor(Qt::blue);
-		this->paint_widget_->repaint();
-		//_sleep(2 * 1000);
+			this->paint_widget_->allQPoints2Draw[index_i].setQ(i->Q_);//animation
+			//show animation
+			this->paint_widget_->allQPoints2Draw[temp_vertex_index].setColor(Qt::blue);
+			if (showVG) 
+				this->paint_widget_->repaint();
+			//_sleep(2 * 1000);
 	}
 	//ADD(ij)
 	HalfEdge *e = new HalfEdge(i, j);
@@ -146,81 +148,52 @@ void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j,int index_i,int index_j
 	j->incoming_edges_.push_back(e);
 	//ENQUEUE(i,Qj)
 	j->Q_.push_back(i);
-	this->paint_widget_->allQPoints2Draw[index_j].setQ(j->Q_);//animation
-	this->paint_widget_->repaint();
+		this->paint_widget_->allQPoints2Draw[index_j].setQ(j->Q_);//animation
+		if (showVG)
+			this->paint_widget_->repaint();
 
-	//show animation
-	this->paint_widget_->allQPoints2Draw[index_i].setColor(Qt::yellow);
-	this->paint_widget_->allQPoints2Draw[index_j].setColor(Qt::green);
-	this->paint_widget_->repaint();
-	//_sleep(sleepTime() * 100);
+		//show animation
+		this->paint_widget_->allQPoints2Draw[index_i].setColor(Qt::yellow);
+		this->paint_widget_->allQPoints2Draw[index_j].setColor(Qt::green);
+		if (showVG)
+			this->paint_widget_->repaint();
+		//_sleep(sleepTime() * 100);
 
-	//上一次的添加的halfedge转为默认色
-	int last = this->paint_widget_->allQLines2Draw.size()-1;
-	if (this->paint_widget_->allQLines2Draw[last].getColor() == Qt::red)//之前是blue
-	{
-		//this->paint_widget_->allQLines2Draw[last - 1].setColor(Qt::green);
-		//this->paint_widget_->allQLines2Draw[last].setColor(Qt::cyan);
-		this->paint_widget_->allQLines2Draw[last].setColor(Qt::green);
-	}
-	int delta_x = delta(i->point().first,j->point().first,0);
-	int delta_y = delta(i->point().second*-1,j->point().second*-1,0);
-	//if (i->point().first < j->point().first)
-	//	delta_x = 2;
-	//else
-	//	delta_x = -2;
-	//if (i->point().second*-1 < j->point().second*-1)
-	//	delta_y = 2;
-	//else
-	//	delta_y = -2;
+		//上一次的添加的halfedge转为默认色
+		int last = this->paint_widget_->allQLines2Draw.size() - 1;
+		if (this->paint_widget_->allQLines2Draw[last].getColor() == Qt::red)//之前是blue
+		{
+			this->paint_widget_->allQLines2Draw[last].setColor(Qt::green);
+		}
+		int delta_x = delta(i->point().first, j->point().first, 0);
+		int delta_y = delta(i->point().second*-1, j->point().second*-1, 0);
 
-	MyQline edge_ij(QLine(i->point().first + delta_x, (i->point().second+ delta_y)*-1 , j->point().first+delta_x, (j->point().second+delta_y)*-1));
-	edge_ij.setColor(Qt::red);
-	edge_ij.setArrowStyle(true);
-	edge_ij.setDotStyle(false);
-	//MyQline edge_ji(QLine(j->point().first - delta_x, (j->point().second -delta_y)*-1, i->point().first- delta_x, (i->point().second - delta_y)*-1));
-	//edge_ji.setColor(Qt::blue);
-	//edge_ji.setArrowStyle(true);
-	//edge_ji.setDotStyle(false);
-	this->paint_widget_->allQLines2Draw.push_back(edge_ij);
-	//this->paint_widget_->allQLines2Draw.push_back(edge_ji);
-	this->paint_widget_->repaint();
-	_sleep(sleepTime() * 100);
+		MyQline edge_ij(QLine(i->point().first + delta_x, (i->point().second + delta_y)*-1, j->point().first + delta_x, (j->point().second + delta_y)*-1));
+		edge_ij.setColor(Qt::red);
+		edge_ij.setArrowStyle(true);
+		edge_ij.setDotStyle(false);
+		edge_ij.setShowL(showL);
+
+		this->paint_widget_->allQLines2Draw.push_back(edge_ij);
+		//this->paint_widget_->allQLines2Draw.push_back(edge_ji);
+		if (showVG)this->paint_widget_->repaint();
+		if (showVG)_sleep(sleepTime() * 100);
 	return;
 }
 
-vector<Vertex*> Polygon::getVisibilityGraph()
+vector<Vertex*> Polygon::getVisibilityGraph(bool showVG, bool showQ,bool showL)
 {
-	////kernal 及 starpolygon的动画
-	//for (size_t i = 0; i < vertices_.size(); ++i) {
-	//	MyQPoint vertex_i(QPoint(vertices_[i]->point().first, (vertices_[i]->point().second*-1)));
-	//	if (i == 0)
-	//		vertex_i.setColor(Qt::red);
-	//	else
-	//		vertex_i.setColor(Qt::black);
-	//	//vertex_i.setIndex(vertices_[i]->index());
-	//	//this->paint_widget_->allQPoints2Draw.push_back(vertex_i);
-	//	//this->paint_widget_->allQPoints2Draw.push_back(vertex_i);
-	//	MyQline edge_i;
-	//	if (i == vertices_.size() - 1)
-	//		edge_i.setLine(vertices_[i]->point().first, vertices_[i]->point().second*-1, vertices_[0]->point().first, vertices_[0]->point().second*-1);
-	//	else
-	//		edge_i.setLine(vertices_[i]->point().first, vertices_[i]->point().second*-1, vertices_[i + 1]->point().first, vertices_[i + 1]->point().second*-1);
-	//	edge_i.setDotStyle(true);
-	//	this->paint_widget_->allQLines2Draw.push_back(edge_i);
-	//	this->paint_widget_->repaint();
-	//	//this->paint_widget_->update();
-	//	_sleep(sleepTime() * 100);
-	//}
-
 	vector<Vertex*>::iterator it = vertices_.begin();
 	for (; it != vertices_.end(); ++it) {
 		(*it)->Q_.clear();
 	}
 
 	for (size_t i = 1; i + 1 < vertices_.size(); ++i) {
-		proceedNeighborPoints(vertices_[i], vertices_[i + 1], vertices_[i]->index(), vertices_[i+1]->index());
+		proceedNeighborPoints(vertices_[i], vertices_[i + 1], vertices_[i]->index(), vertices_[i + 1]->index(), showVG, showQ,showL);
 	}
+
+	this->paint_widget_->repaint();
+	_sleep(1500);
 	return vertices_;
 }
 
@@ -265,8 +238,7 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 		this->paint_widget_->allQLines2Draw.push_back(halfedge);
 	}
 	this->paint_widget_->repaint();
-	/*_sleep(sleepTime() * 100);*/
-	_sleep(500);
+	_sleep(sleepTime() * 200);
 	//animation show in&out edge end
 	qDebug() << p->index() << "# in edges:" << in_edges.size() << "," << "# out edges:" << out_edges.size();
 	
@@ -287,8 +259,8 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 		int inedgeIndex = inedgeIndexBase+inedgeNum-1 - (it_i - in_edges.rbegin());
 		this->paint_widget_->allQLines2Draw.at(inedgeIndex).setColor(Qt::red);
 		this->paint_widget_->repaint();
-		/*_sleep(sleepTime() * 50);*/
-		_sleep(500);
+		_sleep(sleepTime() * 200);
+
 		//animation for current in_edge end//
 
 		// we compute the L for incoming edge i.
@@ -300,8 +272,8 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 			int outedgeIndex = outedgeIndexBase + outedgeNum-1 - (it_o - out_edges.rbegin());
 			this->paint_widget_->allQLines2Draw.at(outedgeIndex).setColor(Qt::blue);
 			this->paint_widget_->repaint();
-			/*_sleep(sleepTime() * 100);*/
-			_sleep(500);
+			_sleep(sleepTime() * 200);
+			
 			//animation for current out_edge end //
 
 			qDebug() << "out edge:" << (*it_o)->origin()->index() << "->" << (*it_o)->target()->index();
@@ -340,7 +312,7 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 	return longest_edge;
 }
 
-vector<Vertex*> Polygon::getConvexChain() {
+vector<Vertex*> Polygon::getConvexChain(bool showChain, bool showL) {
 	convex_chain_.clear();
 	int animation_largest_chain_len = 0;//animation current largest chain
 	int max_len = 0;
@@ -355,12 +327,13 @@ vector<Vertex*> Polygon::getConvexChain() {
 		Vertex *p = vertices_[i];
 		int len = 0;
 		/*animation  current point*/
-		this->paint_widget_->repaint();
-		this->paint_widget_->update();
+		if (showChain) 
+			this->paint_widget_->repaint();
 		this->paint_widget_->allQPoints2Draw[i].setColor(Qt::yellow);
 		if (i != vertices_.size() - 1)
 			this->paint_widget_->allQPoints2Draw[i + 1].setColor(Qt::blue);
-		this->paint_widget_->repaint();
+		if (showChain) 
+			this->paint_widget_->repaint();
 		//this->paint_widget_->repaint();
 		/* animation  current point end*/
 		HalfEdge *temp_edge = ConvexChainPoint(p, len);
@@ -376,19 +349,22 @@ vector<Vertex*> Polygon::getConvexChain() {
 			MyQline halfedge(QLine(animation_longest_edge->origin()->point().first , animation_longest_edge->origin()->point().second *-1, animation_longest_edge->target()->point().first, animation_longest_edge->target()->point().second*-1));
 			halfedge.setColor(Qt::black);
 			halfedge.setArrowStyle(true);
-			halfedge.setShowL(true);
+			halfedge.setShowL(showL);
 			halfedge.setL(animation_longest_edge->L());
 			this->paint_widget_->allQLines2Draw.push_back(halfedge);
 			animation_longest_edge = animation_longest_edge->prev_chain_;
 			animation_largest_chain_len++; 
-			this->paint_widget_->repaint();
-			_sleep(300);
+			if (showChain)
+			{
+				this->paint_widget_->repaint();
+				_sleep(sleepTime() * 300);
+			}
 		}
 		//animation current largest chain end //
 
 		qDebug() << "max_len for point" << p->index() << ":" << max_len << endl;
 	}
-	_sleep(1000);
+	_sleep(1500);
 	qDebug() << "max_len for all points:" << max_len << endl;
 	// TODO
 	int delta_x = 3, delta_y = 3;
@@ -409,12 +385,13 @@ vector<Vertex*> Polygon::getConvexChain() {
 		MyQline halfedge(QLine(longest_edge->origin()->point().first, longest_edge->origin()->point().second *-1, longest_edge->target()->point().first, longest_edge->target()->point().second*-1));
 		halfedge.setColor(Qt::black);
 		halfedge.setArrowStyle(true);
-		halfedge.setShowL(true);
+		halfedge.setShowL(showL);
 		halfedge.setL(longest_edge->L());
 		this->paint_widget_->allQLines2Draw.push_back(halfedge);
 		animation_largest_chain_len++;
 		this->paint_widget_->repaint();
-		_sleep(300);
+		if (showChain)
+			_sleep(sleepTime() * 200);
 		//animation largest chain for kernal end//
 		chain_end = longest_edge->target();
 		longest_edge = longest_edge->prev_chain_;
@@ -435,8 +412,9 @@ vector<Vertex*> Polygon::getConvexChain() {
 	MyQline halfedge0n(QLine(vertices_[0]->point().first, vertices_[0]->point().second *-1, chain_end->point().first, chain_end->point().second*-1));
 	halfedge0n.setColor(Qt::black);
 	this->paint_widget_->allQLines2Draw.push_back(halfedge0n);
+	
 	this->paint_widget_->repaint();
-	_sleep(1000);
+	_sleep(1500);
 	//animation convex polygon end//
 	return convex_chain_;
 }

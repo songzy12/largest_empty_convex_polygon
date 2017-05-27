@@ -30,11 +30,12 @@ LECP::LECP(QWidget *parent)
 	showDCEL=false;
 	showQ=false;
 	showL=false;
-	showspeed = 1;
+	showspeed = showSpeedMax;
 
 
 	mesh = new Mesh();
 	poly2show = new Polygon();
+	poly2show->setSleepTime(showSpeedMax);
 
 	paintWidget = new PaintWidget(width, height);
 	this->setCentralWidget(paintWidget);
@@ -254,6 +255,10 @@ void LECP::singlePointShowSlot()
 
 	//演示模式设置
 	currMode = singlePoint;
+
+	//默认选择0号点
+	paintWidget->myQPoints.at(0)->setColor(Qt::green);
+	paintWidget->repaint();
 }
 
 
@@ -263,10 +268,9 @@ void LECP::lastPointSlot()
 	int val = pointSpinBox->value() - 1 < 0 ? 0 : pointSpinBox->value() - 1;
 	pointSpinBox->setValue(val);
 	paintWidget->myQPoints.at(lastSelectedPoint)->setColor(Qt::red);
-	paintWidget->myQPoints.at(val)->setColor(Qt::green);
+	paintWidget->myQPoints.at(val)->setColor(Qt::cyan);
 	lastSelectedPoint = val;
 	paintWidget->repaint();
-	_sleep(1000);
 }
 
 void LECP::nextPointSlot()
@@ -274,10 +278,9 @@ void LECP::nextPointSlot()
 	int val = pointSpinBox->value() + 1 > poly2show->getPaintWidget()->points.size() - 1 ? poly2show->getPaintWidget()->points.size() - 1 : pointSpinBox->value() + 1;
 	pointSpinBox->setValue(val);
 	paintWidget->myQPoints.at(lastSelectedPoint)->setColor(Qt::red);
-	paintWidget->myQPoints.at(val)->setColor(Qt::green);
+	paintWidget->myQPoints.at(val)->setColor(Qt::cyan);
 	lastSelectedPoint = val;
 	paintWidget->repaint();
-	_sleep(1000);
 }
 
 
@@ -285,30 +288,51 @@ void LECP::nextPointSlot()
 void LECP::startShowSlot()
 {
 	isStart = true;//演示结束时设为false
+	/*if (lecp_doc->points.size() < 3)
+	{
+		QMessageBox::warning(NULL, "Warning", "add at lest 3 points to start animation!", QMessageBox::Yes);
+		return ;
+	}*/
+	poly2show->clear();
+	//dcel
+	if (showDCEL)
+	{
+		DCELAnimationSlot();
+		_sleep(1500);
+		clearDCELAnimationSlot();
+	}
+	else
+		polarAngleSortDCELSlot();
 
 	int kernalNum = mesh->sortedVector.size();
-	//dcel
-	polarAngleSortDCELSlot();
 
 	vector<Vertex *> longest_convex_chain;
 	//mode 选择
 	switch (currMode)
 	{
 	case finalRes:
-
+		longest_convex_chain.clear();
+		for (int kernal_index = 0; kernal_index < kernalNum; kernal_index++) {
+			poly2show->clear();
+			trans2Poly(kernal_index);
+			if (poly2show->convex_chain_.size() > longest_convex_chain.size()) {
+				longest_convex_chain = poly2show->convex_chain_;
+			}
+		}
 		break;
 
 	case allPoints:
 		//循环处理每个点
 		longest_convex_chain.clear();
 		for (int kernal_index = 0; kernal_index < kernalNum; kernal_index++) {
+			poly2show->clear();
 			trans2Poly(kernal_index);
 			if (poly2show->convex_chain_.size() > longest_convex_chain.size()) {
 				longest_convex_chain = poly2show->convex_chain_;
 			}
 		}
 		qDebug() << "longest_convex_chain length:" << longest_convex_chain.size();
-		_sleep(1000);
+		_sleep(2000);
 		poly2show->clear();
 		break;
 
@@ -327,15 +351,15 @@ void LECP::startShowSlot()
 
 
 
-	//paintWidget->allQPoints2Draw
-	if (showSort){}
-	else{}
+	////paintWidget->allQPoints2Draw
+	//if (showSort){}
+	//else{}
 
-	if (showVG){}
-	else{}
+	//if (showVG){}
+	//else{}
 
-	if (showChain){}
-	else{}
+	//if (showChain){}
+	//else{}
 
 }
 
@@ -420,26 +444,48 @@ void  LECP::onDCELSelected(int flag)
 	switch (flag)
 	{
 	case 0:
-		showSort = false;
+		showDCEL = false;
 		break;
 	case 2:
-		showSort = true;
+		showDCEL = true;
 		break;
 	}
 }
 
 //qTB vg-工具栏:slot
-void  LECP::onQueueSelected(int flag){}
+void  LECP::onQueueSelected(int flag)
+{
+	switch (flag)
+	{
+	case 0:
+		showQ = false;
+		break;
+	case 2:
+		showQ = true;
+		break;
+	}
+}
 
 //lTB chain-工具栏:slot
-void  LECP::onLSelected(int flag){}
+void  LECP::onLSelected(int flag)
+{
+	switch (flag)
+	{
+	case 0:
+		showL = false;
+		break;
+	case 2:
+		showL = true;
+		break;
+	}
+}
 
 //showControlTB 速度控制-工具栏:slot
 void LECP::changeSpeedSlot(int newSpeed)
 {
 	speedSpinBox->setValue(newSpeed);
 	speedSlider->setValue(newSpeed);
-	showspeed = newSpeed;
+	showspeed = showSpeedMax- newSpeed;
 	if (poly2show != NULL)
 	{
 		poly2show->setSleepTime(showSpeedMax - showspeed);
@@ -583,7 +629,7 @@ void LECP::DCELAnimationSlot(){
 		mesh->addCurrentAngleSortedResultToVector(point,lecp_points,points);
 
 		paintWidget->animationPoint(qPoint, lecp_points);
-		_sleep(3 * 1000);
+		_sleep(showspeed * 100);
 		qPoint->setColor(Qt::red);
 		paintWidget->update();
 	}
@@ -608,14 +654,9 @@ Polygon* LECP::trans2Poly(int kernal_index)
 {
 	if (kernal_index < 0)
 		qDebug() << "kernal index should >=0 in Fun trans2Poly(int kernal_index)";
-	//int pointsNum = mesh->sortedVector.size();
 	else{
 		int pointsNum = 1;
 		//循环处理每个点
-		/*for (int points_index = 0; points_index < pointsNum; points_index++)
-		{*/
-		//int points_index = 3;
-		//temp 存储用来初始化polygon的vertor<vertex>
 		vector<Vertex*> temp_vertices;
 		int vertexNum = mesh->sortedVector.at(kernal_index).size();
 
@@ -644,16 +685,18 @@ Polygon* LECP::trans2Poly(int kernal_index)
 			temp_myqpoint.setColor(Qt::blue);
 			temp_myqpoint.setIndex(temp_vertices[i]->index());
 			temp_myqpoint.setQ(temp_vertices[i]->Q_);
-			temp_myqpoint.setShowQ(true);
+			temp_myqpoint.setShowQ(showQ);
 			poly2show->getPaintWidget()->allQPoints2Draw.push_back(temp_myqpoint);
 			poly2show->getPaintWidget()->repaint();
-			_sleep(showspeed * 50);
+			if (showSort)
+			_sleep(showspeed * 100);
 
 			MyQline edge_i(QLine(poly2show->vertices()->at(i - 1)->point().first, poly2show->vertices()->at(i - 1)->point().second*-1, poly2show->vertices()->at(i)->point().first, poly2show->vertices()->at(i)->point().second*-1));
-			edge_i.setDotStyle(true);
+			edge_i.setDotStyle(showQ);
 			poly2show->getPaintWidget()->allQLines2Draw.push_back(edge_i);
 			poly2show->getPaintWidget()->repaint();
 			//this->paint_widget_->update();
+			if (showSort)
 			_sleep(showspeed * 100);
 		}
 		MyQline edge_i(QLine(poly2show->vertices()->at(vertexNum - 1)->point().first, poly2show->vertices()->at(vertexNum - 1)->point().second*-1, poly2show->vertices()->at(0)->point().first, poly2show->vertices()->at(0)->point().second*-1));
@@ -663,7 +706,7 @@ Polygon* LECP::trans2Poly(int kernal_index)
 		//animation_kernal & starpolygon end//
 
 		//polygon的返回值 不应该直接修改polygon的vertex吗
-		temp_vertices = poly2show->getVisibilityGraph();
+		temp_vertices = poly2show->getVisibilityGraph(showVG,showQ,showL);
 
 		//animation_做chain之前把点和半边的状态更新一下
 		for (int i = 1; i < vertexNum; i++){
@@ -682,7 +725,7 @@ Polygon* LECP::trans2Poly(int kernal_index)
 		poly2show->getPaintWidget()->repaint();
 		//animation_做chain之前把点和半边的状态更新一下 end//
 
-		temp_vertices = poly2show->getConvexChain();
+		temp_vertices = poly2show->getConvexChain(showChain,showL);
 		temp_vertices.clear(); // why?
 		/*}*/
 	}

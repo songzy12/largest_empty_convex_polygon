@@ -1,10 +1,9 @@
-/*
-This file is only used by zyx.
-*/
 
 #ifndef  LECP_POINT_H
 #define  LECP_POINT_H
-
+/*
+This file is only used by zyx.
+*/
 #include<queue>
 #include<QColor>
 using namespace std;

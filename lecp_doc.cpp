@@ -41,7 +41,7 @@ vector<vector<Vertex*>> LECP_Doc::getVisibilityGraphs() {
 	qDebug() << "Polygon Count:" << polygons_.size();
 	vector<Polygon*>::iterator it = polygons_.begin();
 	while (it != polygons_.end()) {
-		visibility_graphs_.push_back((*it)->getVisibilityGraph());
+		visibility_graphs_.push_back((*it)->getVisibilityGraph(true,true,true));//TODO: 
 		it++;
 		break; // TODO: delete this line
 	}
@@ -52,7 +52,7 @@ vector<vector<Vertex*>> LECP_Doc::getConvexChains() {
 	convex_chains_.clear();
 	vector<Polygon*>::iterator it = polygons_.begin();
 	while (it != polygons_.end()) {
-		convex_chains_.push_back((*it)->getConvexChain());
+		convex_chains_.push_back((*it)->getConvexChain(true, true));//TODO:
 		it++; 
 		break; // TODO: delete this line
 	}
