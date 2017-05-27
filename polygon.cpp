@@ -270,8 +270,7 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len, bool showChain, bool s
 			//int outedgeIndex = outedgeIndexBase + outedgeNum-1 - (it_o - out_edges.begin());
 			int outedgeIndex = outedgeIndexBase + outedgeNum-1 - (it_o - out_edges.rbegin());
 			this->paint_widget_->allQLines2Draw.at(outedgeIndex).setColor(Qt::blue);
-			this->paint_widget_->repaint();
-			_sleep(sleepTime() * 100);
+			
 			
 			//animation for current out_edge end //
 
@@ -287,6 +286,10 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len, bool showChain, bool s
 		qDebug() << (*it_i)->target()->index() << "<-" << (*it_i)->origin()->index() << " L updated:" << m + 1;
 		(*it_i)->prev_chain_ = prev_chain_;
 		(*it_i)->set_L(m + 1);
+
+		this->paint_widget_->allQLines2Draw.at(inedgeIndex).setL(m + 1);
+		this->paint_widget_->repaint();
+		_sleep(sleepTime() * 100);
 	}
 	len = m + 1;
 	//animation state clear

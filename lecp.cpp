@@ -225,32 +225,69 @@ void LECP::finalResultShowSlot()
 	
 	//演示模式设置
 	currMode = finalRes;
+	paintWidget->myQPoints.at(pointSpinBox->value())->setColor(Qt::red);
+	paintWidget->repaint();
 }
 
 void LECP::allPointsShowSlot()
 {
 	//控件显示控制
 	this->ui.pointSelectTB->hide();
-	this->ui.strartShowTB->hide();
+	if (showSort || showVG ||showChain)
+		this->ui.strartShowTB->show();
+	else
+		this->ui.strartShowTB->hide();
+
 	this->ui.showContentTB->show();
-	this->ui.sortTB->hide();
-	this->ui.qTB->hide();
-	this->ui.lTB->hide();
+	if (showSort)
+		this->ui.sortTB->show();
+	else
+		this->ui.sortTB->hide();
+
+	if (showVG)
+		this->ui.qTB->show();
+	else
+		this->ui.qTB->hide();
+
+	if (showChain)
+		this->ui.lTB->show();
+	else
+		this->ui.lTB->hide();
+
 	this->ui.showControlTB->show();
 
 	//演示模式设置
 	currMode = allPoints;
+	paintWidget->myQPoints.at(pointSpinBox->value())->setColor(Qt::red);
+	paintWidget->repaint();
 }
 
 void LECP::singlePointShowSlot()
 {
 	//控件显示控制
 	this->ui.pointSelectTB->show();
-	this->ui.strartShowTB->hide();
+
+	if (showSort || showVG || showChain)
+		this->ui.strartShowTB->show();
+	else
+		this->ui.strartShowTB->hide();
+
 	this->ui.showContentTB->show();
-	this->ui.sortTB->hide();
-	this->ui.qTB->hide();
-	this->ui.lTB->hide();
+	if (showSort)
+		this->ui.sortTB->show();
+	else
+		this->ui.sortTB->hide();
+
+	if (showVG)
+		this->ui.qTB->show();
+	else
+		this->ui.qTB->hide();
+
+	if (showChain)
+		this->ui.lTB->show();
+	else
+		this->ui.lTB->hide();
+
 	this->ui.showControlTB->show();
 
 	//演示模式设置
@@ -324,7 +361,7 @@ void LECP::startShowSlot()
 	case allPoints:
 		//循环处理每个点
 		longest_convex_chain.clear();
-		for (int kernal_index = 0; kernal_index < kernalNum; kernal_index++) {
+		for (int kernal_index = kernalNum-1; kernal_index >0; kernal_index--) {
 			poly2show->clear();
 			trans2Poly(kernal_index);
 			if (poly2show->convex_chain_.size() > longest_convex_chain.size()) {
