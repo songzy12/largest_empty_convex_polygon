@@ -1,6 +1,6 @@
 #ifndef LECP_H
 #define LECP_H
-#define showSpeedMax 20
+#define showSpeedMax 10
 #define showSpeedMin 1
 
 #include <QtWidgets/QMainWindow>

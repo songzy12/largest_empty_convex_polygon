@@ -206,10 +206,12 @@ void PaintWidget::paintPoint(MyQPoint *point){
 	painter.setBrush(point->getColor());
 	painter.drawEllipse(point->x(), point->y(), 6, 6);
 
-	int index = point->getIndex();
-	QFont font("ËÎÌו", 12, QFont::Bold, false);
-	painter.setFont(font);
-	painter.drawText(point->x() + 10, point->y() + 5, QString::number(index));
+	if (allQPoints2Draw.size() == 0){
+		int index = point->getIndex();
+		QFont font("ËÎÌו", 12, QFont::Bold, false);
+		painter.setFont(font);
+		painter.drawText(point->x() + 10, point->y() + 5, QString::number(index));
+	}
 	update();
 }
 

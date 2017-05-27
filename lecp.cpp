@@ -257,7 +257,7 @@ void LECP::singlePointShowSlot()
 	currMode = singlePoint;
 
 	//默认选择0号点
-	paintWidget->myQPoints.at(0)->setColor(Qt::green);
+	paintWidget->myQPoints.at(0)->setColor(Qt::cyan);
 	paintWidget->repaint();
 }
 
@@ -376,6 +376,7 @@ void LECP::onSortSelected(int flag)
 	{
 	case 0:
 		showSort = false;
+		showDCEL = false;
 		break;
 	case 2:
 		showSort = true;
@@ -399,6 +400,7 @@ void LECP::onVGSelected(int flag)
 	{
 	case 0:
 		showVG = false;
+		showQ = false;
 		break;
 	case 2:
 		showVG = true;
@@ -421,6 +423,7 @@ void LECP::onChainSelected(int flag)
 	{
 	case 0:
 		showChain = false;
+		showL = false;
 		break;
 	case 2:
 		showChain = true;
@@ -485,10 +488,10 @@ void LECP::changeSpeedSlot(int newSpeed)
 {
 	speedSpinBox->setValue(newSpeed);
 	speedSlider->setValue(newSpeed);
-	showspeed = showSpeedMax- newSpeed;
+	showspeed = (showSpeedMax- newSpeed)*2;
 	if (poly2show != NULL)
 	{
-		poly2show->setSleepTime(showSpeedMax - showspeed);
+		poly2show->setSleepTime(showspeed);
 	}
 }
 
@@ -692,7 +695,7 @@ Polygon* LECP::trans2Poly(int kernal_index)
 			_sleep(showspeed * 100);
 
 			MyQline edge_i(QLine(poly2show->vertices()->at(i - 1)->point().first, poly2show->vertices()->at(i - 1)->point().second*-1, poly2show->vertices()->at(i)->point().first, poly2show->vertices()->at(i)->point().second*-1));
-			edge_i.setDotStyle(showQ);
+			edge_i.setDotStyle(true);
 			poly2show->getPaintWidget()->allQLines2Draw.push_back(edge_i);
 			poly2show->getPaintWidget()->repaint();
 			//this->paint_widget_->update();
@@ -705,8 +708,9 @@ Polygon* LECP::trans2Poly(int kernal_index)
 		poly2show->getPaintWidget()->repaint();
 		//animation_kernal & starpolygon end//
 
+		_sleep(3000);
 		//polygon的返回值 不应该直接修改polygon的vertex吗
-		temp_vertices = poly2show->getVisibilityGraph(showVG,showQ,showL);
+		temp_vertices = poly2show->getVisibilityGraph(showVG,showQ);
 
 		//animation_做chain之前把点和半边的状态更新一下
 		for (int i = 1; i < vertexNum; i++){
@@ -725,8 +729,9 @@ Polygon* LECP::trans2Poly(int kernal_index)
 		poly2show->getPaintWidget()->repaint();
 		//animation_做chain之前把点和半边的状态更新一下 end//
 
+		_sleep(3000);
 		temp_vertices = poly2show->getConvexChain(showChain,showL);
-		temp_vertices.clear(); // why?
+		temp_vertices.clear(); // why?   ans:只是想释放一下
 		/*}*/
 	}
 	return poly2show;

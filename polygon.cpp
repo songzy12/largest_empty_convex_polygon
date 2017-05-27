@@ -126,11 +126,11 @@ vector<Vertex*> Polygon::getStarPolygon() {
 /*process bewteen vertex i&j (counterclockwise order:i->j)
 in creating visibility graph*/
 
-void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j, int index_i, int index_j, bool showVG, bool showQ,bool showL)
+void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j, int index_i, int index_j, bool showVG, bool showQ)
 {
 	while ((!(i->Q_.empty())) && toLeft(i->Q_.front(), i, j)){
 		//PROCEED
-		proceedNeighborPoints(i->Q_.front(), j, i->Q_.front()->index(), j->index(), showVG, showQ,showL);
+		proceedNeighborPoints(i->Q_.front(), j, i->Q_.front()->index(), j->index(), showVG, showQ);
 		//DEQUEUE(Qi)
 		int temp_vertex_index = i->Q_.front()->index();
 		i->Q_.pop_front();
@@ -172,7 +172,6 @@ void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j, int index_i, int index
 		edge_ij.setColor(Qt::red);
 		edge_ij.setArrowStyle(true);
 		edge_ij.setDotStyle(false);
-		edge_ij.setShowL(showL);
 
 		this->paint_widget_->allQLines2Draw.push_back(edge_ij);
 		//this->paint_widget_->allQLines2Draw.push_back(edge_ji);
@@ -181,7 +180,7 @@ void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j, int index_i, int index
 	return;
 }
 
-vector<Vertex*> Polygon::getVisibilityGraph(bool showVG, bool showQ,bool showL)
+vector<Vertex*> Polygon::getVisibilityGraph(bool showVG, bool showQ)
 {
 	vector<Vertex*>::iterator it = vertices_.begin();
 	for (; it != vertices_.end(); ++it) {
@@ -189,7 +188,7 @@ vector<Vertex*> Polygon::getVisibilityGraph(bool showVG, bool showQ,bool showL)
 	}
 
 	for (size_t i = 1; i + 1 < vertices_.size(); ++i) {
-		proceedNeighborPoints(vertices_[i], vertices_[i + 1], vertices_[i]->index(), vertices_[i + 1]->index(), showVG, showQ,showL);
+		proceedNeighborPoints(vertices_[i], vertices_[i + 1], vertices_[i]->index(), vertices_[i + 1]->index(), showVG, showQ);
 	}
 
 	this->paint_widget_->repaint();
@@ -201,7 +200,7 @@ vector<Vertex*> Polygon::getVisibilityGraph(bool showVG, bool showQ,bool showL)
 * Also, the incoming edges have been sorted counterclock wise
 */
 
-HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
+HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len, bool showChain, bool showL) {
 	vector<HalfEdge*> in_edges = p->incoming_edges_;
 	vector<HalfEdge*> out_edges = p->outgoing_edges_;
 
@@ -220,7 +219,7 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 		halfedge.setArrowStyle(true);
 		halfedge.setDotStyle(false);
 		halfedge.setL(temp_halfedge->L());
-		halfedge.setShowL(true);
+		halfedge.setShowL(showL);
 		this->paint_widget_->allQLines2Draw.push_back(halfedge);
 	}
 		//in edges
@@ -234,7 +233,7 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 		halfedge.setArrowStyle(true);
 		halfedge.setDotStyle(false);
 		halfedge.setL(temp_halfedge->L());
-		halfedge.setShowL(true);
+		halfedge.setShowL(showL);
 		this->paint_widget_->allQLines2Draw.push_back(halfedge);
 	}
 	this->paint_widget_->repaint();
@@ -259,7 +258,7 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 		int inedgeIndex = inedgeIndexBase+inedgeNum-1 - (it_i - in_edges.rbegin());
 		this->paint_widget_->allQLines2Draw.at(inedgeIndex).setColor(Qt::red);
 		this->paint_widget_->repaint();
-		_sleep(sleepTime() * 200);
+		_sleep(sleepTime() * 100);
 
 		//animation for current in_edge end//
 
@@ -272,7 +271,7 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len) {
 			int outedgeIndex = outedgeIndexBase + outedgeNum-1 - (it_o - out_edges.rbegin());
 			this->paint_widget_->allQLines2Draw.at(outedgeIndex).setColor(Qt::blue);
 			this->paint_widget_->repaint();
-			_sleep(sleepTime() * 200);
+			_sleep(sleepTime() * 100);
 			
 			//animation for current out_edge end //
 
@@ -336,7 +335,7 @@ vector<Vertex*> Polygon::getConvexChain(bool showChain, bool showL) {
 			this->paint_widget_->repaint();
 		//this->paint_widget_->repaint();
 		/* animation  current point end*/
-		HalfEdge *temp_edge = ConvexChainPoint(p, len);
+		HalfEdge *temp_edge = ConvexChainPoint(p, len,showChain,showL);
 		if (len > max_len) {
 			max_len = len;
 			longest_edge = temp_edge;
