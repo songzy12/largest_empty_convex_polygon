@@ -32,7 +32,7 @@ class Polygon {
 		void setSleepTime(int time);
 
 		vector<Vertex*> convex_chain_;
-
+		Vertex * kernel() { return kernel_; }
 	private:
 		vector<Vertex *> vertices_;	
 		Vertex* kernel_; // which is vertices[0]
