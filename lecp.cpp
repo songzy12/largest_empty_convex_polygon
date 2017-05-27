@@ -425,7 +425,7 @@ void LECP::startShowSlot()
 	}
 	case singlePoint:
 		poly2show->clear();
-		int kernalSelected = pointSpinBox->value();//TODO ÐèÒª¸Ä
+		int kernalSelected = getSortedIndex(pointSpinBox->value());
 		trans2Poly(kernalSelected);
 
 		break;
