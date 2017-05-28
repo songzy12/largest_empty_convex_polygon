@@ -228,6 +228,13 @@ void LECP::finalResultShowSlot()
 	this->ui.qTB->hide();
 	this->ui.lTB->hide();
 	this->ui.showControlTB->show();
+
+	showSort = false;
+	showVG = false;
+	showChain = false;
+	showDCEL = false;
+	showQ = false;
+	showL = false;
 	
 	//演示模式设置
 	currMode = finalRes;
@@ -784,7 +791,7 @@ Polygon* LECP::trans2Poly(int kernal_index)
 			MyQPoint temp_myqpoint(QPoint(temp_vertices[i]->point().first, temp_vertices[i]->point().second*-1));
 			temp_myqpoint.setColor(Qt::blue);
 			temp_myqpoint.setIndex(temp_vertices[i]->index());
-			temp_myqpoint.setQ(temp_vertices[i]->Q_);
+			//temp_myqpoint.setQ(temp_vertices[i]->Q_);
 			temp_myqpoint.setShowQ(showQ);
 			poly2show->getPaintWidget()->allQPoints2Draw.push_back(temp_myqpoint);
 			poly2show->getPaintWidget()->repaint();

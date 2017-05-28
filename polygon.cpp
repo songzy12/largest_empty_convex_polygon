@@ -274,7 +274,10 @@ HalfEdge* Polygon::ConvexChainPoint(Vertex * p, int &len, bool showChain, bool s
 			//int outedgeIndex = outedgeIndexBase + outedgeNum-1 - (it_o - out_edges.begin());
 			int outedgeIndex = outedgeIndexBase + outedgeNum-1 - (it_o - out_edges.rbegin());
 			this->paint_widget_->allQLines2Draw.at(outedgeIndex).setColor(Qt::blue);
-			
+			if (showChain){
+				this->paint_widget_->repaint();
+				_sleep(sleepTime() * 100);
+			}
 			
 			//animation for current out_edge end //
 
