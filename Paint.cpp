@@ -130,10 +130,26 @@ bool PaintWidget::savePoints(char *filename){
 	return true;
 }
 
+//release memory
 void PaintWidget::init(){
+	for (LECP_Point* point : points){
+		delete point;
+	}
 	points.clear();
+
+	for (MyQPoint* myQpoint : myQPoints){
+		delete myQpoint;
+	}
 	myQPoints.clear();
+
+	for (MyQline* line : lines){
+		delete line;
+	}
 	lines.clear();
+
+	for (LECP_Point* intersectPoint : intersectPoints){
+		delete intersectPoint;
+	}
 	intersectPoints.clear();
 }
 
@@ -256,7 +272,7 @@ LECP_Point* PaintWidget::changeMyQPointToLECP_Point(MyQPoint *qPoint){
 // y坐标相反
 MyQPoint* PaintWidget::changeLECP_PointToMyQPoint(LECP_Point *p){
 	
-	MyQPoint *mp;
+	MyQPoint *mp = nullptr;
 
 
 	vector<LECP_Point*>::iterator it;
@@ -288,27 +304,15 @@ void PaintWidget::changeLECP_PointsToQPoints(){
 	for (long long i = 0; i < points.size(); i++)
 	{
 		LECP_Point *p = points[i];
-		//QPoint qp;
-		//qp.setX(half_x + p.x);
-		//qp.setY(half_y - p.y);
-
-		//MyQPoint *mp = new MyQPoint(qp);
-
+		
 		MyQPoint *mp = changeLECP_PointToMyQPoint(p);
 
 		mp->setIndex(myQPoints.size());
 		myQPoints.push_back(mp);
 
-
 	}
 
 	update();
-}
-
-void PaintWidget::initDisplayDCEL(){
-	displayDCEL = new DisplayDCEL(this->width(), this->height());
-	displayDCEL->show();
-
 }
 
 long long PaintWidget::getOriginPointIndex(MyQPoint* qPoint){
@@ -321,7 +325,7 @@ long long PaintWidget::getOriginPointIndex(MyQPoint* qPoint){
 }
 
 //-----------for animation-----------------------------------------------------------------------
-void PaintWidget::animationPoint(MyQPoint  *qPoint, vector<pair<LECP_Point*, LECP_Point*>> lecp_points){
+void PaintWidget::animationPoint(MyQPoint  *qPoint, vector<pair<LECP_Point*, LECP_Point*>> lecp_points, double showSpeed){
 	// current user input point change to green
 	qPoint->setColor(Qt::green);
 	update();
@@ -329,11 +333,11 @@ void PaintWidget::animationPoint(MyQPoint  *qPoint, vector<pair<LECP_Point*, LEC
 	// draw the corresponding 
 	MyQline* qLine=addLine(qPoint);
 
-	displayIntersectionPoint(lecp_points);//挨个显示交点以及对应的用户输入的point
+	displayIntersectionPoint(lecp_points, showSpeed);//挨个显示交点以及对应的用户输入的point
 	qLine->setColor(Qt::blue);
 }
 
-void PaintWidget::displayIntersectionPoint(vector<pair<LECP_Point*, LECP_Point*>> lecp_points){
+void PaintWidget::displayIntersectionPoint(vector<pair<LECP_Point*, LECP_Point*>> lecp_points,double showSpeed){
 	for (long long i = 0; i < lecp_points.size(); i++){
 		pair<LECP_Point*, LECP_Point*> p = lecp_points[i];
 		LECP_Point* intersectPoint = p.first;
@@ -344,15 +348,13 @@ void PaintWidget::displayIntersectionPoint(vector<pair<LECP_Point*, LECP_Point*>
 		MyQPoint *origQPoint = changeLECP_PointToMyQPoint(originPoint);
 		long long index = getOriginPointIndex(origQPoint);
 
-		//qPoint->setColor(Qt::yellow);
-		//qPoint->setIndex(index);
 		intersectPoint->index = index;
 		intersectPoints.push_back(intersectPoint);
 
 		repaint();
 		update();
-
-		_sleep(2*1000);
+		
+		_sleep(showSpeed * 100);
 	}
 
 	intersectPoints.clear();
@@ -425,6 +427,13 @@ QLine PaintWidget::getPaintLine(MyQPoint *qPoint){
 	end = changeLECP_PointToMyQPoint(endP);
 
 	QLine line(*start, *end);
+
+	// 2017-05-28 release memory
+	delete startP;
+	delete endP;
+	delete start;
+	delete end;
+
 	return line;
 }
 

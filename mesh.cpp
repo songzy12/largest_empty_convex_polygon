@@ -19,12 +19,19 @@ Mesh::~Mesh() {
 	clear();
 }
 void Mesh ::clear(){
+	
 	for (HalfEdge *e : half_edges_)
 		delete e;
 	half_edges_.clear();
+
+	// clear bounding box
+	boundingBox.clear();
+
 	for (Vertex *v : vertices_)
 		delete v;
 	vertices_.clear();
+
+	init(); // init bounding box
 }
 
 /*simple version: add new vertex at the end of the vertex list*/
@@ -451,6 +458,8 @@ HalfEdge* Mesh::getIntersection(double a, double b, HalfEdge newHalf, Vertex &ne
 
 	newIntersection = *inter;
 
+	delete inter;
+
 	return newInectHalfEdge;
 }
 
@@ -466,7 +475,7 @@ bool Mesh::onBoundingBox(Vertex* newIntersection){
 // store the intersection point of line: ax-b with bounding box to vertex, then return the intersected bounding edge
 HalfEdge*  Mesh::getIntersectBundingBox(double a, double b, Vertex &vertex){
 	list<HalfEdge*>::iterator it = boundingBox.begin();
-	HalfEdge *firstHalfEdge = new HalfEdge(); // TODO: code refactor: do not new a HalfEdge here
+	HalfEdge *firstHalfEdge = nullptr; 
 	while (it != boundingBox.end()){
 		firstHalfEdge = *it++;
 
@@ -485,6 +494,7 @@ HalfEdge*  Mesh::getIntersectBundingBox(double a, double b, Vertex &vertex){
 
 //处理中间的交点
 //返回newPoH和newNeH
+// Not used yet
 void Mesh::dealWithNormalIntersection(Vertex* newIntersection, HalfEdge* intersectHalfEdgeLeft, HalfEdge* intersectHalfEdgeRight, HalfEdge* newPoH, HalfEdge* newNeH){
 
 	//产生两条新的HalfEdge

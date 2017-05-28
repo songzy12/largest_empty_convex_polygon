@@ -15,7 +15,7 @@ LECP::LECP(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	lecp_doc = new LECP_Doc();
+	//lecp_doc = new LECP_Doc(); //暂时不需要lecp_doc
 
 	setFixedSize(WIN_WIDTH, WIN_HEIGHT);
 	
@@ -300,8 +300,11 @@ void LECP::singlePointShowSlot()
 	currMode = singlePoint;
 
 	//默认选择0号点
-	paintWidget->myQPoints.at(0)->setColor(Qt::cyan);
-	paintWidget->repaint();
+	if (paintWidget->myQPoints.size() != 0){  // Added by zyx
+		paintWidget->myQPoints.at(0)->setColor(Qt::cyan);
+		paintWidget->repaint();
+	}
+	
 }
 
 
@@ -599,7 +602,7 @@ bool compareVertex(Vertex* p, Vertex* q){
 }
 
 vector<LECP_Point*>   LECP::preprocessingPolarAngleSort(){
-	mesh = new Mesh();
+	mesh->clear();
 
 	//首先将输入的所有点按照从左到右的顺序排列
 	vector<LECP_Point*> points = paintWidget->points;
@@ -647,10 +650,14 @@ void LECP::polarAngleSortSlot() {
 	time_t end = clock();
 	double runTime = double(end - start) * 1000 / CLOCKS_PER_SEC;
 
+	cout << "Naive methon for polar angle sort:" << runTime << "ms," << points.size() << " points" << endl;
+
+	/*
 	QString msg = "Naive methon for polar angle sort:"+QString::number(runTime)+"ms"+","+QString::number(points.size())+" points";
 	QMessageBox box;
 	box.about(this, "running time", msg);
 	box.show();
+	*/
 }
 
 //DCEL algorithm for polar angle sort result
@@ -671,10 +678,14 @@ void LECP::polarAngleSortDCELSlot() {
 	time_t end = clock();
 	double runTime = double(end - start) * 1000 / CLOCKS_PER_SEC;
 
+	cout << "DCEL polar angle sort:" << runTime << " ms," << points.size() << " points" << endl;
+
+	/*
 	QString msg = "DCEL polar angle sort:" + QString::number(runTime) + "ms" + "," + QString::number(points.size()) + " points";
 	QMessageBox box;
 	box.about(this, "running time", msg);
 	box.show();
+	*/
 }
 
 void LECP::showVisibilityGraphSlot()
@@ -717,7 +728,8 @@ void LECP::DCELAnimationSlot(){
 		//将交点加上当前点存入mesh的sortedPoint中，并处理横坐标相同的点的情况
 		mesh->addCurrentAngleSortedResultToVector(point,lecp_points,points);
 
-		paintWidget->animationPoint(qPoint, lecp_points);
+		paintWidget->animationPoint(qPoint, lecp_points,showspeed);
+
 		_sleep(showspeed * 100);
 		qPoint->setColor(Qt::red);
 		paintWidget->update();
@@ -733,7 +745,6 @@ void LECP::clearDCELAnimationSlot(){
 void LECP::resetSlot(){
 	paintWidget->init();
 	mesh->clear();
-	mesh = new Mesh();
 }
 
 
