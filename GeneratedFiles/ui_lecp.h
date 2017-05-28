@@ -15,7 +15,6 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
@@ -46,9 +45,6 @@ public:
     QAction *DCEL_animation;
     QAction *clearDCELAnimation;
     QAction *reset;
-    QMenu *menu;
-    QMenu *menu_2;
-    QMenu *menu_3;
     QToolBar *operationsTB;
     QToolBar *pointSelectTB;
     QToolBar *strartShowTB;
@@ -136,12 +132,6 @@ public:
         QIcon icon9;
         icon9.addFile(QStringLiteral("Resources/clear.ico"), QSize(), QIcon::Normal, QIcon::Off);
         reset->setIcon(icon9);
-        menu = new QMenu(menuBar);
-        menu->setObjectName(QStringLiteral("menu"));
-        menu_2 = new QMenu(menuBar);
-        menu_2->setObjectName(QStringLiteral("menu_2"));
-        menu_3 = new QMenu(menuBar);
-        menu_3->setObjectName(QStringLiteral("menu_3"));
         LECPClass->setMenuBar(menuBar);
         operationsTB = new QToolBar(LECPClass);
         operationsTB->setObjectName(QStringLiteral("operationsTB"));
@@ -169,13 +159,6 @@ public:
         showControlTB->setObjectName(QStringLiteral("showControlTB"));
         LECPClass->addToolBar(Qt::TopToolBarArea, showControlTB);
 
-        menuBar->addAction(menu_2->menuAction());
-        menuBar->addAction(menu->menuAction());
-        menuBar->addAction(menu_3->menuAction());
-        menu->addAction(polar_angle_sort);
-        menu->addAction(sortedDCEL);
-        menu_3->addAction(clearDCELAnimation);
-        menu_3->addAction(DCEL_animation);
         operationsTB->addAction(openFile);
         operationsTB->addAction(saveFile);
         operationsTB->addAction(reset);
@@ -230,9 +213,6 @@ public:
         DCEL_animation->setText(QApplication::translate("LECPClass", "DCEL\346\236\201\350\247\222\346\216\222\345\272\217\345\212\250\347\224\273", Q_NULLPTR));
         clearDCELAnimation->setText(QApplication::translate("LECPClass", "\346\270\205\351\231\244DCEL\345\212\250\347\224\273\346\274\224\347\244\272", Q_NULLPTR));
         reset->setText(QApplication::translate("LECPClass", "\351\207\215\347\275\256", Q_NULLPTR));
-        menu->setTitle(QApplication::translate("LECPClass", "\346\223\215\344\275\234", Q_NULLPTR));
-        menu_2->setTitle(QApplication::translate("LECPClass", "\346\226\207\344\273\266", Q_NULLPTR));
-        menu_3->setTitle(QApplication::translate("LECPClass", "\345\212\250\347\224\273\346\274\224\347\244\272", Q_NULLPTR));
         operationsTB->setWindowTitle(QApplication::translate("LECPClass", "toolBar", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         operationsTB->setToolTip(QString());

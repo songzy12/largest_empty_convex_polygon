@@ -44,7 +44,6 @@ LECP::LECP(QWidget *parent)
 
 	createToolBar();    //创建工具栏 
 	this->addToolBarBreak();
-
 	//operationTB:action
 	QObject::connect(ui.openFile, SIGNAL(triggered()), this, SLOT(openFileSlot()));
 	QObject::connect(ui.saveFile, SIGNAL(triggered()), this, SLOT(saveFileSlot()));
