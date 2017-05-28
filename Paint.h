@@ -54,10 +54,7 @@ public:
 
 	void paintAllPoints();//绘制当前所有点,LECP_Point
 
-	void animationPoint(MyQPoint  *qPoint,vector<pair<LECP_Point*, LECP_Point*>> lecp_points);
-
-	void initDisplayDCEL();
-
+	void animationPoint(MyQPoint  *qPoint, vector<pair<LECP_Point*, LECP_Point*>> lecp_points, double showSpeed);
 	long long getOriginPointIndex(MyQPoint* qPoint);
 
 	//------------------for animation------------------------------------------------------
@@ -66,7 +63,7 @@ public:
 	void paintIntersectPoints();
 	MyQline* addLine(MyQPoint *point);
 	QLine getPaintLine(MyQPoint *qPoint);
-	void displayIntersectionPoint(vector<pair<LECP_Point*, LECP_Point*>> lecp_points);
+	void displayIntersectionPoint(vector<pair<LECP_Point*, LECP_Point*>> lecp_points, double showSpeed);
 	void getSuitCoordinate(double a,double  b,double &x1,double &y1,double &x2,double &y2);
 	/////////////show animation///////////////////////////
 	void paintPoints(MyQPoint *point);
