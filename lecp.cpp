@@ -198,6 +198,7 @@ void LECP::saveFileSlot() {
 
 void LECP::resetPointsSlot()
 {
+	paintWidget->init();
 	mesh->clear();
 	poly2show->clear();
 	paintWidget->clearMyQPandMyQL();
@@ -209,6 +210,9 @@ void LECP::randomPointsGenerationSlot(){
 	QString text = QInputDialog::getText(NULL, "Input points number", "Please input the number of points:", QLineEdit::Normal, "points number", &isOK);
 
 	if (isOK){
+
+		resetPointsSlot();
+
 		int points_number = text.toInt();
 
 		cout << "random points number:" << points_number << endl;

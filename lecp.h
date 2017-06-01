@@ -41,8 +41,6 @@ private:
 	QSlider* speedSlider;
 	QSpinBox *speedSpinBox,*pointSpinBox;
 
-	QAction *openAction;
-
 public:
 	void createToolBar();
 	void clearToolBar();

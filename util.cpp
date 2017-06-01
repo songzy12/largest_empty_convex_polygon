@@ -2,6 +2,9 @@
 #include "LECP_Point.h"
 #include"Paint.h"
 #include"time.h"
+#include"iostream"
+
+using namespace std;
 
 //按照横坐标从左向右排列
 bool comparePoint(LECP_Point* a, LECP_Point* b){
@@ -61,11 +64,13 @@ vector<LECP_Point*> sortInputPointsFromLeftToRight(PaintWidget *paint){
 vector<LECP_Point*>  generateRandomPoints(long long points_number){
 	vector<LECP_Point*> points;
 
+	int offset = 40;
+
 	// 向内回收5个像素点的位置，避免点落在边界或者超出边界的case
-	int mx = -WIN_WIDTH / 2+5;
-	int nx = WIN_WIDTH / 2-5;
-	int my = -WIN_HEIGHT / 2+5;
-	int ny = WIN_HEIGHT / 2-5;
+	int mx = -WIN_WIDTH / 2 + offset;
+	int nx = WIN_WIDTH / 2 - offset;
+	int my = -WIN_HEIGHT / 2 + offset;
+	int ny = WIN_HEIGHT / 2 - offset;
 
 	srand(time(NULL));
 
@@ -82,6 +87,10 @@ vector<LECP_Point*>  generateRandomPoints(long long points_number){
 
 		if (it == points.end()){
 			points.push_back(point);
+
+
+			cout << "point " << points.size()-1 << ":" << x << "," << y << endl;
+
 		}
 		else{
 			int tmp = it - points.begin();
