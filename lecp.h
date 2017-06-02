@@ -18,7 +18,7 @@
 
 #include "ui_lecp.h"
 #include "Paint.h"
-#include "lecp_doc.h"
+#include "polygon.h"
 #include "DisplayDCEL.h"
 
 class LECP : public QMainWindow
@@ -84,8 +84,6 @@ public slots:
 	long long getSortedIndex(long long displayIndex);
 
 	void polarAngleSortSlot();//对于每个输入点，该点左侧的所有点按照关于该点进行极角排序
-	void showVisibilityGraphSlot();
-	void showConvexChainSlot();
 	void polarAngleSortDCELSlot();
 	vector<LECP_Point*>  preprocessingPolarAngleSort();
 	//DCEL 动画
@@ -98,7 +96,6 @@ public slots:
 
 public:
 	Mesh *mesh;
-	LECP_Doc *lecp_doc;
 	Polygon *poly2show;
 	int lastSelectedPoint;
 	//show variable

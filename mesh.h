@@ -2,7 +2,8 @@
 #define MESH_H
 #include "vertex.h"
 #include "half_edge.h"
-#include "lecp_doc.h"
+#include "polygon.h"
+#include "paint.h"
 #include <list>
 
 using namespace std;

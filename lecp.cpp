@@ -7,7 +7,8 @@
 #include <vertex.h>
 #include "util.h"
 #include "lecp.h"
-#include "lecp_doc.h"
+#include "polygon.h"
+#include "paint.h"
 using namespace std;
 
 LECP::LECP(QWidget *parent)
@@ -57,10 +58,6 @@ LECP::LECP(QWidget *parent)
 	//strartShowTB 开始演示-工具栏:action
 	QObject::connect(ui.startShow, SIGNAL(triggered()), this, SLOT(startShowSlot()));
 
-
-	QObject::connect(ui.polar_angle_sort, SIGNAL(triggered()), this, SLOT(polarAngleSortSlot()));
-	QObject::connect(ui.create_VG, SIGNAL(triggered()), this, SLOT(showVisibilityGraphSlot()));
-	QObject::connect(ui.sortedDCEL, SIGNAL(triggered()), this, SLOT(polarAngleSortDCELSlot()));
 	//DCEL 动画
 	QObject::connect(ui.DCEL_animation, SIGNAL(triggered()), this, SLOT(DCELAnimationSlot()));
 	QObject::connect(ui.clearDCELAnimation, SIGNAL(triggered()), this, SLOT(clearDCELAnimationSlot()));
@@ -691,34 +688,6 @@ void LECP::polarAngleSortDCELSlot() {
 	box.about(this, "running time", msg);
 	box.show();
 	*/
-}
-
-//TODO: the following two is of no use
-
-void LECP::showVisibilityGraphSlot()
-{
-	//QMessageBox::warning(this, tr("to show"), tr("show animation of VG!"));
-	vector<vector<Vertex*>> visibility_graphs = lecp_doc->getVisibilityGraphs();
-
-	for (int i = 0; i < visibility_graphs.size(); i++){
-		qDebug() << "Visibility Graph " << i << ":";
-		vector<Vertex*> visibility_graph = visibility_graphs[i];
-
-		vector<Vertex*>::iterator it = visibility_graph.begin();
-		for (; it != visibility_graph.end(); ++it) {
-			qDebug() << "Vertex with index " << (*it)->index() << ":";
-			vector<HalfEdge*> incoming_edges = (*it)->incoming_edges_;
-			vector<HalfEdge*>::iterator it_e = incoming_edges.begin();
-			for (; it_e != incoming_edges.end(); ++it_e) {
-				qDebug() << (*it_e)->origin()->index() << "->" << (*it_e)->target()->index();
-			}
-		}
-		break; // TODO: delete this line
-	}
-}
-
-void LECP::showConvexChainSlot() {
-
 }
 
 //DCEL 动画

@@ -59,12 +59,6 @@
     <ClCompile Include="GeneratedFiles\qrc_lecp.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_lecp.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_lecp.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="lecp.cpp">
       <Filter>Source Files\LECP</Filter>
     </ClCompile>
@@ -98,8 +92,11 @@
     <ClCompile Include="mesh.cpp">
       <Filter>Source Files\DCEL</Filter>
     </ClCompile>
-    <ClCompile Include="lecp_doc.cpp">
-      <Filter>Source Files\DCEL</Filter>
+    <ClCompile Include="GeneratedFiles\Debug\moc_lecp.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_lecp.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -145,9 +142,6 @@
       <Filter>Header Files\LECP</Filter>
     </ClInclude>
     <ClInclude Include="vertex.h">
-      <Filter>Header Files\LECP</Filter>
-    </ClInclude>
-    <ClInclude Include="lecp_doc.h">
       <Filter>Header Files\LECP</Filter>
     </ClInclude>
   </ItemGroup>
