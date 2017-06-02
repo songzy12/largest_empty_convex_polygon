@@ -31,8 +31,8 @@ void Polygon::clear()
 	for (it_v = vertices_.begin(); it_v != vertices_.end(); it_v++)
 	{
 		vector<HalfEdge*>::iterator it_e;
-		for (it_e = (*it_v)->incoming_edges_.begin(); it_e != (*it_v)->incoming_edges_.end(); ++it_e) 
-			delete (*it_e);
+		//for (it_e = (*it_v)->incoming_edges_.begin(); it_e != (*it_v)->incoming_edges_.end(); ++it_e) 
+		//	delete (*it_e);
 		// for any edge, it must appear both in incoming_edges and outgoing_edges.
 		(*it_v)->incoming_edges_.clear();
 		(*it_v)->outgoing_edges_.clear();
@@ -372,9 +372,13 @@ vector<Vertex*> Polygon::getConvexChain(bool showChain, bool showL) {
 		halfedge.setL(longest_edge->L());
 		this->paint_widget_->allQLines2Draw.push_back(halfedge);
 		animation_largest_chain_len++;
-		this->paint_widget_->repaint();
+		
 		if (showChain)
+		{
+			this->paint_widget_->repaint();
 			_sleep(sleepTime() * 200);
+		}
+
 		//animation largest chain for kernal end//
 		chain_end = longest_edge->target();
 		longest_edge = longest_edge->prev_chain_;
@@ -395,10 +399,10 @@ vector<Vertex*> Polygon::getConvexChain(bool showChain, bool showL) {
 	MyQline halfedge0n(QLine(vertices_[0]->point().first, vertices_[0]->point().second *-1, chain_end->point().first, chain_end->point().second*-1));
 	halfedge0n.setColor(Qt::black);
 	this->paint_widget_->allQLines2Draw.push_back(halfedge0n);
-	if (showChain){
+	//if (showChain){
 		this->paint_widget_->repaint();
 		_sleep(1500);
-	}
+	//}
 	//animation convex polygon end//
 	return convex_chain_;
 }

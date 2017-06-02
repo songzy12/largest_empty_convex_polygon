@@ -41,8 +41,6 @@ private:
 	QSlider *speedSlider;
 	QSpinBox *speedSpinBox,*pointSpinBox;
 
-	QAction *openAction;
-
 public:
 	void createToolBar();
 	void clearToolBar();
@@ -94,6 +92,9 @@ public slots:
 	void DCELAnimationSlot();
 	void clearDCELAnimationSlot();
 	void resetSlot();
+
+	//用来检查点
+	bool checkPoints();
 
 public:
 	Mesh *mesh;

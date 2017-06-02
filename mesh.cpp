@@ -28,6 +28,21 @@ void Mesh::clear() {
 	for (Vertex *v : vertices_)
 		delete v;
 	vertices_.clear();
+
+	for (list<Vertex*> l : sortedVector){
+		for (Vertex* v : l){
+			delete v; // TODO: really?
+		}
+		l.clear();
+	}
+	sortedVector.clear();
+	/*
+	if (sortedPoint.size() > 0){
+		for (LECP_Point* v : sortedPoint[sortedPoint.size() - 1]){
+			delete v;
+		}
+		sortedPoint.clear();
+	}*/
 }
 
 //屏幕上增加一个点，对应的对偶图中增加一条线
@@ -181,7 +196,6 @@ void Mesh::postAjustIntersections(vector<pair<LECP_Point*, LECP_Point*>>  &retur
 	}
 }
 
-//最外围的墙，no twins,翻不出去
 void Mesh::init(){
 	//init four vertex, which are the four window points. 
 
