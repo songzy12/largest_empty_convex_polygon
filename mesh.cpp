@@ -31,6 +31,23 @@ void Mesh ::clear(){
 		delete v;
 	vertices_.clear();
 
+	for (list<Vertex*> l : sortedVector){
+		for (Vertex* v : l){
+			delete v;
+		}
+		l.clear();
+	}
+	sortedVector.clear();
+	/*
+	if (sortedPoint.size() > 0){
+		for (LECP_Point* v : sortedPoint[sortedPoint.size() - 1]){
+			delete v;
+		}
+		sortedPoint.clear();
+	}*/
+
+	sortedPoint.clear();
+	
 	init(); // init bounding box
 }
 
@@ -194,7 +211,6 @@ void Mesh::postAjustIntersections(vector<pair<LECP_Point*, LECP_Point*>>  &retur
 	}
 }
 
-//最外围的墙，no twins,翻不出去
 void Mesh::init(){
 	//init four vertex, which are the four window points. 
 

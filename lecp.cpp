@@ -726,6 +726,7 @@ void LECP::showConvexChainSlot() {
 }
 
 //DCEL 动画
+//调用之前先clear,否则结果会累加  modified by xyz
 void LECP::DCELAnimationSlot(){
 	vector<LECP_Point*> points = preprocessingPolarAngleSort();
 
