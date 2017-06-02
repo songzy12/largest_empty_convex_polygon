@@ -95,6 +95,9 @@ public slots:
 	void clearDCELAnimationSlot();
 	void resetSlot();
 
+	//用来检查点
+	bool checkPoints();
+
 public:
 	Mesh *mesh;
 	LECP_Doc* lecp_doc;

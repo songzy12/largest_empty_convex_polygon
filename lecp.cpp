@@ -67,7 +67,7 @@ LECP::LECP(QWidget *parent)
 	//DCEL 动画
 	QObject::connect(ui.DCEL_animation, SIGNAL(triggered()), this, SLOT(DCELAnimationSlot()));
 	QObject::connect(ui.clearDCELAnimation, SIGNAL(triggered()), this, SLOT(clearDCELAnimationSlot()));
-	QObject::connect(ui.reset, SIGNAL(triggered()), this, SLOT(resetSlot()));
+	//QObject::connect(ui.reset, SIGNAL(triggered()), this, SLOT(resetSlot()));
 
 }
 
@@ -201,6 +201,7 @@ void LECP::resetPointsSlot()
 	mesh->clear();
 	poly2show->clear();
 	paintWidget->clearMyQPandMyQL();
+	paintWidget->init();
 	poly2show->setPaintWidget(paintWidget);	
 }
 
@@ -340,123 +341,127 @@ void LECP::nextPointSlot()
 //strartShowTB 开始演示-工具栏:slot
 void LECP::startShowSlot()
 {
-	isStart = true;//演示结束时设为false
-	/*if (lecp_doc->points.size() < 3)
-	{
+	if (!checkPoints())
+		QMessageBox::warning(this, tr("Warning"), tr("the number of the points should >=3"));
+	else{
+
+		isStart = true;//演示结束时设为false
+		/*if (lecp_doc->points.size() < 3)
+		{
 		QMessageBox::warning(NULL, "Warning", "add at lest 3 points to start animation!", QMessageBox::Yes);
 		return ;
-	}*/
-	poly2show->clear();
-	//dcel
-	if (showDCEL)
-	{
-		DCELAnimationSlot();
-		_sleep(1500);
-		clearDCELAnimationSlot();
-	}
-	else
-		polarAngleSortDCELSlot();
-
-	int kernalNum = mesh->sortedVector.size();
-	vector<Vertex *> longest_convex_chain;
-
-	//mode 选择
-	switch (currMode)
-	{
-	case finalRes:
-	{
-		vector<Vertex *> longest_convex_chain;
-		longest_convex_chain.clear();
-		Vertex * longest_chain_kernel = nullptr;
-		for (int kernal_index = kernalNum - 1; kernal_index >= 0; kernal_index--) {
-			poly2show->clear();
-			trans2Poly(kernal_index);
-			if (poly2show->convex_chain_.size() > longest_convex_chain.size()) {
-				longest_convex_chain = poly2show->convex_chain_;
-				longest_chain_kernel = poly2show->kernel();
-			}
-		}
+		}*/
 		poly2show->clear();
-		if (longest_convex_chain.size() > 2){
-			longest_convex_chain.push_back(longest_chain_kernel);
-			MyQline temp_edge;
-			temp_edge.setLine(longest_chain_kernel->point().first, longest_chain_kernel->point().second*-1, longest_convex_chain.at(0)->point().first, longest_convex_chain.at(0)->point().second*-1);
-			temp_edge.setColor(Qt::black);
-			poly2show->getPaintWidget()->allQLines2Draw.push_back(temp_edge);
-			for (int i = 0; i < longest_convex_chain.size() - 1; i++){
-				temp_edge.setLine(longest_convex_chain.at(i)->point().first, longest_convex_chain.at(i)->point().second*-1, longest_convex_chain.at(i + 1)->point().first, longest_convex_chain.at(i + 1)->point().second*-1);
-				temp_edge.setColor(Qt::black);
-				poly2show->getPaintWidget()->allQLines2Draw.push_back(temp_edge);
-			}
-			this->repaint();
+		//dcel
+		if (showDCEL)
+		{
+			DCELAnimationSlot();
+			_sleep(1500);
+			clearDCELAnimationSlot();
 		}
 		else
-			QMessageBox::warning(this, tr("Not find LECP"), tr("Not find LECP"));
-		break;
-	}
+			polarAngleSortDCELSlot();
 
-	case allPoints: {
-		//循环处理每个点
+		int kernalNum = mesh->sortedVector.size();
 		vector<Vertex *> longest_convex_chain;
-		longest_convex_chain.clear();
-		Vertex * longest_chain_kernel = nullptr;
-		for (int kernal_index = kernalNum-1; kernal_index >=0; kernal_index--) {
-			poly2show->clear();
-			trans2Poly(kernal_index);
-			if (poly2show->convex_chain_.size() > longest_convex_chain.size()) {
-				longest_convex_chain = poly2show->convex_chain_;
-				longest_chain_kernel = poly2show->kernel();
-			}
-		}
-		/*qDebug() << "longest_convex_chain length:" << longest_convex_chain.size();
 
-		if (longest_chain_kernel)
+		//mode 选择
+		switch (currMode)
+		{
+		case finalRes:
+		{
+			vector<Vertex *> longest_convex_chain;
+			longest_convex_chain.clear();
+			Vertex * longest_chain_kernel = nullptr;
+			for (int kernal_index = kernalNum - 1; kernal_index >= 0; kernal_index--) {
+				poly2show->clear();
+				trans2Poly(kernal_index);
+				if (poly2show->convex_chain_.size() > longest_convex_chain.size()) {
+					longest_convex_chain = poly2show->convex_chain_;
+					longest_chain_kernel = poly2show->kernel();
+				}
+			}
+			poly2show->clear();
+			if (longest_convex_chain.size() > 2){
+				longest_convex_chain.push_back(longest_chain_kernel);
+				MyQline temp_edge;
+				temp_edge.setLine(longest_chain_kernel->point().first, longest_chain_kernel->point().second*-1, longest_convex_chain.at(0)->point().first, longest_convex_chain.at(0)->point().second*-1);
+				temp_edge.setColor(Qt::black);
+				poly2show->getPaintWidget()->allQLines2Draw.push_back(temp_edge);
+				for (int i = 0; i < longest_convex_chain.size() - 1; i++){
+					temp_edge.setLine(longest_convex_chain.at(i)->point().first, longest_convex_chain.at(i)->point().second*-1, longest_convex_chain.at(i + 1)->point().first, longest_convex_chain.at(i + 1)->point().second*-1);
+					temp_edge.setColor(Qt::black);
+					poly2show->getPaintWidget()->allQLines2Draw.push_back(temp_edge);
+				}
+				this->repaint();
+			}
+			else
+				QMessageBox::warning(this, tr("Not find LECP"), tr("Not find LECP"));
+			break;
+		}
+
+		case allPoints: {
+			//循环处理每个点
+			vector<Vertex *> longest_convex_chain;
+			longest_convex_chain.clear();
+			Vertex * longest_chain_kernel = nullptr;
+			for (int kernal_index = kernalNum - 1; kernal_index >= 0; kernal_index--) {
+				poly2show->clear();
+				trans2Poly(kernal_index);
+				if (poly2show->convex_chain_.size() > longest_convex_chain.size()) {
+					longest_convex_chain = poly2show->convex_chain_;
+					longest_chain_kernel = poly2show->kernel();
+				}
+			}
+			/*qDebug() << "longest_convex_chain length:" << longest_convex_chain.size();
+
+			if (longest_chain_kernel)
 			qDebug() << "longest chain kernel:" << longest_chain_kernel->point().first << longest_chain_kernel->point().second;*/
 
-		//_sleep(2000);
-		poly2show->clear();
-		if (longest_convex_chain.size() > 2){
-			longest_convex_chain.push_back(longest_chain_kernel);
-			MyQline temp_edge;
-			temp_edge.setLine(longest_chain_kernel->point().first, longest_chain_kernel->point().second*-1, longest_convex_chain.at(0)->point().first, longest_convex_chain.at(0)->point().second*-1);
-			temp_edge.setColor(Qt::black);
-			poly2show->getPaintWidget()->allQLines2Draw.push_back(temp_edge);
-			for (int i = 0; i < longest_convex_chain.size()-1; i++){
-				temp_edge.setLine(longest_convex_chain.at(i)->point().first, longest_convex_chain.at(i)->point().second*-1, longest_convex_chain.at(i + 1)->point().first, longest_convex_chain.at(i + 1)->point().second*-1);
+			//_sleep(2000);
+			poly2show->clear();
+			if (longest_convex_chain.size() > 2){
+				longest_convex_chain.push_back(longest_chain_kernel);
+				MyQline temp_edge;
+				temp_edge.setLine(longest_chain_kernel->point().first, longest_chain_kernel->point().second*-1, longest_convex_chain.at(0)->point().first, longest_convex_chain.at(0)->point().second*-1);
 				temp_edge.setColor(Qt::black);
 				poly2show->getPaintWidget()->allQLines2Draw.push_back(temp_edge);
+				for (int i = 0; i < longest_convex_chain.size() - 1; i++){
+					temp_edge.setLine(longest_convex_chain.at(i)->point().first, longest_convex_chain.at(i)->point().second*-1, longest_convex_chain.at(i + 1)->point().first, longest_convex_chain.at(i + 1)->point().second*-1);
+					temp_edge.setColor(Qt::black);
+					poly2show->getPaintWidget()->allQLines2Draw.push_back(temp_edge);
+				}
+				this->repaint();
 			}
-			this->repaint();
+			else
+				QMessageBox::warning(this, tr("Not find LECP"), tr("Not find LECP"));
+			break;
 		}
-		else
-			QMessageBox::warning(this, tr("Not find LECP"), tr("Not find LECP"));
-		break;
+		case singlePoint:
+			poly2show->clear();
+			int kernalSelected = getSortedIndex(pointSpinBox->value());
+			trans2Poly(kernalSelected);
+
+			break;
+		}
+		//all points
+		//for (int kernal_index = 0;kernal_index<)
+
+
+		//certain point
+
+
+
+		////paintWidget->allQPoints2Draw
+		//if (showSort){}
+		//else{}
+
+		//if (showVG){}
+		//else{}
+
+		//if (showChain){}
+		//else{}
 	}
-	case singlePoint:
-		poly2show->clear();
-		int kernalSelected = getSortedIndex(pointSpinBox->value());
-		trans2Poly(kernalSelected);
-
-		break;
-	}
-	//all points
-	//for (int kernal_index = 0;kernal_index<)
-
-
-	//certain point
-
-
-
-	////paintWidget->allQPoints2Draw
-	//if (showSort){}
-	//else{}
-
-	//if (showVG){}
-	//else{}
-
-	//if (showChain){}
-	//else{}
-
 }
 
 void LECP::resetShowSlot()
@@ -750,6 +755,7 @@ void LECP::clearDCELAnimationSlot(){
 }
 
 void LECP::resetSlot(){
+
 	paintWidget->init();
 	mesh->clear();
 }
@@ -840,4 +846,9 @@ Polygon* LECP::trans2Poly(int kernal_index)
 		/*}*/
 	}
 	return poly2show;
+}
+
+bool LECP::checkPoints()
+{
+	return paintWidget->points.size() > 3;
 }
