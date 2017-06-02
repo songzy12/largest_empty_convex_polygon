@@ -4,18 +4,22 @@ All painting operations  are executed by this file.
 
 #ifndef PAINT_H
 #define PAINT_H
-#include "vertex.h"
-#include "half_edge.h"
+
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets\qwidget.h>
 #include <QtGui/qpainter.h>
-#include <LECP_Point.h>
-#include <mesh.h>
 #include <QColor>
 #include <QBasicTimer>
-#include <MyQPoint.h>
-#include"DisplayDCEL.h"
+#include <qwidget.h>
+#include <qpaintengine.h>
+#include <vector>
+
 #include <MyQLine.h>
+#include <MyQPoint.h>
+#include <LECP_Point.h>
+#include <mesh.h>
+#include "vertex.h"
+#include "half_edge.h"
 
 class PaintWidget:public QWidget
 {

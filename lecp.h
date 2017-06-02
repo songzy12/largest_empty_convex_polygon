@@ -19,7 +19,7 @@
 #include "ui_lecp.h"
 #include "Paint.h"
 #include "polygon.h"
-#include "DisplayDCEL.h"
+
 
 class LECP : public QMainWindow
 {

@@ -86,9 +86,6 @@
     <ClCompile Include="half_edge.cpp">
       <Filter>Source Files\DCEL</Filter>
     </ClCompile>
-    <ClCompile Include="DisplayDCEL.cpp">
-      <Filter>Source Files\Animation</Filter>
-    </ClCompile>
     <ClCompile Include="mesh.cpp">
       <Filter>Source Files\DCEL</Filter>
     </ClCompile>
@@ -116,9 +113,6 @@
     </ClInclude>
     <ClInclude Include="util.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DisplayDCEL.h">
-      <Filter>Header Files\Ainimation</Filter>
     </ClInclude>
     <ClInclude Include="half_edge.h">
       <Filter>Header Files\DCEL</Filter>
