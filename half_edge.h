@@ -1,7 +1,7 @@
 #ifndef HALFEDGE_H
 #define HALFEDGE_H
 #include "vertex.h"
-#include "LECP_Point.h"
+#include "point.h"
 
 class HalfEdge
 {

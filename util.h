@@ -1,7 +1,7 @@
 #include<list>
 #include "vertex.h"
 #include "half_edge.h"
-#include "LECP_Point.h"
+#include "point.h"
 #include "polygon.h"
 #include "paint.h"
 

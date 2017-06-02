@@ -80,9 +80,6 @@
     <ClCompile Include="MyQLine.cpp">
       <Filter>Source Files\Animation</Filter>
     </ClCompile>
-    <ClCompile Include="LECP_Point.cpp">
-      <Filter>Source Files\DCEL</Filter>
-    </ClCompile>
     <ClCompile Include="half_edge.cpp">
       <Filter>Source Files\DCEL</Filter>
     </ClCompile>
@@ -94,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_lecp.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="point.cpp">
+      <Filter>Source Files\DCEL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,9 +117,6 @@
     <ClInclude Include="half_edge.h">
       <Filter>Header Files\DCEL</Filter>
     </ClInclude>
-    <ClInclude Include="LECP_Point.h">
-      <Filter>Header Files\DCEL</Filter>
-    </ClInclude>
     <ClInclude Include="mesh.h">
       <Filter>Header Files\DCEL</Filter>
     </ClInclude>
@@ -137,6 +134,9 @@
     </ClInclude>
     <ClInclude Include="vertex.h">
       <Filter>Header Files\LECP</Filter>
+    </ClInclude>
+    <ClInclude Include="point.h">
+      <Filter>Header Files\DCEL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

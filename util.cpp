@@ -1,8 +1,7 @@
 #include "util.h"
-#include "LECP_Point.h"
-#include"Paint.h"
-#include"time.h"
-#include"iostream"
+#include "paint.h"
+#include "time.h"
+#include <iostream>
 
 using namespace std;
 
@@ -52,7 +51,7 @@ list<Vertex*> changeLECO_PointToVertex(vector<LECP_Point*> points){
 	return re;
 }
 
-vector<LECP_Point*> sortInputPointsFromLeftToRight(PaintWidget *paint){
+vector<LECP_Point*> sortPointsOnX(PaintWidget *paint){
 	vector<LECP_Point*> points= paint->points;
 	
 	sort(points.begin(), points.end(), comparePoint);

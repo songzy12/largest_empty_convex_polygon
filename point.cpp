@@ -1,4 +1,4 @@
-#include"LECP_Point.h"
+#include "point.h"
 
 LECP_Point::LECP_Point(){
 	color = Qt::red;

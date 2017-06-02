@@ -14,10 +14,10 @@ All painting operations  are executed by this file.
 #include <qpaintengine.h>
 #include <vector>
 
-#include <MyQLine.h>
-#include <MyQPoint.h>
-#include <LECP_Point.h>
-#include <mesh.h>
+#include "MyQLine.h"
+#include "MyQPoint.h"
+#include "point.h"
+#include "mesh.h"
 #include "vertex.h"
 #include "half_edge.h"
 
