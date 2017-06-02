@@ -16,12 +16,6 @@ public:
 	list<Vertex*> vertices() { return vertices_; }
 	list<HalfEdge*> edges() { return half_edges_; }
 
-	/*store all directed edges from low_index to high_index in vg*/
-	vector<list<pair<Vertex*, Vertex*>>>* all_edges(){ return &all_edges_; }
-
-	void AddVertex(Vertex *v);
-	void ConnectVertices(Vertex *v1, Vertex *v2);
-
 	//the first is the intersection point, and the second is the corresponding point user input.
 	vector<pair<LECP_Point*,LECP_Point*>> AddLine(LECP_Point *point);// return the intersections
 
@@ -60,9 +54,6 @@ public:
 private:
 	list<Vertex*> vertices_;
 	list<HalfEdge*> half_edges_;
-
-	/*store all directed edges from low_index to high_index in vg*/
-	vector<list<pair<Vertex*, Vertex*>>> all_edges_;
 
 	list<HalfEdge*> boundingBox;//保存边界的HalfEdge,用以确定新插入的直线首先穿过哪个face
 

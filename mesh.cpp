@@ -9,38 +9,25 @@ using namespace std;
 #define  DELTA 0.000000000000001
 
 Mesh::Mesh() {
-	half_edges_ = list<HalfEdge*>();
-	vertices_ = list<Vertex*>();
-
 	init();//DCEL初始化
 }
 
 Mesh::~Mesh() {
 	clear();
+	// TODO: delete the bounding box
 }
-void Mesh ::clear(){
+
+void Mesh::clear() {
+	// clear bounding box
+	boundingBox.clear(); // vertex and edge will be cleared in vertices_ and half_edges_
 	
 	for (HalfEdge *e : half_edges_)
 		delete e;
 	half_edges_.clear();
 
-	// clear bounding box
-	boundingBox.clear();
-
 	for (Vertex *v : vertices_)
 		delete v;
 	vertices_.clear();
-
-	init(); // init bounding box
-}
-
-/*simple version: add new vertex at the end of the vertex list*/
-void Mesh::AddVertex(Vertex *v) {
-	vertices_.push_back(v);
-}
-
-void Mesh::ConnectVertices(Vertex *v1, Vertex *v2) {
-
 }
 
 //屏幕上增加一个点，对应的对偶图中增加一条线
@@ -201,42 +188,16 @@ void Mesh::init(){
 	double half_x = MAX_X;
 	double half_y = MAX_Y;
 
-	Vertex *v1 = new Vertex();
-	pair<double, double> p1;
-	p1.first = -half_x;
-	p1.second = half_y;
-	v1->set_point(p1);
-
-	Vertex *v2 = new Vertex();
-	pair<double, double> p2;
-	p2.first = half_x;
-	p2.second = half_y;
-	v2->set_point(p2);
-
-	Vertex *v3 = new Vertex();
-	pair<double, double> p3;
-	p3.first = half_x;
-	p3.second = -half_y;
-	v3->set_point(p3);
-
-	Vertex *v4 = new Vertex();
-	pair<double, double> p4;
-	p4.first = -half_x;
-	p4.second = -half_y;
-	v4->set_point(p4);
+	Vertex *v1 = new Vertex(-half_x, half_y);
+	Vertex *v2 = new Vertex(half_x, half_y);
+	Vertex *v3 = new Vertex(half_x, -half_y);
+	Vertex *v4 = new Vertex(-half_x, -half_y);
 
 	// four half_edge
-	HalfEdge *h1 = new HalfEdge();
-	h1->set_origin(v1);
-
-	HalfEdge *h2 = new HalfEdge();
-	h2->set_origin(v2);
-
-	HalfEdge *h3 = new HalfEdge();
-	h3->set_origin(v3);
-
-	HalfEdge *h4 = new HalfEdge();
-	h4->set_origin(v4);
+	HalfEdge *h1 = new HalfEdge(v1, nullptr);
+	HalfEdge *h2 = new HalfEdge(v2, nullptr);
+	HalfEdge *h3 = new HalfEdge(v3, nullptr);
+	HalfEdge *h4 = new HalfEdge(v4, nullptr);
 
 	// set the half_edges of each vertex
 	v1->set_half_edge(h1);
@@ -653,6 +614,7 @@ void Mesh::addCurrentAngleSortedResultToVector(LECP_Point *point, vector<pair<LE
 	it = find(points.begin(), points.end(), point);
 	long long index = it - points.begin();
 	index++;
+	// TODO: not only the same x
 	// y越小，极角越小
 	while (index<points.size() && points[index]->x == point->x){
 		sortedAngle.push_back(points[index]);

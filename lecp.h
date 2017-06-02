@@ -17,9 +17,9 @@
 #include <qslider.h>
 
 #include "ui_lecp.h"
-#include"Paint.h"
-#include"lecp_doc.h"
-#include"DisplayDCEL.h"
+#include "Paint.h"
+#include "lecp_doc.h"
+#include "DisplayDCEL.h"
 
 class LECP : public QMainWindow
 {
@@ -37,8 +37,8 @@ private:
 
 	//toolbar content:
 	QCheckBox *sortComboBox,*vgComboBox,*chainComboBox,*dcelComboBox,*qComboBox,*lComboBox;
-	QPushButton* startButton,* resetButton;
-	QSlider* speedSlider;
+	QPushButton *startButton, *resetButton; // TODO: delete this two
+	QSlider *speedSlider;
 	QSpinBox *speedSpinBox,*pointSpinBox;
 
 	QAction *openAction;
@@ -97,8 +97,8 @@ public slots:
 
 public:
 	Mesh *mesh;
-	LECP_Doc* lecp_doc;
-	Polygon* poly2show;
+	LECP_Doc *lecp_doc;
+	Polygon *poly2show;
 	int lastSelectedPoint;
 	//show variable
 	enum showMode { finalRes, allPoints, singlePoint };

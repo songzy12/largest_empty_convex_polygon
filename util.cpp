@@ -61,32 +61,24 @@ vector<LECP_Point*> sortInputPointsFromLeftToRight(PaintWidget *paint){
 vector<LECP_Point*>  generateRandomPoints(long long points_number){
 	vector<LECP_Point*> points;
 
+	const int delta = 5;
 	// 向内回收5个像素点的位置，避免点落在边界或者超出边界的case
-	int mx = -WIN_WIDTH / 2+5;
-	int nx = WIN_WIDTH / 2-5;
-	int my = -WIN_HEIGHT / 2+5;
-	int ny = WIN_HEIGHT / 2-5;
+	int mx = -WIN_WIDTH / 2 + delta;
+	int nx = WIN_WIDTH / 2 - delta;
+	int my = -WIN_HEIGHT / 2 + delta;
+	int ny = WIN_HEIGHT / 2 - delta;
 
 	srand(time(NULL));
 
 	for (long long i = 0; i < points_number; i++){
-		
-		LECP_Point *point = new LECP_Point();
-		double x = rand() % (nx - mx + 1) + mx;
-		double y = rand() % (ny - my + 1) + my;
-		point->setX(x);
-		point->setY(y);
-
-		vector<LECP_Point*>::iterator it;
-		it = std::find(points.begin(), points.end(), point);
-
-		if (it == points.end()){
+		LECP_Point *point = new LECP_Point(rand() % (nx - mx + 1) + mx, rand() % (ny - my + 1) + my);
+		if (std::find(points.begin(), points.end(), point) == points.end()){
 			points.push_back(point);
 		}
-		else{
-			int tmp = it - points.begin();
+		else {
+			delete point;
+			i--;
 		}
-		
 	}
 	return points;
 }

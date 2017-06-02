@@ -12,71 +12,39 @@
 ////////////////////////////////////////////
 Polygon::Polygon() {
 	sleepTime_ = 1;
+	kernel_ = nullptr;
 }
 
-
-Polygon::Polygon(vector<Vertex*> vertices) {
-	vertices_ = vertices;
-	if (vertices_.size() > 0)
-		kernel_ = vertices_[0];
-	sleepTime_ = 1;
-}
-
-Polygon::Polygon(vector<Vertex*> vertices, PaintWidget* paint_widget) {
-	vertices_ = vertices;
-	if (vertices_.size() > 0)
-		kernel_ = vertices_[0];
+Polygon::Polygon(PaintWidget* paint_widget) {
 	paint_widget_ = paint_widget;
+	kernel_ = nullptr;
 	sleepTime_ = 1;
 }
 
 Polygon::~Polygon() {
-
 	clear();
 }
 
 void Polygon::clear()
 {
-	//LÖµÉèÎª0
-	vector<Vertex*>::iterator it_v = vertices_.begin();
-	while (it_v != vertices_.end())
+	vector<Vertex*>::iterator it_v;
+	for (it_v = vertices_.begin(); it_v != vertices_.end(); it_v++)
 	{
+		vector<HalfEdge*>::iterator it_e;
+		for (it_e = (*it_v)->incoming_edges_.begin(); it_e != (*it_v)->incoming_edges_.end(); ++it_e) 
+			delete (*it_e);
+		// for any edge, it must appear both in incoming_edges and outgoing_edges.
 		(*it_v)->incoming_edges_.clear();
 		(*it_v)->outgoing_edges_.clear();
-		it_v++;
 	}
 
-	/*while (it_v != vertices_.end())
-	{
-		vector<HalfEdge *>::iterator it_e = (*it_v)->incoming_edges_.begin();
-		while (it_e != (*it_v)->incoming_edges_.end())
-		{
-			(*it_e)->set_L(0);
-			it_e++;
-		}
-		it_e = (*it_v)->outgoing_edges_.begin();
-		while (it_e != (*it_v)->outgoing_edges_.end())
-		{
-			(*it_e)->set_L(0);
-			it_e++;
-		}
-		it_v++;
-	}*/
 	vertices_.clear();
 	convex_chain_.clear();
-	paint_widget_->allQLines2Draw.clear();
-	paint_widget_->allQPoints2Draw.clear();
+	kernel_ = nullptr;
 }
 
-vector<Vertex *>* Polygon::vertices()
-{
-	vector<Vertex *>* res = new vector<Vertex *>;
-	*res = vertices_;
-	return res;
-}
 void Polygon::setVertices(vector<Vertex*> vertices)
 {
-	vertices_.clear();
 	vertices_ = vertices;
 	if (vertices_.size() > 0)
 		kernel_ = vertices_[0];

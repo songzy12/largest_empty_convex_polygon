@@ -29,7 +29,6 @@ public:
 	QColor color_;
 	vector<int> Q_;
 	bool showQ_;
-
 };
 
 #endif // !MYQPOINT_H

@@ -22,7 +22,7 @@
 //		txt = QString("Fatal: %1").arg(msg);
 //		break;
 //	}
-//	QFile outFile("Log/log");
+//	QFile outFile("log");
 //	outFile.open(QIODevice::WriteOnly | QIODevice::Append);
 //	QTextStream ts(&outFile);
 //	ts << QTime::currentTime().toString() << txt << endl;
@@ -30,7 +30,7 @@
 
 int main(int argc, char *argv[])
 {
-	//qInstallMessageHandler(myMessageOutput); // 注意在当前目录下新建文件夹为 Log
+	//qInstallMessageHandler(myMessageOutput);
 	QApplication a(argc, argv);
 	LECP w;
 	w.show();

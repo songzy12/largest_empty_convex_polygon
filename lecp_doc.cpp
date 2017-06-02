@@ -27,9 +27,9 @@ vector<vector<Vertex*>> LECP_Doc::getStarPolygons() {
 	vector<Vertex*>::iterator it = vertices_.begin();
 	while (it != vertices_.end()) {
 		vector<Vertex*> vertices(it, vertices_.end());
-		Polygon* polygon = new Polygon(vertices, paint_widget_); // TODO: need to be new vertex
-		polygons_.push_back(polygon);
-		star_polygons_.push_back(polygon->getStarPolygon());
+		//Polygon* polygon = new Polygon(vertices, paint_widget_); // TODO: need to be new vertex
+		//polygons_.push_back(polygon);
+		//star_polygons_.push_back(polygon->getStarPolygon());
 		it++;
 		break; // TODO: delete this line
 	}

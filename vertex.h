@@ -34,10 +34,11 @@ public:
 	HalfEdge* prev_;
 
 	// used in unique()
-	bool operator == (Vertex v){
+	bool operator == (Vertex v) {
 		if (v.point().first == point_.first && v.point().first == point_.second)
 			return true;
-		else return false;
+		else 
+			return false;
 	}
 private:
 	HalfEdge *half_edge_;//每个Vertex对应多个half_edge,选择一个作为origin

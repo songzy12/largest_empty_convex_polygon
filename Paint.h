@@ -34,7 +34,7 @@ protected:
 	void mousePressEvent(QMouseEvent *event);
 	void timerEvent(QTimerEvent *event);
 public:
-	void init();
+	void clearAll();
 
 	void setPoints(vector<LECP_Point*> points_);
 	bool savePoints(char *filename);
@@ -69,19 +69,17 @@ public:
 	void paintPoints(MyQPoint *point);
 	void paintAllEdges();
 	void paintEdges(MyQline *line);
-	void clearMyQPandMyQL();
+	void clearQPointsQLines();
 
 public:
 	QPoint currentPoint;//current kernel
 
 	bool drawKernel;//whether to draw kernel
 
-	vector<LECP_Point*> points;// store all of the points user input.Calculated  coordinate system
+	vector<LECP_Point*> points;// store all of the points user input. Calculated  coordinate system
+	
 	//vector<QPoint> qPoints; //which are under Qt coordinate system
-	vector<MyQPoint*> myQPoints;//绘制都用它，与points的区别在于y（取负）
-
-	DisplayDCEL *displayDCEL;
-
+	vector<MyQPoint*> myQPoints;//绘制都用它，与points的区别在于y（取负）	
 	vector<MyQline*> lines;
 
 	vector<LECP_Point*> intersectPoints;//can not use MyQPoint, because there is  Deviation

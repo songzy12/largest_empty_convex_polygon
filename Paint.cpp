@@ -1,4 +1,3 @@
-
 #include "Paint.h"
 #include "util.h"
 #include <QtGui/QPen>
@@ -26,7 +25,6 @@ PaintWidget::PaintWidget(int width, int height) {
 	scaleX = 200;
 	scaleY = 0.5;
 	penWidth = 0.02;
-
 }
 
 PaintWidget::~PaintWidget() {
@@ -34,25 +32,19 @@ PaintWidget::~PaintWidget() {
 }
 
 //绘制points中所有点
-void PaintWidget::paintEvent(QPaintEvent *event){
-	
+void PaintWidget::paintEvent(QPaintEvent *event) {	
 	paintAllPoints();
 	paintAllLine();
-
 	paintIntersectPoints();
-
 	paintAllEdges();
-
-	
 }
 
 void PaintWidget::timerEvent(QTimerEvent *event){
 	Q_UNUSED(event);
-
 }
 
 void PaintWidget::paintAllPoints(){
-  for (long long i = 0; i < myQPoints.size();i++){
+  for (long long i = 0; i < myQPoints.size();i++) {
 	  MyQPoint *tmpP = myQPoints[i];
 		paintPoint(tmpP);
 	}
@@ -131,13 +123,13 @@ bool PaintWidget::savePoints(char *filename){
 }
 
 //release memory
-void PaintWidget::init(){
+void PaintWidget::clearAll(){
 	for (LECP_Point* point : points){
 		delete point;
 	}
 	points.clear();
 
-	for (MyQPoint* myQpoint : myQPoints){
+	for (MyQPoint* myQpoint : myQPoints){		
 		delete myQpoint;
 	}
 	myQPoints.clear();
@@ -160,7 +152,7 @@ void PaintWidget::setPoints(vector<LECP_Point*> points_){
 }
 
 void PaintWidget::loadPoints(char *fileName){
-	init();
+	clearAll();
 
 	ifstream in(fileName);
 
@@ -290,7 +282,7 @@ MyQPoint* PaintWidget::changeLECP_PointToMyQPoint(LECP_Point *p){
 	   //qp.setY(half_y - p.y);
 	  mp = new MyQPoint(qp);
 	}
-	else{
+	else {
 		mp = myQPoints[index];
 	}
 
@@ -564,9 +556,9 @@ void PaintWidget::paintEdges(MyQline *line){
 	painter.drawLine(*line);
 	update();
 }
-void PaintWidget::clearMyQPandMyQL()
+void PaintWidget::clearQPointsQLines()
 {
-	allQPoints2Draw.clear();
+	allQPoints2Draw.clear(); // TODO: delete the new object
 	allQLines2Draw.clear();
 }
 

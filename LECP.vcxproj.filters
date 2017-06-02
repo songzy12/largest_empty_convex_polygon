@@ -33,9 +33,6 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
-    <Filter Include="TEST">
-      <UniqueIdentifier>{6900aedf-038c-4da9-b75e-e03fef68f7e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\DCEL">
       <UniqueIdentifier>{34228a82-74b3-4112-b73f-1f30ac564beb}</UniqueIdentifier>
     </Filter>
@@ -92,13 +89,7 @@
     <ClCompile Include="LECP_Point.cpp">
       <Filter>Source Files\DCEL</Filter>
     </ClCompile>
-    <ClCompile Include="lecp_doc.cpp">
-      <Filter>Source Files\DCEL</Filter>
-    </ClCompile>
     <ClCompile Include="half_edge.cpp">
-      <Filter>Source Files\DCEL</Filter>
-    </ClCompile>
-    <ClCompile Include="face.cpp">
       <Filter>Source Files\DCEL</Filter>
     </ClCompile>
     <ClCompile Include="DisplayDCEL.cpp">
@@ -107,8 +98,8 @@
     <ClCompile Include="mesh.cpp">
       <Filter>Source Files\DCEL</Filter>
     </ClCompile>
-    <ClCompile Include="Test\test.cpp">
-      <Filter>TEST</Filter>
+    <ClCompile Include="lecp_doc.cpp">
+      <Filter>Source Files\DCEL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -126,22 +117,13 @@
     <ClInclude Include="GeneratedFiles\ui_lecp.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DisplayDCEL.h">
       <Filter>Header Files\Ainimation</Filter>
     </ClInclude>
-    <ClInclude Include="face.h">
-      <Filter>Header Files\DCEL</Filter>
-    </ClInclude>
     <ClInclude Include="half_edge.h">
-      <Filter>Header Files\DCEL</Filter>
-    </ClInclude>
-    <ClInclude Include="lecp_doc.h">
       <Filter>Header Files\DCEL</Filter>
     </ClInclude>
     <ClInclude Include="LECP_Point.h">
@@ -165,8 +147,8 @@
     <ClInclude Include="vertex.h">
       <Filter>Header Files\LECP</Filter>
     </ClInclude>
-    <ClInclude Include="EdgeIterator.h">
-      <Filter>Header Files\DCEL</Filter>
+    <ClInclude Include="lecp_doc.h">
+      <Filter>Header Files\LECP</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
