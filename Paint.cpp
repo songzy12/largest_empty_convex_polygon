@@ -139,8 +139,8 @@ void PaintWidget::clear(){
 	}
 	intersectPoints.clear();
 
-	allQPoints2Draw.clear(); // TODO: delete the new object
-	allQLines2Draw.clear();
+	allQLines2Draw.clear(); 
+	allQPoints2Draw.clear(); 
 }
 
 void PaintWidget::setPoints(vector<LECP_Point*> points_){
@@ -198,7 +198,6 @@ void PaintWidget::paintPoint(MyQPoint point){
 
 	painter.setBrush(point.getColor());
 	painter.drawEllipse(point.x(), point.y(), 6, 6);
-
 
 	/*QFont font("ËÎÌו", 12, QFont::Bold, false);
 	painter.setFont(font);

@@ -16,12 +16,12 @@ class LECP_Point{
 
 public:
 	double x, y;
-	long long index;
+	int index;
 	long long sortedIndex;//from left to right according to x coordinate
 	QColor color; //default color is red
 public:
 	LECP_Point();
-	LECP_Point(double _x, double _y);
+	LECP_Point(double _x, double _y, int index);
 
 	void setX(double x){ this->x = x; }
 	void setY(double y){ this->y = y; }
