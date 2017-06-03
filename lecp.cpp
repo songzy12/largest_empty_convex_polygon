@@ -198,7 +198,6 @@ void LECP::saveFileSlot() {
 
 void LECP::resetPointsSlot()
 {
-	paintWidget->init();
 	mesh->clear();
 	poly2show->clear();
 	paintWidget->clearMyQPandMyQL();

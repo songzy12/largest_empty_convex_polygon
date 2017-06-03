@@ -41,8 +41,10 @@ void Polygon::clear()
 	vector<Vertex*>::iterator it_v = vertices_.begin();
 	while (it_v != vertices_.end())
 	{
-		(*it_v)->incoming_edges_.clear();
-		(*it_v)->outgoing_edges_.clear();
+		if (!(*it_v)->incoming_edges_.empty())
+			(*it_v)->incoming_edges_.clear();
+		if (!(*it_v)->outgoing_edges_.empty())
+			(*it_v)->outgoing_edges_.clear();
 		it_v++;
 	}
 
