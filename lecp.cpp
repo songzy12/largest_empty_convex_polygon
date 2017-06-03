@@ -441,10 +441,11 @@ void LECP::startShowSlot()
 			break;
 		}
 		case singlePoint:{
-			poly2show->clear();
-			int kernalSelected = getSortedIndex(pointSpinBox->value());
-			trans2Poly(kernalSelected);
-
+			if (showVG) {
+				poly2show->clear();
+				int kernalSelected = getSortedIndex(pointSpinBox->value());
+				trans2Poly(kernalSelected);
+			}
 			break; 
 		}
 		}
@@ -669,6 +670,7 @@ void LECP::polarAngleSortDCELSlot() {
 	vector<LECP_Point*> points = preprocessingPolarAngleSort();
 	for (long long i = points.size()-1; i>= 0; i--){
 		LECP_Point *point = points[i];
+		qDebug() << "point" << i << "of" << points.size();
 		vector<pair<LECP_Point*, LECP_Point*>> lecp_points = mesh->AddLine(point);
 
 		//将交点加上当前点存入mesh的sortedPoint中，并处理横坐标相同的点的情况
@@ -682,12 +684,11 @@ void LECP::polarAngleSortDCELSlot() {
 
 	qDebug() << "DCEL polar angle sort:" << runTime << " ms," << points.size() << " points" << endl;
 
-	/*
+	
 	QString msg = "DCEL polar angle sort:" + QString::number(runTime) + "ms" + "," + QString::number(points.size()) + " points";
 	QMessageBox box;
 	box.about(this, "running time", msg);
 	box.show();
-	*/
 }
 
 //DCEL 动画
@@ -815,5 +816,5 @@ Polygon* LECP::trans2Poly(int kernal_index)
 
 bool LECP::checkPoints()
 {
-	return paintWidget->points.size() > 3;
+	return paintWidget->points.size() >= 3;
 }

@@ -3,6 +3,7 @@
 HalfEdge::HalfEdge() {
 	L_ = 0;
 	prev_chain_ = nullptr;
+	lecp_point = nullptr;
 }
 
 HalfEdge::HalfEdge(Vertex *origin, Vertex *target) {
@@ -10,6 +11,7 @@ HalfEdge::HalfEdge(Vertex *origin, Vertex *target) {
 	target_ = target;
 	L_ = 0;
 	prev_chain_ = nullptr;
+	lecp_point = nullptr;
 }
 
 HalfEdge::~HalfEdge() {
