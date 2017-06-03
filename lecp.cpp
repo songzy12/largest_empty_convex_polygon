@@ -232,7 +232,7 @@ void LECP::finalResultShowSlot()
 	this->ui.sortTB->hide();
 	this->ui.qTB->hide();
 	this->ui.lTB->hide();
-	this->ui.showControlTB->show();
+	this->ui.showControlTB->hide();
 
 	showSort = false;
 	showVG = false;
@@ -441,12 +441,13 @@ void LECP::startShowSlot()
 				QMessageBox::warning(this, tr("Not find LECP"), tr("Not find LECP"));
 			break;
 		}
-		case singlePoint:
+		case singlePoint:{
 			poly2show->clear();
 			int kernalSelected = getSortedIndex(pointSpinBox->value());
 			trans2Poly(kernalSelected);
 
-			break;
+			break; 
+		}
 		}
 		//all points
 		//for (int kernal_index = 0;kernal_index<)
@@ -678,6 +679,9 @@ void LECP::polarAngleSortSlot() {
 
 //DCEL algorithm for polar angle sort result
 void LECP::polarAngleSortDCELSlot() {
+	paintWidget->myQPoints.at(lastSelectedPoint)->setColor(Qt::red);
+	paintWidget->repaint();
+
 	time_t start = clock();
 
 	vector<LECP_Point*> points = preprocessingPolarAngleSort();
@@ -704,31 +708,31 @@ void LECP::polarAngleSortDCELSlot() {
 	*/
 }
 
-void LECP::showVisibilityGraphSlot()
-{
-	//QMessageBox::warning(this, tr("to show"), tr("show animation of VG!"));
-	vector<vector<Vertex*>> visibility_graphs = lecp_doc->getVisibilityGraphs();
-
-	for (int i = 0; i < visibility_graphs.size(); i++){
-		qDebug() << "Visibility Graph " << i << ":";
-		vector<Vertex*> visibility_graph = visibility_graphs[i];
-
-		vector<Vertex*>::iterator it = visibility_graph.begin();
-		for (; it != visibility_graph.end(); ++it) {
-			qDebug() << "Vertex with index " << (*it)->index() << ":";
-			vector<HalfEdge*> incoming_edges = (*it)->incoming_edges_;
-			vector<HalfEdge*>::iterator it_e = incoming_edges.begin();
-			for (; it_e != incoming_edges.end(); ++it_e) {
-				qDebug() << (*it_e)->origin()->index() << "->" << (*it_e)->target()->index();
-			}
-		}
-		break; // TODO: delete this line
-	}
-}
-
-void LECP::showConvexChainSlot() {
-
-}
+//void LECP::showVisibilityGraphSlot()
+//{
+//	////QMessageBox::warning(this, tr("to show"), tr("show animation of VG!"));
+//	//vector<vector<Vertex*>> visibility_graphs = lecp_doc->getVisibilityGraphs();
+//
+//	//for (int i = 0; i < visibility_graphs.size(); i++){
+//	//	qDebug() << "Visibility Graph " << i << ":";
+//	//	vector<Vertex*> visibility_graph = visibility_graphs[i];
+//
+//	//	vector<Vertex*>::iterator it = visibility_graph.begin();
+//	//	for (; it != visibility_graph.end(); ++it) {
+//	//		qDebug() << "Vertex with index " << (*it)->index() << ":";
+//	//		vector<HalfEdge*> incoming_edges = (*it)->incoming_edges_;
+//	//		vector<HalfEdge*>::iterator it_e = incoming_edges.begin();
+//	//		for (; it_e != incoming_edges.end(); ++it_e) {
+//	//			qDebug() << (*it_e)->origin()->index() << "->" << (*it_e)->target()->index();
+//	//		}
+//	//	}
+//	//	break; // TODO: delete this line
+//	//}
+//}
+//
+//void LECP::showConvexChainSlot() {
+//
+//}
 
 //DCEL 动画
 //调用之前先clear,否则结果会累加  modified by xyz
@@ -805,53 +809,60 @@ Polygon* LECP::trans2Poly(int kernal_index)
 			//temp_myqpoint.setQ(temp_vertices[i]->Q_);
 			temp_myqpoint.setShowQ(showQ);
 			poly2show->getPaintWidget()->allQPoints2Draw.push_back(temp_myqpoint);
-			poly2show->getPaintWidget()->repaint();
-			if (showSort)
-			_sleep(showspeed * 100);
-
+			if (currMode != 0){
+				poly2show->getPaintWidget()->repaint();
+				if (showSort)
+					_sleep(showspeed * 100);
+			}
 			MyQline edge_i(QLine(poly2show->vertices()->at(i - 1)->point().first, poly2show->vertices()->at(i - 1)->point().second*-1, poly2show->vertices()->at(i)->point().first, poly2show->vertices()->at(i)->point().second*-1));
 			edge_i.setDotStyle(true);
 			poly2show->getPaintWidget()->allQLines2Draw.push_back(edge_i);
-			poly2show->getPaintWidget()->repaint();
-			//this->paint_widget_->update();
-			if (showSort)
-			_sleep(showspeed * 100);
+			if (currMode != 0){
+				poly2show->getPaintWidget()->repaint();
+				if (showSort)
+					_sleep(showspeed * 100);
+			}
 		}
 		MyQline edge_i(QLine(poly2show->vertices()->at(vertexNum - 1)->point().first, poly2show->vertices()->at(vertexNum - 1)->point().second*-1, poly2show->vertices()->at(0)->point().first, poly2show->vertices()->at(0)->point().second*-1));
 		edge_i.setDotStyle(true);
 		poly2show->getPaintWidget()->allQLines2Draw.push_back(edge_i);
-		poly2show->getPaintWidget()->repaint();
+		if (currMode != 0)
+			poly2show->getPaintWidget()->repaint();
 		//animation_kernal & starpolygon end//
 
-		if(currMode!=finalRes)
-			_sleep(3000);
-		//polygon的返回值 不应该直接修改polygon的vertex吗
-		temp_vertices = poly2show->getVisibilityGraph(showVG,showQ);
+			if (currMode != 0)
+				_sleep(1500);
+			temp_vertices = poly2show->getVisibilityGraph(showVG, showQ,currMode);
 
-		//animation_做chain之前把点和半边的状态更新一下
-		for (int i = 1; i < vertexNum; i++){
-			poly2show->getPaintWidget()->allQPoints2Draw.at(i).setColor(Qt::blue);
-			poly2show->getPaintWidget()->allQPoints2Draw.at(i).setShowQ(false);
+			//animation_做chain之前把点和半边的状态更新一下
+			for (int i = 1; i < vertexNum; i++){
+				poly2show->getPaintWidget()->allQPoints2Draw.at(i).setColor(Qt::blue);
+				poly2show->getPaintWidget()->allQPoints2Draw.at(i).setShowQ(false);
+			}
+			int last_index = poly2show->getPaintWidget()->allQLines2Draw.size() - 1;
+			//poly2show->getPaintWidget()->allQLines2Draw.at(last_index - 1).setColor(Qt::green);
+			//poly2show->getPaintWidget()->allQLines2Draw.at(last_index).setColor(Qt::cyan);
+			poly2show->getPaintWidget()->allQLines2Draw.at(last_index).setColor(Qt::green);
+			int lineNum = poly2show->getPaintWidget()->allQLines2Draw.size();
+			for (int i = 0; i < lineNum; i++)
+			{
+				poly2show->getPaintWidget()->allQLines2Draw.at(i).setDotStyle(true);
+			}
+			if (currMode != 0)
+				poly2show->getPaintWidget()->repaint();
+			//animation_做chain之前把点和半边的状态更新一下 end//
+			
+			if (currMode != 0)
+				_sleep(1500);
+			temp_vertices = poly2show->getConvexChain(showChain, showL,currMode);
+			temp_vertices.clear(); // why?   ans:只是想释放一下
+			/*}*/
 		}
-		int last_index = poly2show->getPaintWidget()->allQLines2Draw.size() - 1;
-		//poly2show->getPaintWidget()->allQLines2Draw.at(last_index - 1).setColor(Qt::green);
-		//poly2show->getPaintWidget()->allQLines2Draw.at(last_index).setColor(Qt::cyan);
-		poly2show->getPaintWidget()->allQLines2Draw.at(last_index).setColor(Qt::green);
-		int lineNum = poly2show->getPaintWidget()->allQLines2Draw.size();
-		for (int i = 0; i < lineNum; i++)
-		{
-			poly2show->getPaintWidget()->allQLines2Draw.at(i).setDotStyle(true);
-		}
-		poly2show->getPaintWidget()->repaint();
-		//animation_做chain之前把点和半边的状态更新一下 end//
-		if (currMode != finalRes)
-		_sleep(3000);
-		temp_vertices = poly2show->getConvexChain(showChain,showL);
-		temp_vertices.clear(); // why?   ans:只是想释放一下
-		/*}*/
-	}
+	
 	return poly2show;
 }
+
+
 
 bool LECP::checkPoints()
 {
