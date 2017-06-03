@@ -32,7 +32,7 @@ public:
 	HalfEdge* getIntersection(double a, double b, HalfEdge newHalf, Vertex &newIntersection);
 	bool onBoundingBox(Vertex* newIntersection);
 
-	HalfEdge* getIntersectBundingBox(double a, double b, Vertex &vertex);
+	HalfEdge* getIntersectBoundingBox(double a, double b, Vertex &vertex);
 
 	//poH和neH是上一步产生的新边对应的两个half_edge,在下一步需要更新某些字段
 	//newPoH和new neH是该步新产生的边对应的两个half_edge

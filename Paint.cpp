@@ -95,11 +95,6 @@ bool PaintWidget::addPoint(LECP_Point *point) {
 	return false;
 }
 
-void PaintWidget::removeRepeatPoints() {
-	//sort(vertices_.begin(), vertices_.end(), comparePoint);
-	//t6vertices_.erase(unique(vertices_.begin(), vertices_.end()), vertices_.end());
-}
-
 bool PaintWidget::savePoints(char *filename){
 	ofstream outFile(filename);
 	if (!outFile){
@@ -123,7 +118,7 @@ bool PaintWidget::savePoints(char *filename){
 }
 
 //release memory
-void PaintWidget::clearAll(){
+void PaintWidget::clear(){
 	for (LECP_Point* point : points){
 		delete point;
 	}
@@ -143,6 +138,9 @@ void PaintWidget::clearAll(){
 		delete intersectPoint;
 	}
 	intersectPoints.clear();
+
+	allQPoints2Draw.clear(); // TODO: delete the new object
+	allQLines2Draw.clear();
 }
 
 void PaintWidget::setPoints(vector<LECP_Point*> points_){
@@ -152,7 +150,7 @@ void PaintWidget::setPoints(vector<LECP_Point*> points_){
 }
 
 void PaintWidget::loadPoints(char *fileName){
-	clearAll();
+	clear();
 
 	ifstream in(fileName);
 
@@ -169,7 +167,7 @@ void PaintWidget::loadPoints(char *fileName){
 
 	in.getline(buffer, 10);
 	int size = atoi(buffer);
-	// TODO: whether to clear vertices_ first?
+	
 	for (int i = 0; i < size; i++) {
 		in.getline(buffer, 10);
 		char *cx = strtok(buffer, " ");
@@ -479,8 +477,6 @@ void PaintWidget::paintIntersectPoints(){
 	update();
 }
 
-
-
 /////////////show animation///////////////////////////
 void PaintWidget::paintPoints(MyQPoint* point){
 	QPainter painter(this);
@@ -507,6 +503,7 @@ void PaintWidget::paintPoints(MyQPoint* point){
 	}
 	update();
 }
+
 void PaintWidget::paintAllEdges()
 {
 	for (long long i = 0; i < allQLines2Draw.size(); i++){
@@ -514,6 +511,7 @@ void PaintWidget::paintAllEdges()
 		paintEdges(&tmpL);
 	}
 }
+
 void PaintWidget::paintEdges(MyQline *line){
 	QPainter painter(this);
 	painter.translate(WIN_WIDTH / 2, WIN_HEIGHT / 2);
@@ -556,9 +554,3 @@ void PaintWidget::paintEdges(MyQline *line){
 	painter.drawLine(*line);
 	update();
 }
-void PaintWidget::clearQPointsQLines()
-{
-	allQPoints2Draw.clear(); // TODO: delete the new object
-	allQLines2Draw.clear();
-}
-

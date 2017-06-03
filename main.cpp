@@ -31,6 +31,12 @@
 int main(int argc, char *argv[])
 {
 	//qInstallMessageHandler(myMessageOutput);
+
+	qDebug() << sizeof(int);
+	qDebug() << sizeof(MyQline) << sizeof(MyQPoint);
+	qDebug() << sizeof(Vertex) << sizeof(HalfEdge) << sizeof(LECP_Point);
+	qDebug() << sizeof(Mesh) << sizeof(Polygon);
+
 	QApplication a(argc, argv);
 	LECP w;
 	w.show();

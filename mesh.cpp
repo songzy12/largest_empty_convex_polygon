@@ -58,7 +58,7 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 	Vertex vRet;
 
 	//找到新插入的直线和bounding box的哪个线段相交
-	HalfEdge *firstIntersect = getIntersectBundingBox(a, b, vRet);
+	HalfEdge *firstIntersect = getIntersectBoundingBox(a, b, vRet);
 
 	//找到交点，并且更新boudingBox
 	Vertex* v = new Vertex();
@@ -349,7 +349,7 @@ Vertex*  Mesh::intersectWithBoundingBox(HalfEdge* tmp, double a, double b){
 
 //判断half_edge与直线y=ax-b是否有交点，if intersect,return the Vertex,else return null
 // half_edge没有next
-Vertex* intersaction(HalfEdge *half_edge, double a, double b){
+Vertex* intersection(HalfEdge *half_edge, double a, double b){
 	//线段的起点和终点
 	Vertex* start = half_edge->origin();
 
@@ -419,15 +419,15 @@ HalfEdge* Mesh::getIntersection(double a, double b, HalfEdge newHalf, Vertex &ne
 	//沿着新产生的half_edge找到当前face中与直线y=ax-b有交点的half_edge
 	HalfEdge *newInectHalfEdge = newHalf.next();
 
-	Vertex* inter = intersaction(newInectHalfEdge, a, b);
+	Vertex* inter = intersection(newInectHalfEdge, a, b);
 
 	while (inter == NULL){
 		newInectHalfEdge = newInectHalfEdge->next();
 
-		inter = intersaction(newInectHalfEdge, a, b);
+		inter = intersection(newInectHalfEdge, a, b);
 
 		// TODO: how can newInectHalfEdge->next() not set?
-		inter = intersaction(newInectHalfEdge, a, b);//
+		inter = intersection(newInectHalfEdge, a, b);//
 
 	}
 
@@ -448,7 +448,7 @@ bool Mesh::onBoundingBox(Vertex* newIntersection){
 	return false;
 }
 // store the intersection point of line: ax-b with bounding box to vertex, then return the intersected bounding edge
-HalfEdge*  Mesh::getIntersectBundingBox(double a, double b, Vertex &vertex){
+HalfEdge*  Mesh::getIntersectBoundingBox(double a, double b, Vertex &vertex){
 	list<HalfEdge*>::iterator it = boundingBox.begin();
 	HalfEdge *firstHalfEdge = nullptr; 
 	while (it != boundingBox.end()){

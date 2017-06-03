@@ -38,7 +38,7 @@ protected:
 	void mousePressEvent(QMouseEvent *event);
 	void timerEvent(QTimerEvent *event);
 public:
-	void clearAll();
+	void clear();
 
 	void setPoints(vector<LECP_Point*> points_);
 	bool savePoints(char *filename);
@@ -49,7 +49,6 @@ public:
 	void paintEdge(HalfEdge* edge);
 
 	bool addPoint(LECP_Point *point);//double x, double y
-	void removeRepeatPoints(); //remove one of the same point to ensure every point in points is unique.
 
 	LECP_Point* changeMyQPointToLECP_Point(MyQPoint *qPoint);
 	MyQPoint* changeLECP_PointToMyQPoint(LECP_Point *point);
@@ -73,19 +72,17 @@ public:
 	void paintPoints(MyQPoint *point);
 	void paintAllEdges();
 	void paintEdges(MyQline *line);
-	void clearQPointsQLines();
 
 public:
 	QPoint currentPoint;//current kernel
 
 	bool drawKernel;//whether to draw kernel
 
-	vector<LECP_Point*> points;// store all of the points user input. Calculated  coordinate system
-	
+	vector<LECP_Point*> points;// store all of the points user input. Calculated  coordinate system	
 	//vector<QPoint> qPoints; //which are under Qt coordinate system
 	vector<MyQPoint*> myQPoints;//绘制都用它，与points的区别在于y（取负）	
-	vector<MyQline*> lines;
 
+	vector<MyQline*> lines;
 	vector<LECP_Point*> intersectPoints;//can not use MyQPoint, because there is  Deviation
 
 	/////////////show animation///////////////////////////

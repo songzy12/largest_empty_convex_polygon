@@ -201,17 +201,14 @@ void LECP::resetPointsSlot()
 	mesh->clear();
 	mesh->init();
 	poly2show->clear();
-	paintWidget->clearAll();
-	paintWidget->clearQPointsQLines();
+	paintWidget->clear();
 }
 
 void LECP::randomPointsGenerationSlot(){
 	bool isOK;
 	QString text = QInputDialog::getText(NULL, "Input points number", "Please input the number of points:", QLineEdit::Normal, "points number", &isOK);
 	if (isOK){
-
 		resetPointsSlot();
-
 		int points_number = text.toInt();
 		qDebug() << "random points number:" << points_number << endl;
 		paintWidget->setPoints(generateRandomPoints(points_number));
@@ -717,12 +714,6 @@ void LECP::DCELAnimationSlot(){
 
 void LECP::clearDCELAnimationSlot(){
 	paintWidget->lines.clear(); // TODO: also delete
-}
-
-void LECP::resetSlot(){
-	paintWidget->clearAll();
-	mesh->clear();
-	mesh->init();
 }
 
 

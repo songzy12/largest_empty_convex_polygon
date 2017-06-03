@@ -89,7 +89,6 @@ public slots:
 	//DCEL 动画
 	void DCELAnimationSlot();
 	void clearDCELAnimationSlot();
-	void resetSlot();
 
 	//用来检查点
 	bool checkPoints();

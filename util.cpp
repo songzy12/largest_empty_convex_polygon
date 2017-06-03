@@ -7,13 +7,9 @@ using namespace std;
 
 //按照横坐标从左向右排列
 bool comparePoint(LECP_Point* a, LECP_Point* b){
-	if (a->x < b->x)
-		return true;
-	else if (a->x >b->x)
-		return false;
-	else{
-		return a->y < b->y;
-	}
+	if (a->x != b->x)
+		return a->x < b->x;
+	return a->y < b->y;
 }
 
 bool toLeft(Vertex* i, Vertex* j, Vertex* k)
@@ -26,7 +22,7 @@ bool toLeft(pair<double, double> i, pair<double, double> j, pair<double, double>
 	bool isleft = (get<0>(i)*get<1>(j) -get<1>(i)*get<0>(j)
 		+get<0>(j)*get<1>(k) -get<1>(j)*get<0>(k)
 		+get<0>(k)*get<1>(i) -get<1>(k)*get<0>(i)) > 0;
-	return isleft; // TODO: < >
+	return isleft; 
 }
 
 bool isConvexTurn(HalfEdge *i, HalfEdge *o)
@@ -39,23 +35,15 @@ list<Vertex*> changeLECO_PointToVertex(vector<LECP_Point*> points){
 
 	for (long long i = 0; i < points.size(); i++){
 		LECP_Point *point = points[i];
-		Vertex *v = new Vertex();
-		pair<double, double> p;
-		p.first = point->x;
-		p.second = point->y;
-		v->set_point(p);
-		v->set_index(i);
+		Vertex *v = new Vertex(point->x, point->y, i);
 		re.push_back(v);
 	}
 
 	return re;
 }
 
-vector<LECP_Point*> sortPointsOnX(PaintWidget *paint){
-	vector<LECP_Point*> points= paint->points;
-	
+vector<LECP_Point*> sortPointsOnX(vector<LECP_Point*> points){
 	sort(points.begin(), points.end(), comparePoint);
-
 	return points;
 }
 
@@ -73,7 +61,7 @@ vector<LECP_Point*>  generateRandomPoints(long long points_number){
 
 	srand(time(NULL));
 
-	for (long long i = 0; i < points_number; i++){
+	for (long long i = 0; i < points_number; i++) {
 		LECP_Point *point = new LECP_Point(rand() % (nx - mx + 1) + mx, rand() % (ny - my + 1) + my);
 		if (std::find(points.begin(), points.end(), point) == points.end()){
 			points.push_back(point);
