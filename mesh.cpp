@@ -36,6 +36,7 @@ void Mesh::clear() {
 		l.clear();
 	}
 	sortedVector.clear();
+	sortedPoint.clear();
 	/*
 	if (sortedPoint.size() > 0){
 		for (LECP_Point* v : sortedPoint[sortedPoint.size() - 1]){
@@ -46,14 +47,14 @@ void Mesh::clear() {
 }
 
 //屏幕上增加一个点，对应的对偶图中增加一条线
-vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
+vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point) {
 	//The first is intersection,and the second is corresponding original user input point.
 	vector<pair<LECP_Point*, LECP_Point*>> return_intersections;
 
 	double a = point->x;
 	double b = point->y;
 
-	qDebug() << "AddLine:" << a << b;
+	//qDebug() << "AddLine:" << a << b;
 
 	Vertex vRet;
 
@@ -63,7 +64,7 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 	//找到交点，并且更新boudingBox
 	Vertex* v = new Vertex(vRet.point().first, vRet.point().second);
 
-	qDebug() << "first intersection with bounding box: " << vRet.point().first << vRet.point().second;
+	//qDebug() << "first intersection with bounding box: " << vRet.point().first << vRet.point().second;
 	
 	HalfEdge* newHalf = splitEdge(firstIntersect,v); // belongs to bounding box
 	boundingBox.push_back(newHalf);
@@ -101,8 +102,8 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 		return_intersections.push_back(intersectionPair);
 
 		count++;
-		if (second)
-			qDebug() << "outer count:" << count << "intersection:" << first->x << first->y << "point:" << second->x << second->y;
+		//if (second)
+		//	qDebug() << "outer count:" << count << "intersection:" << first->x << first->y << "point:" << second->x << second->y;
 		//-----------end add new pair--------------------------------------------------
 
 		//sortedAngle.push_back(intersectHalfEdgeLeft->lecp_point);
@@ -110,7 +111,7 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 		// return tmpV and left,right
 		newHalf = intersectHalfEdgeLeft->twin();
 
-		qDebug() << "next inner loop start:" << newHalf;
+		//qDebug() << "next inner loop start:" << newHalf;
 
 		newHalf->lecp_point = intersectHalfEdgeLeft->lecp_point;
 
@@ -209,7 +210,7 @@ void Mesh::init(){
 	v4->set_half_edge(h4);
 
 	//relation between the four half edges
-	h1->set_next(h2);
+	/*h1->set_next(h2);
 	h1->set_prev(h4);
 	h1->set_twin(NULL);
 
@@ -223,6 +224,23 @@ void Mesh::init(){
 
 	h4->set_next(h1);
 	h4->set_prev(h3);
+	h4->set_twin(NULL);*/
+
+	//TODO: delete this
+	h1->set_next(h4);
+	h1->set_prev(h2);
+	h1->set_twin(NULL);
+
+	h2->set_next(h1);
+	h2->set_prev(h3);
+	h2->set_twin(NULL);
+
+	h3->set_next(h2);
+	h3->set_prev(h4);
+	h3->set_twin(NULL);
+
+	h4->set_next(h3);
+	h4->set_prev(h1);
 	h4->set_twin(NULL);
 
 	vertices_.push_back(v1);
@@ -350,9 +368,9 @@ Vertex* intersection(HalfEdge *half_edge, double a, double b){
 	double x2 = end->point().first;
 	double y2 = end->point().second;
 
-	if (half_edge->lecp_point)
-		qDebug() << "half_edge->lecp_point" << half_edge->lecp_point->x << half_edge->lecp_point->y;
-	qDebug() << "half_edge (x1, y1), (x2, y2)" << x1 << y1 << x2 << y2;
+	//if (half_edge->lecp_point)
+	//	qDebug() << "half_edge->lecp_point" << half_edge->lecp_point->x << half_edge->lecp_point->y;
+	//qDebug() << "half_edge (x1, y1), (x2, y2)" << x1 << y1 << x2 << y2;
 
 	//判断是否平行
 	double k1;
@@ -382,6 +400,8 @@ Vertex* intersection(HalfEdge *half_edge, double a, double b){
 		resultY = a*resultX - b;
 	}
 
+	//qDebug() << "resultX, resultY" << resultX << resultY;
+
 	if (k1 == INFINITY) {
 		if ((resultY >= y1 && resultY <= y2) || (resultY <= y1 && resultY >= y2))
 
@@ -410,12 +430,12 @@ HalfEdge* Mesh::getIntersection(double a, double b, HalfEdge newHalf, Vertex &ne
 	int count = 0;
 	while (inter == NULL) {
 
-		newInectHalfEdge = newInectHalfEdge->next();
-		if (newInectHalfEdge == startEdge)
-			qDebug() << "inner infinite loop";
-		inter = intersection(newInectHalfEdge, a, b);
 		count++;
-		qDebug() << "inner count:" << count;
+		
+		newInectHalfEdge = newInectHalfEdge->next();
+		//if (newInectHalfEdge == startEdge)
+		//	qDebug() << "inner infinite loop";
+		inter = intersection(newInectHalfEdge, a, b);
 	}
 
 	newIntersection = *inter;

@@ -195,7 +195,7 @@ public:
 #endif // QT_NO_TOOLTIP
         openFile->setText(QApplication::translate("LECPClass", "\346\211\223\345\274\200\346\226\207\344\273\266", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
-        openFile->setToolTip(QApplication::translate("LECPClass", "\344\277\235\345\255\230\346\226\207\344\273\266", Q_NULLPTR));
+        openFile->setToolTip(QApplication::translate("LECPClass", "\346\211\223\345\274\200\346\226\207\344\273\266", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         sortedDCEL->setText(QApplication::translate("LECPClass", "\346\236\201\350\247\222\346\216\222\345\272\217\357\274\210DCEL\357\274\211", Q_NULLPTR));
         finalResultShow->setText(QApplication::translate("LECPClass", "\346\230\276\347\244\272\346\234\200\347\273\210\347\273\223\346\236\234", Q_NULLPTR));

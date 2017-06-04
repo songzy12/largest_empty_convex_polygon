@@ -151,7 +151,8 @@ void PaintWidget::setPoints(vector<LECP_Point*> points_){
 
 void PaintWidget::loadPoints(char *fileName){
 	clear();
-
+	points.clear();
+	myQPoints.clear();
 	ifstream in(fileName);
 
 	if (!in){
