@@ -603,15 +603,17 @@ void Mesh::addCurrentAngleSortedResultToVector(LECP_Point *point, vector<pair<LE
 
 	// three points which xs are the same
 	vector<LECP_Point*>::iterator it;
-	it = find(points.begin(), points.end(), point);
+	it = find(points.begin(), points.end(), point); // TODO
 	long long index = it - points.begin();
 	index++;
 	// TODO: not only the same x
-	// y越小，极角越小
+	// y越小，极角越大
+	int temp = index;
 	while (index<points.size() && points[index]->x == point->x){
-		sortedAngle.push_back(points[index]);
 		index++;
 	}
+	for (int i = index - 1; i >= temp; --i)
+		sortedAngle.push_back(points[i]);
 
 	// add the sorted list to the vector
 	sortedPoint.push_back(sortedAngle);
