@@ -411,6 +411,12 @@ vector<Vertex*> Polygon::getConvexChain(bool showChain, bool showL,int currMode)
 	if (currMode!=0)
 	this->paint_widget_->repaint();
 	_sleep(1500);
+	
+	for (int j = 0; j < animation_largest_chain_len+2; j++)
+	{
+		this->paint_widget_->allQLines2Draw.pop_back();
+	}
+	this->paint_widget_->repaint();
 	//}
 	//animation convex polygon end//
 	return convex_chain_;

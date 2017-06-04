@@ -30,7 +30,7 @@ LECP::LECP(QWidget *parent)
 	showQ=false;
 	showL=false;
 
-	showspeed = showSpeedMax; // TODO: why so slow? 
+	showspeed = 1; // default to fast
 	lastSelectedPoint = 0; // TODO: -1 or not?
 
 	mesh = new Mesh();
@@ -39,7 +39,7 @@ LECP::LECP(QWidget *parent)
 	this->setCentralWidget(paintWidget);
 
 	poly2show = new Polygon(paintWidget);
-	poly2show->setSleepTime(showSpeedMax); // TODO: semantic
+	poly2show->setSleepTime(showspeed); // TODO: semantic
 
 	createToolBar();    //创建工具栏 
 	this->addToolBarBreak();
