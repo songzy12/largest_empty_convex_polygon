@@ -46,7 +46,7 @@ void Mesh::clear() {
 }
 
 //屏幕上增加一个点，对应的对偶图中增加一条线
-vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
+vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point) {
 	//The first is intersection,and the second is corresponding original user input point.
 	vector<pair<LECP_Point*, LECP_Point*>> return_intersections;
 
@@ -409,12 +409,12 @@ HalfEdge* Mesh::getIntersection(double a, double b, HalfEdge newHalf, Vertex &ne
 
 	int count = 0;
 	while (inter == NULL) {
+		count++;
+		qDebug() << "inner count:" << count;
 		newInectHalfEdge = newInectHalfEdge->next();
 		if (newInectHalfEdge == startEdge)
 			qDebug() << "inner infinite loop";
 		inter = intersection(newInectHalfEdge, a, b);
-		count++;
-		qDebug() << "inner count:" << count;
 	}
 
 	newIntersection = *inter;

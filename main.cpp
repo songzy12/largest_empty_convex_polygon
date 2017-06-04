@@ -30,7 +30,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &, const QString &
 
 int main(int argc, char *argv[])
 {
-	//qInstallMessageHandler(myMessageOutput);
+	qInstallMessageHandler(myMessageOutput);
 
 	qDebug() << sizeof(int);
 	qDebug() << sizeof(MyQline) << sizeof(MyQPoint);
