@@ -1,6 +1,16 @@
 <RCC>
-    <qresource prefix="/LECP"/>
     <qresource prefix="/">
+        <file>Resources/main.ico</file>
+        <file>Resources/clear.ico</file>
+        <file>Resources/final.ico</file>
+        <file>Resources/left.ico</file>
+        <file>Resources/open.ico</file>
+        <file>Resources/point.ico</file>
+        <file>Resources/points.ico</file>
+        <file>Resources/right.ico</file>
+        <file>Resources/rpoints.ico</file>
         <file>Resources/save.ico</file>
+        <file>Resources/start.ico</file>
+        <file>Resources/stop.ico</file>
     </qresource>
 </RCC>

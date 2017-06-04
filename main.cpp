@@ -38,6 +38,10 @@ int main(int argc, char *argv[])
 	qDebug() << sizeof(Mesh) << sizeof(Polygon);
 
 	QApplication a(argc, argv);
+	QApplication::addLibraryPath("./plugins");
+
+	a.setWindowIcon(QIcon(QStringLiteral(":/Resources/main.ico")));
+
 	LECP w;
 	w.show();
 

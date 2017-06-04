@@ -144,5 +144,25 @@
     <ClInclude Include="point.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="LECP.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\clear.ico" />
+    <Image Include="Resources\final.ico" />
+    <Image Include="Resources\left.ico" />
+    <Image Include="Resources\open.ico" />
+    <Image Include="Resources\point.ico" />
+    <Image Include="Resources\points.ico" />
+    <Image Include="Resources\right.ico" />
+    <Image Include="Resources\rpoints.ico" />
+    <Image Include="Resources\save.ico" />
+    <Image Include="Resources\start.ico" />
+    <Image Include="Resources\stop.ico" />
+    <Image Include="Resources\main.ico" />
   </ItemGroup>
 </Project>

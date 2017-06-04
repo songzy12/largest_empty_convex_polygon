@@ -46,8 +46,8 @@
    </action>
    <action name="saveFile">
     <property name="icon">
-     <iconset>
-      <normaloff>Resources/save.ico</normaloff>Resources/save.ico</iconset>
+     <iconset resource="lecp.qrc">
+      <normaloff>:/Resources/save.ico</normaloff>:/Resources/save.ico</iconset>
     </property>
     <property name="text">
      <string>保存文件</string>
@@ -58,8 +58,8 @@
    </action>
    <action name="openFile">
     <property name="icon">
-     <iconset>
-      <normaloff>Resources/open.ico</normaloff>Resources/open.ico</iconset>
+     <iconset resource="lecp.qrc">
+      <normaloff>:/Resources/open.ico</normaloff>:/Resources/open.ico</iconset>
     </property>
     <property name="text">
      <string>打开文件</string>
@@ -75,8 +75,8 @@
    </action>
    <action name="finalResultShow">
     <property name="icon">
-     <iconset>
-      <normaloff>Resources/final.ico</normaloff>Resources/final.ico</iconset>
+     <iconset resource="lecp.qrc">
+      <normaloff>:/Resources/final.ico</normaloff>:/Resources/final.ico</iconset>
     </property>
     <property name="text">
      <string>显示最终结果</string>
@@ -87,8 +87,8 @@
    </action>
    <action name="allPointsShow">
     <property name="icon">
-     <iconset>
-      <normaloff>Resources/points.ico</normaloff>Resources/points.ico</iconset>
+     <iconset resource="lecp.qrc">
+      <normaloff>:/Resources/points.ico</normaloff>:/Resources/points.ico</iconset>
     </property>
     <property name="text">
      <string>所有点演示</string>
@@ -99,8 +99,8 @@
    </action>
    <action name="singlePointShow">
     <property name="icon">
-     <iconset>
-      <normaloff>Resources/point.ico</normaloff>Resources/point.ico</iconset>
+     <iconset resource="lecp.qrc">
+      <normaloff>:/Resources/point.ico</normaloff>:/Resources/point.ico</iconset>
     </property>
     <property name="text">
      <string>单点演示</string>
@@ -121,8 +121,8 @@
    </action>
    <action name="reset">
     <property name="icon">
-     <iconset>
-      <normaloff>Resources/clear.ico</normaloff>Resources/clear.ico</iconset>
+     <iconset resource="lecp.qrc">
+      <normaloff>:/Resources/clear.ico</normaloff>:/Resources/clear.ico</iconset>
     </property>
     <property name="text">
      <string>重置</string>
@@ -232,8 +232,8 @@
   </widget>
   <action name="randomPoints">
    <property name="icon">
-    <iconset>
-     <normaloff>Resources/rpoints.ico</normaloff>Resources/rpoints.ico</iconset>
+    <iconset resource="lecp.qrc">
+     <normaloff>:/Resources/rpoints.ico</normaloff>:/Resources/rpoints.ico</iconset>
    </property>
    <property name="text">
     <string>随机点生成</string>
@@ -246,8 +246,8 @@
   </action>
   <action name="startShow">
    <property name="icon">
-    <iconset>
-     <normaloff>Resources/start.ico</normaloff>Resources/start.ico</iconset>
+    <iconset resource="lecp.qrc">
+     <normaloff>:/Resources/start.ico</normaloff>:/Resources/start.ico</iconset>
    </property>
    <property name="text">
     <string>开始动画演示</string>
@@ -258,8 +258,8 @@
   </action>
   <action name="lastPoint">
    <property name="icon">
-    <iconset>
-     <normaloff>Resources/left.ico</normaloff>Resources/left.ico</iconset>
+    <iconset resource="lecp.qrc">
+     <normaloff>:/Resources/left.ico</normaloff>:/Resources/left.ico</iconset>
    </property>
    <property name="text">
     <string>上一点</string>
@@ -267,8 +267,8 @@
   </action>
   <action name="nextPoint">
    <property name="icon">
-    <iconset>
-     <normaloff>Resources/right.ico</normaloff>Resources/right.ico</iconset>
+    <iconset resource="lecp.qrc">
+     <normaloff>:/Resources/right.ico</normaloff>:/Resources/right.ico</iconset>
    </property>
    <property name="text">
     <string>下一点</string>
