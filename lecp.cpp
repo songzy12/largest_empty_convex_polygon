@@ -449,7 +449,7 @@ void LECP::startShowSlot()
 			break;
 		}
 		case singlePoint:{
-			if (showVG) {
+			if (showVG || showChain) {
 				poly2show->clear();
 				int kernalSelected = getSortedIndex(pointSpinBox->value());
 				trans2Poly(kernalSelected);
