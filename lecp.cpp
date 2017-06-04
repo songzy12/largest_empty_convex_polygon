@@ -815,12 +815,11 @@ Polygon* LECP::trans2Poly(int kernal_index)
 			_sleep(1500);
 		temp_vertices = poly2show->getConvexChain(showChain, showL, currMode);
 		temp_vertices.clear(); // why?   ans:只是想释放一下
+		paintWidget->allQLines2Draw.clear();
 		/*}*/
 	}
 	return poly2show;
 }
-
-
 
 bool LECP::checkPoints()
 {
