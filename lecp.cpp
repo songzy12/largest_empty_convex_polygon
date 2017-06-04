@@ -449,11 +449,9 @@ void LECP::startShowSlot()
 			break;
 		}
 		case singlePoint:{
-			if (showVG || showChain) {
-				poly2show->clear();
-				int kernalSelected = getSortedIndex(pointSpinBox->value());
-				trans2Poly(kernalSelected);
-			}
+			poly2show->clear();
+			int kernalSelected = getSortedIndex(pointSpinBox->value());
+			trans2Poly(kernalSelected);
 			break; 
 		}
 		}
