@@ -64,6 +64,7 @@ vector<LECP_Point*>  generateRandomPoints(long long points_number){
 	for (long long i = 0; i < points_number; i++) {
 		LECP_Point *point = new LECP_Point(rand() % (nx - mx + 1) + mx, rand() % (ny - my + 1) + my, i);
 		if (std::find(points.begin(), points.end(), point) == points.end()){
+			cout << "point " << points.size() << ":" << point->x << " " << point->y << endl;
 			points.push_back(point);
 		}
 		else {

@@ -421,13 +421,10 @@ HalfEdge* Mesh::getIntersection(double a, double b, HalfEdge newHalf, Vertex &ne
 
 	Vertex* inter = intersection(newInectHalfEdge, a, b);
 
-	while (inter == NULL){
+	while (inter == NULL){  //ËÀÑ­»·
 		newInectHalfEdge = newInectHalfEdge->next();
 
 		inter = intersection(newInectHalfEdge, a, b);
-
-		// TODO: how can newInectHalfEdge->next() not set?
-		inter = intersection(newInectHalfEdge, a, b);//
 
 	}
 

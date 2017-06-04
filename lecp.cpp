@@ -811,9 +811,7 @@ Polygon* LECP::trans2Poly(int kernal_index)
 	return poly2show;
 }
 
-
-
 bool LECP::checkPoints()
 {
-	return paintWidget->points.size() > 3;
+	return paintWidget->points.size() >= 3;
 }

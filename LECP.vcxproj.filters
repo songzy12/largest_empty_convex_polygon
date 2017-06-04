@@ -93,7 +93,7 @@
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="point.cpp">
-      <Filter>Source Files\DCEL</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,8 +135,14 @@
     <ClInclude Include="vertex.h">
       <Filter>Header Files\LECP</Filter>
     </ClInclude>
+    <ClInclude Include="lecp_doc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LECP_Point.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="point.h">
-      <Filter>Header Files\DCEL</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
