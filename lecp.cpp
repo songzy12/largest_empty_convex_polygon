@@ -164,7 +164,6 @@ void LECP::clearToolBar() {
 
 //operationTB:slot
 void LECP::openFileSlot() {
-	resetPointsSlot();
 	QDir dir;
 	QString fileName = QFileDialog::getOpenFileName(this, QString("Open File"), dir.absolutePath());
 	if (fileName.isEmpty()){
@@ -173,7 +172,8 @@ void LECP::openFileSlot() {
 
 	QByteArray ba = fileName.toLocal8Bit();
 	char* fileName_str = ba.data();
-
+	
+	resetPointsSlot();
 	paintWidget->loadPoints(fileName_str);
 }
 
@@ -360,6 +360,7 @@ void LECP::startShowSlot()
 		poly2show->clear();
 		poly2show->getPaintWidget()->allQLines2Draw.clear();
 		//dcel
+		qDebug() << "showDECL" << showDCEL;
 		if (showDCEL)
 		{
 			DCELAnimationSlot();
@@ -373,7 +374,7 @@ void LECP::startShowSlot()
 		}
 
 		int kernalNum = mesh->sortedVector.size();
-
+		qDebug() << "kernalNum:" << kernalNum;
 		//mode 选择
 		switch (currMode)
 		{
@@ -679,6 +680,7 @@ void LECP::polarAngleSortDCELSlot() {
 	mesh->clear();
 	mesh->init();
 	vector<LECP_Point*> points = preprocessingPolarAngleSort();
+	qDebug() << "points size :" << points.size();
 	for (long long i = points.size()-1; i>= 0; i--){
 		LECP_Point *point = points[i];
 		qDebug() << "point" << i << "of" << points.size();
@@ -694,7 +696,7 @@ void LECP::polarAngleSortDCELSlot() {
 	double runTime = double(end - start) * 1000 / CLOCKS_PER_SEC;
 
 	qDebug() << "DCEL polar angle sort:" << runTime << " ms," << points.size() << " points" << endl;
-
+	qDebug() << "sortedVector.size()" << mesh->sortedVector.size();
 	
 	/*QString msg = "DCEL polar angle sort:" + QString::number(runTime) + "ms" + "," + QString::number(points.size()) + " points";
 	QMessageBox box;
@@ -706,7 +708,7 @@ void LECP::polarAngleSortDCELSlot() {
 //调用之前先clear,否则结果会累加  modified by xyz
 void LECP::DCELAnimationSlot(){
 	vector<LECP_Point*> points = preprocessingPolarAngleSort();
-
+	qDebug() << "points size" << points.size();
 	for (long long i = points.size() - 1; i >= 0; i--) {
 		LECP_Point *point = points[i];
 
