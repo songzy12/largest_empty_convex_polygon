@@ -209,7 +209,7 @@ void Mesh::init(){
 	v4->set_half_edge(h4);
 
 	//relation between the four half edges
-	h1->set_next(h2);
+	/*h1->set_next(h2);
 	h1->set_prev(h4);
 	h1->set_twin(NULL);
 
@@ -223,6 +223,23 @@ void Mesh::init(){
 
 	h4->set_next(h1);
 	h4->set_prev(h3);
+	h4->set_twin(NULL);*/
+
+	//TODO: delete this
+	h1->set_next(h4);
+	h1->set_prev(h2);
+	h1->set_twin(NULL);
+
+	h2->set_next(h1);
+	h2->set_prev(h3);
+	h2->set_twin(NULL);
+
+	h3->set_next(h2);
+	h3->set_prev(h4);
+	h3->set_twin(NULL);
+
+	h4->set_next(h3);
+	h4->set_prev(h1);
 	h4->set_twin(NULL);
 
 	vertices_.push_back(v1);
@@ -381,6 +398,8 @@ Vertex* intersection(HalfEdge *half_edge, double a, double b){
 	else{
 		resultY = a*resultX - b;
 	}
+
+	qDebug() << "resultX, resultY" << resultX << resultY;
 
 	if (k1 == INFINITY) {
 		if ((resultY >= y1 && resultY <= y2) || (resultY <= y1 && resultY >= y2))

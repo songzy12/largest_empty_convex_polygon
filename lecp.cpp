@@ -164,6 +164,7 @@ void LECP::clearToolBar() {
 
 //operationTB:slot
 void LECP::openFileSlot() {
+	resetPointsSlot();
 	QDir dir;
 	QString fileName = QFileDialog::getOpenFileName(this, QString("Open File"), dir.absolutePath());
 	if (fileName.isEmpty()){
