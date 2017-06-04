@@ -2,6 +2,11 @@
 
 This is a course project for Computational geometry of Tsinghua University, where we try to implement the method of reporting empty convex polygons from paper [1].
 
+## Video
+
+* 链接：http://pan.baidu.com/s/1eSxgBvk 
+* 密码：6vvx
+
 ## Report 
 
 * [Read & Edit Link](https://www.overleaf.com/9458081kkgxkngrhchd)

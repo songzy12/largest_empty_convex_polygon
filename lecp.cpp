@@ -449,7 +449,7 @@ void LECP::startShowSlot()
 			break;
 		}
 		case singlePoint:{
-			if (showVG) {
+			if (showVG || showChain) {
 				poly2show->clear();
 				int kernalSelected = getSortedIndex(pointSpinBox->value());
 				trans2Poly(kernalSelected);
@@ -817,6 +817,7 @@ Polygon* LECP::trans2Poly(int kernal_index)
 			_sleep(1500);
 		temp_vertices = poly2show->getConvexChain(showChain, showL, currMode);
 		temp_vertices.clear(); // why?   ans:只是想释放一下
+		paintWidget->allQLines2Draw.clear();
 		/*}*/
 	}
 	return poly2show;
