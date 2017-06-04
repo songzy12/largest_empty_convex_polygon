@@ -389,6 +389,8 @@ void LECP::startShowSlot()
 				}
 			}
 			poly2show->clear();
+			poly2show->getPaintWidget()->allQLines2Draw.clear();
+			
 			if (longest_convex_chain.size() > 2){
 				longest_convex_chain.push_back(longest_chain_kernel);
 				MyQline temp_edge;
@@ -427,6 +429,8 @@ void LECP::startShowSlot()
 
 			//_sleep(2000);
 			poly2show->clear();
+			poly2show->getPaintWidget()->allQLines2Draw.clear();
+
 			if (longest_convex_chain.size() > 2){
 				longest_convex_chain.push_back(longest_chain_kernel);
 				MyQline temp_edge;
@@ -694,6 +698,7 @@ void LECP::polarAngleSortDCELSlot() {
 	box.about(this, "running time", msg);
 	box.show();
 	*/
+
 }
 
 //DCEL ¶¯»­
