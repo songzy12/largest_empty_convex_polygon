@@ -15,7 +15,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &, const QString &
 	case QtWarningMsg:
 		txt = QString("Warning: %1").arg(msg);
 		break;
-	case QtCriticalMsg:
+	case QtCriticalMsg: 
 		txt = QString("Critical: %1").arg(msg);
 		break;
 	case QtFatalMsg:
