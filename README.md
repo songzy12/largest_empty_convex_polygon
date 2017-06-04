@@ -9,7 +9,6 @@ This is a course project for Computational geometry of Tsinghua University, wher
 
 ## Report 
 
-* [Read & Edit Link](https://www.overleaf.com/9458081kkgxkngrhchd)
 * [Read Only Link](https://www.overleaf.com/read/khbqxnhwbffx)
 
 ## Wiki
