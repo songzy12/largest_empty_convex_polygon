@@ -261,3 +261,4 @@ LECP.vcxproj
 lecp.cpp
 GeneratedFiles/ui_lecp.h
 GeneratedFiles/ui_lecp.h
+mesh.cpp
