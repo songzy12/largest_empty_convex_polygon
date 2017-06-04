@@ -688,11 +688,12 @@ void LECP::polarAngleSortDCELSlot() {
 
 	qDebug() << "DCEL polar angle sort:" << runTime << " ms," << points.size() << " points" << endl;
 
-	
+	/*
 	QString msg = "DCEL polar angle sort:" + QString::number(runTime) + "ms" + "," + QString::number(points.size()) + " points";
 	QMessageBox box;
 	box.about(this, "running time", msg);
 	box.show();
+	*/
 }
 
 //DCEL ¶¯»­

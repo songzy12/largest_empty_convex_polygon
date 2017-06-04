@@ -407,22 +407,15 @@ HalfEdge* Mesh::getIntersection(double a, double b, HalfEdge newHalf, Vertex &ne
 	HalfEdge *startEdge = newHalf.next();
 	Vertex* inter = intersection(newInectHalfEdge, a, b);
 
-<<<<<<< HEAD
-	while (inter == NULL){  //ËÀÑ­»·
-=======
 	int count = 0;
 	while (inter == NULL) {
->>>>>>> origin/master
+
 		newInectHalfEdge = newInectHalfEdge->next();
 		if (newInectHalfEdge == startEdge)
 			qDebug() << "inner infinite loop";
 		inter = intersection(newInectHalfEdge, a, b);
-<<<<<<< HEAD
-
-=======
 		count++;
 		qDebug() << "inner count:" << count;
->>>>>>> origin/master
 	}
 
 	newIntersection = *inter;
