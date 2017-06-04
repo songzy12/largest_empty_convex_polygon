@@ -358,6 +358,7 @@ void LECP::startShowSlot()
 		return ;
 		}*/
 		poly2show->clear();
+		poly2show->getPaintWidget()->allQLines2Draw.clear();
 		//dcel
 		if (showDCEL)
 		{
@@ -383,6 +384,7 @@ void LECP::startShowSlot()
 			Vertex * longest_chain_kernel = nullptr;
 			for (int kernal_index = kernalNum - 1; kernal_index >= 0; kernal_index--) {
 				poly2show->clear();
+				poly2show->getPaintWidget()->allQLines2Draw.clear();
 				trans2Poly(kernal_index);
 				if (poly2show->convex_chain_.size() > longest_convex_chain.size()) {
 					longest_convex_chain = poly2show->convex_chain_;
@@ -416,7 +418,8 @@ void LECP::startShowSlot()
 			longest_convex_chain.clear();
 			Vertex * longest_chain_kernel = nullptr;
 			for (int kernal_index = kernalNum - 1; kernal_index >= 0; kernal_index--) {
-				poly2show->clear();
+				poly2show->clear(); 
+				poly2show->getPaintWidget()->allQLines2Draw.clear();
 				trans2Poly(kernal_index);
 				if (poly2show->convex_chain_.size() > longest_convex_chain.size()) {
 					longest_convex_chain = poly2show->convex_chain_;
@@ -451,6 +454,7 @@ void LECP::startShowSlot()
 		}
 		case singlePoint:{
 			poly2show->clear();
+			poly2show->getPaintWidget()->allQLines2Draw.clear();
 			int kernalSelected = getSortedIndex(pointSpinBox->value());
 			trans2Poly(kernalSelected);
 			break; 

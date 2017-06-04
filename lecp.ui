@@ -65,7 +65,7 @@
      <string>打开文件</string>
     </property>
     <property name="toolTip">
-     <string>保存文件</string>
+     <string>打开文件</string>
     </property>
    </action>
    <action name="sortedDCEL">
