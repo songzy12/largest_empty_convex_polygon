@@ -99,6 +99,10 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 		pair<LECP_Point*, LECP_Point*> intersectionPair = {first, second};
 		
 		return_intersections.push_back(intersectionPair);
+
+		count++;
+		if (second)
+			qDebug() << "outer count:" << count << "intersection:" << first->x << first->y << "point:" << second->x << second->y;
 		//-----------end add new pair--------------------------------------------------
 
 		//sortedAngle.push_back(intersectHalfEdgeLeft->lecp_point);
@@ -106,7 +110,7 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 		// return tmpV and left,right
 		newHalf = intersectHalfEdgeLeft->twin();
 
-		qDebug() << "twin:" << newHalf << intersectHalfEdgeLeft;
+		qDebug() << "next inner loop start:" << newHalf;
 
 		newHalf->lecp_point = intersectHalfEdgeLeft->lecp_point;
 
@@ -123,9 +127,6 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point){
 		// for polar angle sort
 		// TODO: newRight->lecp_point may not be set
 		newRight->lecp_point = intersectHalfEdgeLeft->lecp_point;
-
-		count++;
-		qDebug() << "count" << count << "intersection:" << intersection->point().first << intersection->point().second;
 
 	    connectTwoNewVertices(newHalf,newRight,point);
 
@@ -350,8 +351,8 @@ Vertex* intersection(HalfEdge *half_edge, double a, double b){
 	double y2 = end->point().second;
 
 	if (half_edge->lecp_point)
-		qDebug() << "lecp point" << half_edge->lecp_point->x << half_edge->lecp_point->y;
-	qDebug() << "x1, y1, x2, y2" << x1 << y1 << x2 << y2;
+		qDebug() << "half_edge->lecp_point" << half_edge->lecp_point->x << half_edge->lecp_point->y;
+	qDebug() << "half_edge (x1, y1), (x2, y2)" << x1 << y1 << x2 << y2;
 
 	//ÅÐ¶ÏÊÇ·ñÆ½ÐÐ
 	double k1;
@@ -407,13 +408,13 @@ HalfEdge* Mesh::getIntersection(double a, double b, HalfEdge newHalf, Vertex &ne
 	Vertex* inter = intersection(newInectHalfEdge, a, b);
 
 	int count = 0;
-	while (inter == NULL){
+	while (inter == NULL) {
 		newInectHalfEdge = newInectHalfEdge->next();
 		if (newInectHalfEdge == startEdge)
-			qDebug() << "same edge encountered";
+			qDebug() << "inner infinite loop";
 		inter = intersection(newInectHalfEdge, a, b);
 		count++;
-		qDebug() << "getIntersection count:" << count;
+		qDebug() << "inner count:" << count;
 	}
 
 	newIntersection = *inter;
@@ -525,6 +526,7 @@ HalfEdge* Mesh::splitEdge(HalfEdge* half_edge,Vertex* vertex){
 		half_edges_.push_back(newRight);
 	}
 	else{
+		delete newRight;
 		newRight = NULL;
 	}
 	
@@ -537,9 +539,6 @@ HalfEdge* Mesh::splitEdge(HalfEdge* half_edge,Vertex* vertex){
 
 	if(!bb){
 		newRight->set_next(half_twin->next());
-	}
-	
-	if (!bb){
 		newRight->set_origin(vertex);
 		newRight->set_prev(half_twin);
 		newRight->set_twin(half_edge);
@@ -547,7 +546,6 @@ HalfEdge* Mesh::splitEdge(HalfEdge* half_edge,Vertex* vertex){
 	
 	//ÒÅÂ©
 	half_edge->next()->set_prev(newLeft);
-
 	half_edge->set_next(newLeft);
 	half_edge->set_twin(newRight);
 
@@ -555,11 +553,9 @@ HalfEdge* Mesh::splitEdge(HalfEdge* half_edge,Vertex* vertex){
 
 		//ÒÅÂ©
 		half_twin->next()->set_prev(newRight);
-
 		half_twin->set_next(newRight);
 		half_twin->set_twin(newLeft);
-	}
-	
+	}	
 
 	return newLeft;
 }
@@ -590,7 +586,6 @@ void Mesh::connectTwoNewVertices(HalfEdge* h1,HalfEdge* h2,LECP_Point *point){
 	h2->prev()->set_next(half_down);
 
 	h1->set_prev(half_down);
-
 	h2->set_prev(half_up);
 }
 

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <time.h>
 #include <vertex.h>
+#include <thread>
 #include "util.h"
 #include "lecp.h"
 #include "polygon.h"
@@ -363,8 +364,11 @@ void LECP::startShowSlot()
 			_sleep(1500);
 			clearDCELAnimationSlot();
 		}
-		else
+		else {
+			//std::thread t1(&LECP::polarAngleSortDCELSlot, this);
+			//t1.join();
 			polarAngleSortDCELSlot();
+		}
 
 		int kernalNum = mesh->sortedVector.size();
 
