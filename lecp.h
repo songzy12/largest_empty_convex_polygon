@@ -55,42 +55,42 @@ public slots:
 	void allPointsShowSlot();
 	void singlePointShowSlot();
 
-	//pointSelectTB µãÑ¡Ôñ-¹¤¾ßÀ¸:slot
+	//pointSelectTB ç‚¹é€‰æ‹©-å·¥å…·æ :slot
 	void lastPointSlot();
 	void nextPointSlot();
 
-	//strartShowTB ¿ªÊ¼ÑİÊ¾-¹¤¾ßÀ¸:slot
+	//strartShowTB å¼€å§‹æ¼”ç¤º-å·¥å…·æ :slot
 	void startShowSlot();
 	void resetShowSlot();
 
-	//showContentTB ÑİÊ¾ÄÚÈİ-¹¤¾ßÀ¸:slot
+	//showContentTB æ¼”ç¤ºå†…å®¹-å·¥å…·æ :slot
 	void onSortSelected(int flag);
 	void onVGSelected(int flag);
 	void onChainSelected(int flag);
 
-	//sortTB ÅÅĞò-¹¤¾ßÀ¸:slot
+	//sortTB æ’åº-å·¥å…·æ :slot
 	void onDCELSelected(int flag);
 
-	//qTB vg-¹¤¾ßÀ¸:slot
+	//qTB vg-å·¥å…·æ :slot
 	void onQueueSelected(int flag);
 
-	//lTB chain-¹¤¾ßÀ¸:slot
+	//lTB chain-å·¥å…·æ :slot
 	void onLSelected(int flag);
 
-	//showControlTB ËÙ¶È¿ØÖÆ-¹¤¾ßÀ¸:slot
+	//showControlTB é€Ÿåº¦æ§åˆ¶-å·¥å…·æ :slot
 	void changeSpeedSlot(int newSpeed);
 
-	//ÒÑÖªÆÁÄ»ÉÏÏÔÊ¾µÄÃ¿¸öµãµÄlabel(index)»ñÈ¡¸Ãµã¶ÔÓ¦µÄÅÅºÃĞòºóµÄindex(start with 0)
+	//å·²çŸ¥å±å¹•ä¸Šæ˜¾ç¤ºçš„æ¯ä¸ªç‚¹çš„label(index)è·å–è¯¥ç‚¹å¯¹åº”çš„æ’å¥½åºåçš„index(start with 0)
 	long long getSortedIndex(long long displayIndex);
 
-	void polarAngleSortSlot();//¶ÔÓÚÃ¿¸öÊäÈëµã£¬¸Ãµã×ó²àµÄËùÓĞµã°´ÕÕ¹ØÓÚ¸Ãµã½øĞĞ¼«½ÇÅÅĞò
+	void polarAngleSortSlot();//å¯¹äºæ¯ä¸ªè¾“å…¥ç‚¹ï¼Œè¯¥ç‚¹å·¦ä¾§çš„æ‰€æœ‰ç‚¹æŒ‰ç…§å…³äºè¯¥ç‚¹è¿›è¡Œæè§’æ’åº
 	void polarAngleSortDCELSlot();
 	vector<LECP_Point*>  preprocessingPolarAngleSort();
-	//DCEL ¶¯»­
+	//DCEL åŠ¨ç”»
 	void DCELAnimationSlot();
 	void clearDCELAnimationSlot();
 
-	//ÓÃÀ´¼ì²éµã
+	//ç”¨æ¥æ£€æŸ¥ç‚¹
 	bool checkPoints();
 
 public:

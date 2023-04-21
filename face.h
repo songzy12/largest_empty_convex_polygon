@@ -3,14 +3,14 @@
 
 class HalfEdge;
 
-//无洞
+//鏃犳礊
 class Face
 {
 public:
 	Face();
 	~Face();
 
-	HalfEdge* half_edge() { return half_edge_; }//面的半边，最左侧顶点对应的half_edge
+	HalfEdge* half_edge() { return half_edge_; }//闈㈢殑鍗婅竟锛屾渶宸︿晶椤剁偣瀵瑰簲鐨刪alf_edge
 	void set_half_edge(HalfEdge *half_edge) { half_edge_ = half_edge; }
 
 private:

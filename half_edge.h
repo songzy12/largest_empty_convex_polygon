@@ -26,8 +26,8 @@ public:
 	int L() { return L_; }
 	void set_L(int L) { L_ = L; }
 private:
-	Vertex *origin_;//2017-05-13 ĞŞ¸Äby zyx,Ô­ target_
-	HalfEdge *twin_;//µÃµ½ÁíÍâÒ»¸öÃæ
+	Vertex *origin_;//2017-05-13 ä¿®æ”¹by zyx,åŸ target_
+	HalfEdge *twin_;//å¾—åˆ°å¦å¤–ä¸€ä¸ªé¢
 	HalfEdge *next_;
 	HalfEdge *prev_;
 

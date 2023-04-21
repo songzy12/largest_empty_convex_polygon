@@ -16,10 +16,10 @@ public:
 	Vertex(double x, double y, int index);
 	~Vertex();
 
-	HalfEdge* half_edge() { return half_edge_; }//该顶点对应的半边
+	HalfEdge *half_edge() { return half_edge_; } // 璇ラ《鐐瑰搴旂殑鍗婅竟
 	void set_half_edge(HalfEdge *half_edge) { half_edge_ = half_edge; }
-	
-	pair<double, double> point() { return point_; }//顶点坐标
+
+	pair<double, double> point() { return point_; } // 椤剁偣鍧愭爣
 	void set_point(pair<double, double> point) { point_ = point; }
 
 	int index() { return index_; }
@@ -41,7 +41,7 @@ public:
 			return false;
 	}
 private:
-	HalfEdge *half_edge_;//每个Vertex对应多个half_edge,选择一个作为origin
+	HalfEdge *half_edge_; // 姣忎釜Vertex瀵瑰簲澶氫釜half_edge,閫夋嫨涓�涓綔涓簅rigin
 
 	/*only for test&debug ,can be used in animation*/
 	int index_;

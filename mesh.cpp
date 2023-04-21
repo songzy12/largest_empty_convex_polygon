@@ -9,7 +9,7 @@ using namespace std;
 #define  DELTA 0.000000000000001
 
 Mesh::Mesh() {
-	init();//DCEL³õÊ¼»¯
+	init();//DCELåˆå§‹åŒ–
 }
 
 Mesh::~Mesh() {
@@ -46,7 +46,7 @@ void Mesh::clear() {
 	}*/
 }
 
-//ÆÁÄ»ÉÏÔö¼ÓÒ»¸öµã£¬¶ÔÓ¦µÄ¶ÔÅ¼Í¼ÖĞÔö¼ÓÒ»ÌõÏß
+//å±å¹•ä¸Šå¢åŠ ä¸€ä¸ªç‚¹ï¼Œå¯¹åº”çš„å¯¹å¶å›¾ä¸­å¢åŠ ä¸€æ¡çº¿
 vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point) {
 	//The first is intersection,and the second is corresponding original user input point.
 	vector<pair<LECP_Point*, LECP_Point*>> return_intersections;
@@ -58,10 +58,10 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point) {
 
 	Vertex vRet;
 
-	//ÕÒµ½ĞÂ²åÈëµÄÖ±ÏßºÍbounding boxµÄÄÄ¸öÏß¶ÎÏà½»
+	//æ‰¾åˆ°æ–°æ’å…¥çš„ç›´çº¿å’Œbounding boxçš„å“ªä¸ªçº¿æ®µç›¸äº¤
 	HalfEdge *firstIntersect = getIntersectBoundingBox(a, b, vRet);
 
-	//ÕÒµ½½»µã£¬²¢ÇÒ¸üĞÂboudingBox
+	//æ‰¾åˆ°äº¤ç‚¹ï¼Œå¹¶ä¸”æ›´æ–°boudingBox
 	Vertex* v = new Vertex(vRet.point().first, vRet.point().second);
 
 	//qDebug() << "first intersection with bounding box: " << vRet.point().first << vRet.point().second;
@@ -72,13 +72,13 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point) {
 
 	// end intersection with bouding box
 
-	//¼ÆËã½ÓÏÂÀ´Ö±ÏßºÍÆ½ÃæÉÏÒÑÓĞÖ±ÏßµÄÒ»¸öÓÖÒ»¸öµÄ½»µã£¬ÖªµÀ×îºóµÄ½»µãÂäÔÚbounding boxÉÏ½áÊø
+	//è®¡ç®—æ¥ä¸‹æ¥ç›´çº¿å’Œå¹³é¢ä¸Šå·²æœ‰ç›´çº¿çš„ä¸€ä¸ªåˆä¸€ä¸ªçš„äº¤ç‚¹ï¼ŒçŸ¥é“æœ€åçš„äº¤ç‚¹è½åœ¨bounding boxä¸Šç»“æŸ
 
 	Vertex* newIntersection = new Vertex();
-	HalfEdge* intersectHalfEdgeLeft;//Ô­À´µÄ
+	HalfEdge* intersectHalfEdgeLeft;//åŸæ¥çš„
 	
-	// rightÔİÊ±²»¿¼ÂÇ
-	intersectHalfEdgeLeft = getIntersection(a, b, *newHalf, *newIntersection);//·µ»ØÖ±ÏßºÍÃæÖĞÓĞ½»µãµÄ°ë±ßºÍ½»µã×ø±ê
+	// rightæš‚æ—¶ä¸è€ƒè™‘
+	intersectHalfEdgeLeft = getIntersection(a, b, *newHalf, *newIntersection);//è¿”å›ç›´çº¿å’Œé¢ä¸­æœ‰äº¤ç‚¹çš„åŠè¾¹å’Œäº¤ç‚¹åæ ‡
 
 	HalfEdge* intersectHalfEdgeRight = splitEdge(intersectHalfEdgeLeft,newIntersection);
 
@@ -88,10 +88,10 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point) {
 	// TODO: check whether intersectHalfEdgeLeft->lecp_point is set?
 	intersectHalfEdgeRight->lecp_point = intersectHalfEdgeLeft->lecp_point;
 
-	//ÅĞ¶Ïµ±Ç°µÄ½»µãÊÇ·ñÔÚbounding boxÉÏ
+	//åˆ¤æ–­å½“å‰çš„äº¤ç‚¹æ˜¯å¦åœ¨bounding boxä¸Š
 	bool onBB = onBoundingBox(newIntersection);
 	int count = 0;
-	while (!onBB) { //ËÀÑ­»·
+	while (!onBB) { //æ­»å¾ªç¯
 		//---------------start add new pair--------------------------------------------------------
 		// add a new intersection vertex to the return vector.
 		LECP_Point* first = new LECP_Point(newIntersection->point().first, newIntersection->point().second, -1);
@@ -131,22 +131,22 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point) {
 
 	    connectTwoNewVertices(newHalf,newRight,point);
 
-		//ÅĞ¶Ïµ±Ç°µÄ½»µãÊÇ·ñÔÚbounding boxÉÏ
+		//åˆ¤æ–­å½“å‰çš„äº¤ç‚¹æ˜¯å¦åœ¨bounding boxä¸Š
 		onBB = onBoundingBox(intersection);
 
-		//¸üĞÂ±äÁ¿
+		//æ›´æ–°å˜é‡
 		intersectHalfEdgeRight = newRight;
 		newIntersection = intersection;
 	}
 
-	//×îºóÒ»¸ö½»µã
+	//æœ€åä¸€ä¸ªäº¤ç‚¹
 	intersectHalfEdgeRight->set_twin(NULL);
 	boundingBox.push_back(intersectHalfEdgeRight);
 
-	// ½»µãµÄË³Ğò¿ÉÄÜÕıºÃÏà·´£¬ºÍĞÂ²åÈëµÄÖ±ÏßÓëÄÄ¸öbounding boxÊ×ÏÈÏà½»ÓĞ¹Ø£¨Ã¿ÌõĞÂ²åÈëµÄÖ±Ïß¶¼ºÍÁ½¸öbounding boxÏà½»£©
+	// äº¤ç‚¹çš„é¡ºåºå¯èƒ½æ­£å¥½ç›¸åï¼Œå’Œæ–°æ’å…¥çš„ç›´çº¿ä¸å“ªä¸ªbounding boxé¦–å…ˆç›¸äº¤æœ‰å…³ï¼ˆæ¯æ¡æ–°æ’å…¥çš„ç›´çº¿éƒ½å’Œä¸¤ä¸ªbounding boxç›¸äº¤ï¼‰
 
-	//postAjustIntersections(sortedAngle);// 2017-05-24Ìí¼Ó
-	postAjustIntersections(return_intersections);// 2017-05-24Ìí¼Ó
+	//postAjustIntersections(sortedAngle);// 2017-05-24æ·»åŠ 
+	postAjustIntersections(return_intersections);// 2017-05-24æ·»åŠ 
 
 	//save current kernel's polar angle sorted result
 	//sortedPoint.push_back(sortedAngle);
@@ -154,7 +154,7 @@ vector<pair<LECP_Point*, LECP_Point*>>  Mesh::AddLine(LECP_Point *point) {
 	return return_intersections;
 }
 
-// 2017-05-24Ìí¼Ó
+// 2017-05-24æ·»åŠ 
 void Mesh::postAjustIntersections(list<LECP_Point*>  &return_intersections){
 	if (return_intersections.size() <= 2)
 		return;
@@ -171,7 +171,7 @@ void Mesh::postAjustIntersections(list<LECP_Point*>  &return_intersections){
 	}
 }
 
-// 2017-05-24Ìí¼Ó
+// 2017-05-24æ·»åŠ 
 void Mesh::postAjustIntersections(vector<pair<LECP_Point*, LECP_Point*>>  &return_intersections){
 	if (return_intersections.size() < 2)
 		return;
@@ -265,7 +265,7 @@ HalfEdge*  Mesh::getIntersectHalfEdge(double a, double b){
 	while (it != half_edges_.end()){
 		HalfEdge* tmp = *it++;
 
-		//ÅĞ¶Ï°ë±ßÓëÖ±ÏßÊÇ·ñÓĞ½»µã
+		//åˆ¤æ–­åŠè¾¹ä¸ç›´çº¿æ˜¯å¦æœ‰äº¤ç‚¹
 		Vertex* intersect = intersectWithBoundingBox(tmp,a,b);
 		if (intersect!=NULL){
 			return tmp;
@@ -275,12 +275,12 @@ HalfEdge*  Mesh::getIntersectHalfEdge(double a, double b){
 	return NULL;
 }
 
-//ÅĞ¶ÏÖ±Ïßy=ax-bÓë°ë±ßtmpÊÇ·ñÓĞ½»µã,Èç¹ûÓĞ£¬Ôò·µ»Ø½»µã£¬·ñÔòÎªNULL
+//åˆ¤æ–­ç›´çº¿y=ax-bä¸åŠè¾¹tmpæ˜¯å¦æœ‰äº¤ç‚¹,å¦‚æœæœ‰ï¼Œåˆ™è¿”å›äº¤ç‚¹ï¼Œå¦åˆ™ä¸ºNULL
 Vertex*  Mesh::intersectWithBoundingBox(HalfEdge* tmp, double a, double b){
 	double half_x = MAX_X;
 	double half_y = MAX_Y;
 
-	//ÅĞ¶Ïµ±Ç°half_edgeËùÔÚµÄboudingBoxµÄ±ß
+	//åˆ¤æ–­å½“å‰half_edgeæ‰€åœ¨çš„boudingBoxçš„è¾¹
 	double x1 = tmp->origin()->point().first;
 	double y1 = tmp->origin()->point().second;
 
@@ -290,8 +290,8 @@ Vertex*  Mesh::intersectWithBoundingBox(HalfEdge* tmp, double a, double b){
 	Vertex* re = new Vertex();
 
 
-	//4ÖÖÇé¿ö
-	if (x1 == x2 && x1 == -half_x){//×ó²à±ß½ç Ïß¶Îx=-half_x
+	//4ç§æƒ…å†µ
+	if (x1 == x2 && x1 == -half_x){//å·¦ä¾§è¾¹ç•Œ çº¿æ®µx=-half_x
 
 		double tmpY = a* x1 - b;
 
@@ -354,10 +354,10 @@ Vertex*  Mesh::intersectWithBoundingBox(HalfEdge* tmp, double a, double b){
 	return NULL;
 }
 
-//ÅĞ¶Ïhalf_edgeÓëÖ±Ïßy=ax-bÊÇ·ñÓĞ½»µã£¬if intersect,return the Vertex,else return null
-// half_edgeÃ»ÓĞnext
+//åˆ¤æ–­half_edgeä¸ç›´çº¿y=ax-bæ˜¯å¦æœ‰äº¤ç‚¹ï¼Œif intersect,return the Vertex,else return null
+// half_edgeæ²¡æœ‰next
 Vertex* intersection(HalfEdge *half_edge, double a, double b){
-	//Ïß¶ÎµÄÆğµãºÍÖÕµã
+	//çº¿æ®µçš„èµ·ç‚¹å’Œç»ˆç‚¹
 	Vertex* start = half_edge->origin();
 
 	HalfEdge* tmpHalf = half_edge->next();
@@ -372,16 +372,16 @@ Vertex* intersection(HalfEdge *half_edge, double a, double b){
 	//	qDebug() << "half_edge->lecp_point" << half_edge->lecp_point->x << half_edge->lecp_point->y;
 	//qDebug() << "half_edge (x1, y1), (x2, y2)" << x1 << y1 << x2 << y2;
 
-	//ÅĞ¶ÏÊÇ·ñÆ½ĞĞ
+	//åˆ¤æ–­æ˜¯å¦å¹³è¡Œ
 	double k1;
-	if ((end->point().first - start->point().first) == 0){ //´¹Ö±ÓÚºá×ø±êÖáÇé¿ö£¬Ğ±ÂÊÉèÖÃÎªÕıÎŞÇî£¬ÓÃINFINITY´úÌæ
+	if ((end->point().first - start->point().first) == 0){ //å‚ç›´äºæ¨ªåæ ‡è½´æƒ…å†µï¼Œæ–œç‡è®¾ç½®ä¸ºæ­£æ— ç©·ï¼Œç”¨INFINITYä»£æ›¿
 		k1 = INFINITY;
 	}
 	else{
 		k1 = (end->point().second - start->point().second) / (end->point().first - start->point().first);
 	}
 	double k2 = a;
-	if (abs(k1 - k2) <= DELTA)//Ğ±ÂÊÏàÍ¬
+	if (abs(k1 - k2) <= DELTA)//æ–œç‡ç›¸åŒ
 		return NULL;
 
 	double resultX;
@@ -393,7 +393,7 @@ Vertex* intersection(HalfEdge *half_edge, double a, double b){
 	}
 
 	double resultY;
-	if (k1 == 0){//Æ½ĞĞ×ø±êÖá
+	if (k1 == 0){//å¹³è¡Œåæ ‡è½´
 		resultY = y1;
 	}
 	else{
@@ -410,7 +410,7 @@ Vertex* intersection(HalfEdge *half_edge, double a, double b){
 			return NULL;
 	}
 
-	if (abs(resultY)> MAX_Y || abs(resultX) >MAX_X) { //½»µã×ø±ê´óÓÚãĞÖµ£¬ÔòÈÏÎªÁ½ÌõÖ±ÏßÆ½ĞĞ
+	if (abs(resultY)> MAX_Y || abs(resultX) >MAX_X) { //äº¤ç‚¹åæ ‡å¤§äºé˜ˆå€¼ï¼Œåˆ™è®¤ä¸ºä¸¤æ¡ç›´çº¿å¹³è¡Œ
 		return NULL;
 	}
 
@@ -420,9 +420,9 @@ Vertex* intersection(HalfEdge *half_edge, double a, double b){
 	return NULL;
 }
 
-//newIntersection,intersectHalfEdge,intersectHalfEdgeRight×÷Îª·µ»Ø½á¹û
+//newIntersection,intersectHalfEdge,intersectHalfEdgeRightä½œä¸ºè¿”å›ç»“æœ
 HalfEdge* Mesh::getIntersection(double a, double b, HalfEdge newHalf, Vertex &newIntersection){
-	//ÑØ×ÅĞÂ²úÉúµÄhalf_edgeÕÒµ½µ±Ç°faceÖĞÓëÖ±Ïßy=ax-bÓĞ½»µãµÄhalf_edge
+	//æ²¿ç€æ–°äº§ç”Ÿçš„half_edgeæ‰¾åˆ°å½“å‰faceä¸­ä¸ç›´çº¿y=ax-bæœ‰äº¤ç‚¹çš„half_edge
 	HalfEdge *newInectHalfEdge = newHalf.next();
 	HalfEdge *startEdge = newHalf.next();
 	Vertex* inter = intersection(newInectHalfEdge, a, b);
@@ -459,7 +459,7 @@ HalfEdge*  Mesh::getIntersectBoundingBox(double a, double b, Vertex &vertex){
 	while (it != boundingBox.end()){
 		firstHalfEdge = *it++;
 
-		//ÅĞ¶Ï°ë±ßÓëÖ±ÏßÊÇ·ñÓĞ½»µã
+		//åˆ¤æ–­åŠè¾¹ä¸ç›´çº¿æ˜¯å¦æœ‰äº¤ç‚¹
 		Vertex *re = intersectWithBoundingBox(firstHalfEdge, a, b);
 
 		if (re != NULL){
@@ -472,12 +472,12 @@ HalfEdge*  Mesh::getIntersectBoundingBox(double a, double b, Vertex &vertex){
 	return NULL;
 }
 
-//´¦ÀíÖĞ¼äµÄ½»µã
-//·µ»ØnewPoHºÍnewNeH
+//å¤„ç†ä¸­é—´çš„äº¤ç‚¹
+//è¿”å›newPoHå’ŒnewNeH
 // Not used yet
 void Mesh::dealWithNormalIntersection(Vertex* newIntersection, HalfEdge* intersectHalfEdgeLeft, HalfEdge* intersectHalfEdgeRight, HalfEdge* newPoH, HalfEdge* newNeH){
 
-	//²úÉúÁ½ÌõĞÂµÄHalfEdge
+	//äº§ç”Ÿä¸¤æ¡æ–°çš„HalfEdge
 	HalfEdge *alHL = new HalfEdge();
 	HalfEdge *alHR = intersectHalfEdgeRight->twin();
 
@@ -512,11 +512,11 @@ void Mesh::postCalcPolarAngle(){
 
 		list<LECP_Point*> tmpPoints = sortedPoint[i];
 		list<LECP_Point*>::iterator it = tmpPoints.begin();
-		LECP_Point *pole = *it++;//±ê¸Ëµã
+		LECP_Point *pole = *it++;//æ ‡æ†ç‚¹
 
 		tmpList.push_back(pole);
 
-		while (it != tmpPoints.end()){//¶ÔÆäºóµÄÃ¿¸öµã½øĞĞ´¦Àí
+		while (it != tmpPoints.end()){//å¯¹å…¶åçš„æ¯ä¸ªç‚¹è¿›è¡Œå¤„ç†
 			LECP_Point* tmpPoint = *it++;
 			tmpList.push_back(tmpPoint);
 		}
@@ -565,14 +565,14 @@ HalfEdge* Mesh::splitEdge(HalfEdge* half_edge,Vertex* vertex){
 		newRight->set_twin(half_edge);
 	}
 	
-	//ÒÅÂ©
+	//é—æ¼
 	half_edge->next()->set_prev(newLeft);
 	half_edge->set_next(newLeft);
 	half_edge->set_twin(newRight);
 
 	if(!bb){
 
-		//ÒÅÂ©
+		//é—æ¼
 		half_twin->next()->set_prev(newRight);
 		half_twin->set_next(newRight);
 		half_twin->set_twin(newLeft);
@@ -602,7 +602,7 @@ void Mesh::connectTwoNewVertices(HalfEdge* h1,HalfEdge* h2,LECP_Point *point){
 	half_down->set_prev(h2->prev());
 	half_down->set_twin(half_up);
 
-	//ÒÅÂ©
+	//é—æ¼
 	h1->prev()->set_next(half_up);
 	h2->prev()->set_next(half_down);
 
@@ -610,7 +610,7 @@ void Mesh::connectTwoNewVertices(HalfEdge* h1,HalfEdge* h2,LECP_Point *point){
 	h2->set_prev(half_up);
 }
 
-//½«ĞÂ²åÈëµÄÖ±Ïß¹¹³ÉµÄ½»µãlist´æ·Åµ½sortedPointÖĞ£¬²¢´¦ÀíÈıµã¹²xµÄÇé¿ö
+//å°†æ–°æ’å…¥çš„ç›´çº¿æ„æˆçš„äº¤ç‚¹listå­˜æ”¾åˆ°sortedPointä¸­ï¼Œå¹¶å¤„ç†ä¸‰ç‚¹å…±xçš„æƒ…å†µ
 void Mesh::addCurrentAngleSortedResultToVector(LECP_Point *point, vector<pair<LECP_Point*, LECP_Point*>> lecp_points, vector<LECP_Point*> points){
 
 	list<LECP_Point*> sortedAngle;// kernel point's sorted result.
@@ -628,7 +628,7 @@ void Mesh::addCurrentAngleSortedResultToVector(LECP_Point *point, vector<pair<LE
 	long long index = it - points.begin();
 	index++;
 	// TODO: not only the same x
-	// yÔ½Ğ¡£¬¼«½ÇÔ½´ó
+	// yè¶Šå°ï¼Œæè§’è¶Šå¤§
 	int temp = index;
 	while (index<points.size() && points[index]->x == point->x){
 		index++;

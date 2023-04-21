@@ -26,11 +26,11 @@ public:
 	void setShowL(bool showL);
 public:
 	QColor color_;
-	//ÊÇ·ñÊ¹ÓÃĞéÏß·ç¸ñ
+	//æ˜¯å¦ä½¿ç”¨è™šçº¿é£æ ¼
 	bool use_dot_style_;
-	//ÊÇ·ñ´ø¼ıÍ·
+	//æ˜¯å¦å¸¦ç®­å¤´
 	bool have_arrow_;
-	//ÊÇ·ñÏÔÊ¾ÊıÖµL
+	//æ˜¯å¦æ˜¾ç¤ºæ•°å€¼L
 	bool show_l_;
 	int L_;
 };

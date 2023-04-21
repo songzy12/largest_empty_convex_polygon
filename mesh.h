@@ -20,43 +20,43 @@ public:
 	//the first is the intersection point, and the second is the corresponding point user input.
 	vector<pair<LECP_Point*,LECP_Point*>> AddLine(LECP_Point *point);// return the intersections
 
-	void init();//³õÊ¼»¯£¬bounding box, one face,4 half_edge,4 vertex
+	void init();//åˆå§‹åŒ–ï¼Œbounding box, one face,4 half_edge,4 vertex
 	void clear();
 	HalfEdge*  getIntersectHalfEdge(double a,double b);
 	Vertex* intersectWithBoundingBox(HalfEdge* tmp,double a,double b);
 
-	//µÃµ½ĞÂ²åÈëµÄÖ±ÏßºÍµ±Ç°ÃæµÄ½»µã.
-	//´ÓnewHalfEdgeµÄnext¿ªÊ¼ÅĞ¶ÏÊÇ·ñÓĞ½»µã
-	//·µ»ØµÄnewIntersectionÖĞ±£´æ½»µãVertex
-	//·µ»ØµÄintersectHalfEdge±£´æµ±Ç°faceµÄÄÄÌõhalf_edgeºÍÖ±Ïßy=ax-bÏà½»
+	//å¾—åˆ°æ–°æ’å…¥çš„ç›´çº¿å’Œå½“å‰é¢çš„äº¤ç‚¹.
+	//ä»newHalfEdgeçš„nextå¼€å§‹åˆ¤æ–­æ˜¯å¦æœ‰äº¤ç‚¹
+	//è¿”å›çš„newIntersectionä¸­ä¿å­˜äº¤ç‚¹Vertex
+	//è¿”å›çš„intersectHalfEdgeä¿å­˜å½“å‰faceçš„å“ªæ¡half_edgeå’Œç›´çº¿y=ax-bç›¸äº¤
 	HalfEdge* getIntersection(double a, double b, HalfEdge newHalf, Vertex &newIntersection);
 	bool onBoundingBox(Vertex* newIntersection);
 
 	HalfEdge* getIntersectBoundingBox(double a, double b, Vertex &vertex);
 
-	//poHºÍneHÊÇÉÏÒ»²½²úÉúµÄĞÂ±ß¶ÔÓ¦µÄÁ½¸öhalf_edge,ÔÚÏÂÒ»²½ĞèÒª¸üĞÂÄ³Ğ©×Ö¶Î
-	//newPoHºÍnew neHÊÇ¸Ã²½ĞÂ²úÉúµÄ±ß¶ÔÓ¦µÄÁ½¸öhalf_edge
-	void dealWithNormalIntersection(Vertex* newIntersection, HalfEdge* intersectHalfEdgeLeft, HalfEdge* intersectHalfEdgeRight, HalfEdge* newPoH, HalfEdge* newNeH);//´¦ÀíÖĞ¼äµÄ½»µã
+	//poHå’ŒneHæ˜¯ä¸Šä¸€æ­¥äº§ç”Ÿçš„æ–°è¾¹å¯¹åº”çš„ä¸¤ä¸ªhalf_edge,åœ¨ä¸‹ä¸€æ­¥éœ€è¦æ›´æ–°æŸäº›å­—æ®µ
+	//newPoHå’Œnew neHæ˜¯è¯¥æ­¥æ–°äº§ç”Ÿçš„è¾¹å¯¹åº”çš„ä¸¤ä¸ªhalf_edge
+	void dealWithNormalIntersection(Vertex* newIntersection, HalfEdge* intersectHalfEdgeLeft, HalfEdge* intersectHalfEdgeRight, HalfEdge* newPoH, HalfEdge* newNeH);//å¤„ç†ä¸­é—´çš„äº¤ç‚¹
 
 	//void  preprocessingPolarAngleSort();
 	void  postCalcPolarAngle();
 
-	void postAjustIntersections(list<LECP_Point*>  &return_intersections);// 2017-05-24Ìí¼Ó
-	void postAjustIntersections(vector<pair<LECP_Point*, LECP_Point*>>  &return_intersections);// 2017-05-24Ìí¼Ó
+	void postAjustIntersections(list<LECP_Point*>  &return_intersections);// 2017-05-24æ·»åŠ 
+	void postAjustIntersections(vector<pair<LECP_Point*, LECP_Point*>>  &return_intersections);// 2017-05-24æ·»åŠ 
 
 	// Added by zyx,2017-05-25
 	// return the new halfEdge
 	HalfEdge* splitEdge(HalfEdge* half_edge,Vertex* vertex);
 	void connectTwoNewVertices(HalfEdge* h1,HalfEdge* h2,LECP_Point *point);
 
-	//½«ĞÂ²åÈëµÄÖ±Ïß¹¹³ÉµÄ½»µãlist´æ·Åµ½sortedPointÖĞ£¬²¢´¦ÀíÈıµã¹²xµÄÇé¿ö
+	//å°†æ–°æ’å…¥çš„ç›´çº¿æ„æˆçš„äº¤ç‚¹listå­˜æ”¾åˆ°sortedPointä¸­ï¼Œå¹¶å¤„ç†ä¸‰ç‚¹å…±xçš„æƒ…å†µ
 	void addCurrentAngleSortedResultToVector(LECP_Point *point, vector<pair<LECP_Point*, LECP_Point*>> lecp_points, vector<LECP_Point*> points);
 
 private:
 	list<Vertex*> vertices_;
 	list<HalfEdge*> half_edges_;
 
-	list<HalfEdge*> boundingBox;//±£´æ±ß½çµÄHalfEdge,ÓÃÒÔÈ·¶¨ĞÂ²åÈëµÄÖ±ÏßÊ×ÏÈ´©¹ıÄÄ¸öface
+	list<HalfEdge*> boundingBox;//ä¿å­˜è¾¹ç•Œçš„HalfEdge,ç”¨ä»¥ç¡®å®šæ–°æ’å…¥çš„ç›´çº¿é¦–å…ˆç©¿è¿‡å“ªä¸ªface
 
 public:
 	vector<list<Vertex*>> sortedVector;

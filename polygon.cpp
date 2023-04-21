@@ -5,9 +5,9 @@
 #include <functional> 
 #include <iterator> 
 /////////////////////////////////////////////
-// red: kernal ¼°kernal ×ó²àµÄµã
-// black £º kernal ÓÒ²àµÄµã
-// yellow£º
+// red: kernal åŠkernal å·¦ä¾§çš„ç‚¹
+// black ï¼š kernal å³ä¾§çš„ç‚¹
+// yellowï¼š
 // green:
 ////////////////////////////////////////////
 Polygon::Polygon() {
@@ -88,10 +88,10 @@ bool Polygon::comparePolar(Vertex* p, Vertex* q){
 	return area < 0;
 }
 
-//¼«½Ç´ÓĞ¡µ½´óÅÅÁĞ¡£ÔİÊ±²»ÓÃ
+//æè§’ä»å°åˆ°å¤§æ’åˆ—ã€‚æš‚æ—¶ä¸ç”¨
 vector<Vertex*> Polygon::getStarPolygon() {
 	vector<Vertex*>::iterator it = vertices_.begin();	
-	//to left test½øĞĞ¼«½ÇÅÅĞò
+	//to left testè¿›è¡Œæè§’æ’åº
 	//sort(vertices_.begin() + 1, vertices_.end(), std::bind(&Polygon::comparePolar, this, std::placeholders::_1, std::placeholders::_2));
 	return vertices_;
 }
@@ -101,7 +101,7 @@ in creating visibility graph*/
 
 
 
-//¶¯»­°æ
+//åŠ¨ç”»ç‰ˆ
 void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j, int index_i, int index_j, bool showVG, bool showQ, int currMode)
 {
 	while ((!(i->Q_.empty())) && toLeft(i->Q_.front(), i, j)){
@@ -135,9 +135,9 @@ void Polygon::proceedNeighborPoints(Vertex* i, Vertex* j, int index_i, int index
 		this->paint_widget_->repaint();
 	//_sleep(sleepTime() * 100);
 
-	//ÉÏÒ»´ÎµÄÌí¼ÓµÄhalfedge×ªÎªÄ¬ÈÏÉ«
+	//ä¸Šä¸€æ¬¡çš„æ·»åŠ çš„halfedgeè½¬ä¸ºé»˜è®¤è‰²
 	int last = this->paint_widget_->allQLines2Draw.size() - 1;
-	if (this->paint_widget_->allQLines2Draw[last].getColor() == Qt::red)//Ö®Ç°ÊÇblue
+	if (this->paint_widget_->allQLines2Draw[last].getColor() == Qt::red)//ä¹‹å‰æ˜¯blue
 	{
 		this->paint_widget_->allQLines2Draw[last].setColor(Qt::green);
 	}

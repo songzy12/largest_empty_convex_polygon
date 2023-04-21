@@ -10,7 +10,7 @@
 #define MAX_X 80000000000
 #define MAX_Y 60000000000
 
-//°´ÕÕºá×ø±ê´Ó×óÏòÓÒÅÅÁĞ
+//æŒ‰ç…§æ¨ªåæ ‡ä»å·¦å‘å³æ’åˆ—
 bool comparePoint(LECP_Point *a, LECP_Point *b);
 
 /*toLeft test

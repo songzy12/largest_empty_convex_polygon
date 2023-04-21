@@ -41,7 +41,7 @@ LECP::LECP(QWidget *parent)
 	poly2show = new Polygon(paintWidget);
 	poly2show->setSleepTime(showspeed); // TODO: semantic
 
-	createToolBar();    //´´½¨¹¤¾ßÀ¸ 
+	createToolBar();    //åˆ›å»ºå·¥å…·æ  
 	this->addToolBarBreak();
 	//operationTB:action
 	QObject::connect(ui.openFile, SIGNAL(triggered()), this, SLOT(openFileSlot()));
@@ -52,14 +52,14 @@ LECP::LECP(QWidget *parent)
 	QObject::connect(ui.allPointsShow, SIGNAL(triggered()), this, SLOT(allPointsShowSlot()));
 	QObject::connect(ui.singlePointShow, SIGNAL(triggered()), this, SLOT(singlePointShowSlot()));
 
-	//pointSelectTB µãÑ¡Ôñ-¹¤¾ßÀ¸:action
+	//pointSelectTB ç‚¹é€‰æ‹©-å·¥å…·æ :action
 	QObject::connect(ui.lastPoint, SIGNAL(triggered()), this, SLOT(lastPointSlot()));
 	QObject::connect(ui.nextPoint, SIGNAL(triggered()), this, SLOT(nextPointSlot()));
 
-	//strartShowTB ¿ªÊ¼ÑİÊ¾-¹¤¾ßÀ¸:action
+	//strartShowTB å¼€å§‹æ¼”ç¤º-å·¥å…·æ :action
 	QObject::connect(ui.startShow, SIGNAL(triggered()), this, SLOT(startShowSlot()));
 
-	//DCEL ¶¯»­
+	//DCEL åŠ¨ç”»
 	QObject::connect(ui.DCEL_animation, SIGNAL(triggered()), this, SLOT(DCELAnimationSlot()));
 	QObject::connect(ui.clearDCELAnimation, SIGNAL(triggered()), this, SLOT(clearDCELAnimationSlot()));
 }
@@ -74,7 +74,7 @@ LECP::~LECP()
 
 void LECP::createToolBar()
 {
-	//¹¤¾ßÀ¸ 
+	//å·¥å…·æ  
 	this->ui.pointSelectTB->hide();
 	this->ui.strartShowTB->hide();
 	this->ui.showContentTB->hide();
@@ -83,7 +83,7 @@ void LECP::createToolBar()
 	this->ui.lTB->hide();
 	this->ui.showControlTB->hide();
 
-	//pointSelectTB µãÑ¡Ôñ-¹¤¾ßÀ¸
+	//pointSelectTB ç‚¹é€‰æ‹©-å·¥å…·æ 
 	QLabel* psLabel= new QLabel(tr("select a point to show animation: "));
 	pointSpinBox = new QSpinBox(this);
 	pointSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
@@ -93,7 +93,7 @@ void LECP::createToolBar()
 	pointSpinBox->setSingleStep(1);
 	this->ui.pointSelectTB->insertWidget(this->ui.nextPoint, pointSpinBox);
 
-	//showContentTB ÑİÊ¾ÄÚÈİ-¹¤¾ßÀ¸
+	//showContentTB æ¼”ç¤ºå†…å®¹-å·¥å…·æ 
 	QLabel* contentLabel = new QLabel(tr("show contents:     "));
 	sortComboBox = new QCheckBox(tr("1.sort    "));
 	vgComboBox = new QCheckBox(tr("2.VG    "));
@@ -107,22 +107,22 @@ void LECP::createToolBar()
 	connect(vgComboBox, SIGNAL(stateChanged(int)), this, SLOT(onVGSelected(int)));
 	connect(chainComboBox, SIGNAL(stateChanged(int)), this, SLOT(onChainSelected(int)));
 
-	//sortTB ÅÅĞò-¹¤¾ßÀ¸
+	//sortTB æ’åº-å·¥å…·æ 
 	dcelComboBox = new QCheckBox(tr("dcel sort"));
 	this->ui.sortTB->addWidget(dcelComboBox);
 	connect(dcelComboBox, SIGNAL(stateChanged(int)), this, SLOT(onDCELSelected(int)));
 
-	//qTB vg-¹¤¾ßÀ¸
+	//qTB vg-å·¥å…·æ 
 	qComboBox = new QCheckBox(tr("show Q"));
 	this->ui.qTB->addWidget(qComboBox);
 	connect(qComboBox, SIGNAL(stateChanged(int)), this, SLOT(onQueueSelected(int)));
 
-	//lTB chain-¹¤¾ßÀ¸
+	//lTB chain-å·¥å…·æ 
 	lComboBox = new QCheckBox(tr("show L"));
 	this->ui.lTB->addWidget(lComboBox);
 	connect(lComboBox, SIGNAL(stateChanged(int)), this, SLOT(onLSelected(int)));
 
-	//showControlTB ËÙ¶È¿ØÖÆ-¹¤¾ßÀ¸
+	//showControlTB é€Ÿåº¦æ§åˆ¶-å·¥å…·æ 
 	QLabel* speedLabel = new QLabel(tr("show speed:    "));
 
 	speedSpinBox = new QSpinBox(this);
@@ -219,7 +219,7 @@ void LECP::randomPointsGenerationSlot(){
 
 void LECP::finalResultShowSlot()
 {
-	//¿Ø¼şÏÔÊ¾¿ØÖÆ
+	//æ§ä»¶æ˜¾ç¤ºæ§åˆ¶
 	this->ui.pointSelectTB->hide();
 	this->ui.strartShowTB->show();
 	this->ui.showContentTB->hide();
@@ -235,7 +235,7 @@ void LECP::finalResultShowSlot()
 	showQ = false;
 	showL = false;
 	
-	//ÑİÊ¾Ä£Ê½ÉèÖÃ
+	//æ¼”ç¤ºæ¨¡å¼è®¾ç½®
 	currMode = finalRes;
 	if (pointSpinBox->value() >= 0 && pointSpinBox->value() < paintWidget->myQPoints.size())
 		paintWidget->myQPoints.at(pointSpinBox->value())->setColor(Qt::red); 
@@ -244,7 +244,7 @@ void LECP::finalResultShowSlot()
 
 void LECP::allPointsShowSlot()
 {
-	//¿Ø¼şÏÔÊ¾¿ØÖÆ
+	//æ§ä»¶æ˜¾ç¤ºæ§åˆ¶
 	this->ui.pointSelectTB->hide();
 	if (showSort || showVG ||showChain)
 		this->ui.strartShowTB->show();
@@ -269,7 +269,7 @@ void LECP::allPointsShowSlot()
 
 	this->ui.showControlTB->show();
 
-	//ÑİÊ¾Ä£Ê½ÉèÖÃ
+	//æ¼”ç¤ºæ¨¡å¼è®¾ç½®
 	currMode = allPoints;
 	if (pointSpinBox->value() >= 0 && pointSpinBox->value() < paintWidget->myQPoints.size())
 		paintWidget->myQPoints.at(pointSpinBox->value())->setColor(Qt::red);
@@ -278,7 +278,7 @@ void LECP::allPointsShowSlot()
 
 void LECP::singlePointShowSlot()
 {
-	//¿Ø¼şÏÔÊ¾¿ØÖÆ
+	//æ§ä»¶æ˜¾ç¤ºæ§åˆ¶
 	this->ui.pointSelectTB->show();
 
 	if (showSort || showVG || showChain)
@@ -304,10 +304,10 @@ void LECP::singlePointShowSlot()
 
 	this->ui.showControlTB->show();
 
-	//ÑİÊ¾Ä£Ê½ÉèÖÃ
+	//æ¼”ç¤ºæ¨¡å¼è®¾ç½®
 	currMode = singlePoint;
 
-	//Ä¬ÈÏÑ¡Ôñ0ºÅµã
+	//é»˜è®¤é€‰æ‹©0å·ç‚¹
 	if (paintWidget->myQPoints.size() != 0){  // Added by zyx
 		paintWidget->myQPoints.at(0)->setColor(Qt::cyan); // TODO: why different?
 		paintWidget->repaint();
@@ -316,7 +316,7 @@ void LECP::singlePointShowSlot()
 }
 
 
-//pointSelectTB µãÑ¡Ôñ-¹¤¾ßÀ¸:slot
+//pointSelectTB ç‚¹é€‰æ‹©-å·¥å…·æ :slot
 void LECP::lastPointSlot()
 {
 	int val = max(pointSpinBox->value() - 1, 0);
@@ -344,14 +344,14 @@ void LECP::nextPointSlot()
 }
 
 
-//strartShowTB ¿ªÊ¼ÑİÊ¾-¹¤¾ßÀ¸:slot
+//strartShowTB å¼€å§‹æ¼”ç¤º-å·¥å…·æ :slot
 void LECP::startShowSlot()
 {
 	if (!checkPoints())
 		QMessageBox::warning(this, tr("Warning"), tr("the number of the points should >=3"));
 	else {
 
-		isStart = true;//ÑİÊ¾½áÊøÊ±ÉèÎªfalse
+		isStart = true;//æ¼”ç¤ºç»“æŸæ—¶è®¾ä¸ºfalse
 		/*if (lecp_doc->points.size() < 3)
 		{
 		QMessageBox::warning(NULL, "Warning", "add at lest 3 points to start animation!", QMessageBox::Yes);
@@ -375,7 +375,7 @@ void LECP::startShowSlot()
 
 		int kernalNum = mesh->sortedVector.size();
 		qDebug() << "kernalNum:" << kernalNum;
-		//mode Ñ¡Ôñ
+		//mode é€‰æ‹©
 		switch (currMode)
 		{
 		case finalRes:
@@ -414,7 +414,7 @@ void LECP::startShowSlot()
 		}
 
 		case allPoints: {
-			//Ñ­»·´¦ÀíÃ¿¸öµã
+			//å¾ªç¯å¤„ç†æ¯ä¸ªç‚¹
 			vector<Vertex *> longest_convex_chain;
 			longest_convex_chain.clear();
 			Vertex * longest_chain_kernel = nullptr;
@@ -469,7 +469,7 @@ void LECP::resetShowSlot()
 	poly2show->clear();
 }
 
-//showContentTB ÑİÊ¾ÄÚÈİ-¹¤¾ßÀ¸:slot
+//showContentTB æ¼”ç¤ºå†…å®¹-å·¥å…·æ :slot
 void LECP::onSortSelected(int flag)
 {
 	switch (flag)
@@ -541,7 +541,7 @@ void LECP::onChainSelected(int flag)
 }
 
 
-//sortTB ÅÅĞò-¹¤¾ßÀ¸:slot
+//sortTB æ’åº-å·¥å…·æ :slot
 void  LECP::onDCELSelected(int flag)
 {
 	switch (flag)
@@ -555,7 +555,7 @@ void  LECP::onDCELSelected(int flag)
 	}
 }
 
-//qTB vg-¹¤¾ßÀ¸:slot
+//qTB vg-å·¥å…·æ :slot
 void  LECP::onQueueSelected(int flag)
 {
 	switch (flag)
@@ -569,7 +569,7 @@ void  LECP::onQueueSelected(int flag)
 	}
 }
 
-//lTB chain-¹¤¾ßÀ¸:slot
+//lTB chain-å·¥å…·æ :slot
 void  LECP::onLSelected(int flag)
 {
 	switch (flag)
@@ -583,7 +583,7 @@ void  LECP::onLSelected(int flag)
 	}
 }
 
-//showControlTB ËÙ¶È¿ØÖÆ-¹¤¾ßÀ¸:slot
+//showControlTB é€Ÿåº¦æ§åˆ¶-å·¥å…·æ :slot
 void LECP::changeSpeedSlot(int newSpeed)
 {
 	speedSpinBox->setValue(newSpeed);
@@ -595,7 +595,7 @@ void LECP::changeSpeedSlot(int newSpeed)
 	}
 }
 
-//Î´¹éÕıslots
+//æœªå½’æ­£slots
 Vertex* pole;
 bool compareVertex(Vertex* p, Vertex* q){
 	double px = p->point().first;
@@ -614,7 +614,7 @@ bool compareVertex(Vertex* p, Vertex* q){
 
 vector<LECP_Point*> LECP::preprocessingPolarAngleSort() {
 
-	//Ê×ÏÈ½«ÊäÈëµÄËùÓĞµã°´ÕÕ´Ó×óµ½ÓÒµÄË³ĞòÅÅÁĞ
+	//é¦–å…ˆå°†è¾“å…¥çš„æ‰€æœ‰ç‚¹æŒ‰ç…§ä»å·¦åˆ°å³çš„é¡ºåºæ’åˆ—
 	vector<LECP_Point*> points = paintWidget->points;
 	sort(points.begin(), points.end(), comparePoint);
 
@@ -686,7 +686,7 @@ void LECP::polarAngleSortDCELSlot() {
 		qDebug() << "point" << i << "of" << points.size();
 		vector<pair<LECP_Point*, LECP_Point*>> lecp_points = mesh->AddLine(point);
 
-		//½«½»µã¼ÓÉÏµ±Ç°µã´æÈëmeshµÄsortedPointÖĞ£¬²¢´¦Àíºá×ø±êÏàÍ¬µÄµãµÄÇé¿ö
+		//å°†äº¤ç‚¹åŠ ä¸Šå½“å‰ç‚¹å­˜å…¥meshçš„sortedPointä¸­ï¼Œå¹¶å¤„ç†æ¨ªåæ ‡ç›¸åŒçš„ç‚¹çš„æƒ…å†µ
 		mesh->addCurrentAngleSortedResultToVector(point, lecp_points, points);
 	}
 
@@ -699,8 +699,8 @@ void LECP::polarAngleSortDCELSlot() {
 
 }
 
-//DCEL ¶¯»­
-//µ÷ÓÃÖ®Ç°ÏÈclear,·ñÔò½á¹û»áÀÛ¼Ó  modified by xyz
+//DCEL åŠ¨ç”»
+//è°ƒç”¨ä¹‹å‰å…ˆclear,å¦åˆ™ç»“æœä¼šç´¯åŠ   modified by xyz
 void LECP::DCELAnimationSlot(){
 	vector<LECP_Point*> points = preprocessingPolarAngleSort();
 	qDebug() << "points size" << points.size();
@@ -711,7 +711,7 @@ void LECP::DCELAnimationSlot(){
 
 		vector<pair<LECP_Point*, LECP_Point*>> lecp_points = mesh->AddLine(point);
 
-		//½«½»µã¼ÓÉÏµ±Ç°µã´æÈëmeshµÄsortedPointÖĞ£¬²¢´¦Àíºá×ø±êÏàÍ¬µÄµãµÄÇé¿ö
+		//å°†äº¤ç‚¹åŠ ä¸Šå½“å‰ç‚¹å­˜å…¥meshçš„sortedPointä¸­ï¼Œå¹¶å¤„ç†æ¨ªåæ ‡ç›¸åŒçš„ç‚¹çš„æƒ…å†µ
 		mesh->addCurrentAngleSortedResultToVector(point,lecp_points,points);
 
 		paintWidget->animationPoint(qPoint, lecp_points,showspeed);
@@ -737,11 +737,11 @@ Polygon* LECP::trans2Poly(int kernal_index)
 		qDebug() << "kernal index should >=0 in Fun trans2Poly(int kernal_index)";
 	else{
 		int pointsNum = 1;
-		//Ñ­»·´¦ÀíÃ¿¸öµã
+		//å¾ªç¯å¤„ç†æ¯ä¸ªç‚¹
 		vector<Vertex*> temp_vertices;
 		int vertexNum = mesh->sortedVector.at(kernal_index).size();
 
-		if (vertexNum < 3)//²»´æÔÚÒ»¸öÍ¹°ü
+		if (vertexNum < 3)//ä¸å­˜åœ¨ä¸€ä¸ªå‡¸åŒ…
 			return NULL;
 
 		list<Vertex*>::iterator iter_vertex = mesh->sortedVector.at(kernal_index).begin();
@@ -761,7 +761,7 @@ Polygon* LECP::trans2Poly(int kernal_index)
 		kernal.setIndex(temp_vertices[0]->index());
 		poly2show->getPaintWidget()->allQPoints2Draw.push_back(kernal);
 		//other points
-		for (int i = 1; i < vertexNum; i++){//×ª»¯vertexÎªMyQPoint
+		for (int i = 1; i < vertexNum; i++){//è½¬åŒ–vertexä¸ºMyQPoint
 			MyQPoint temp_myqpoint(QPoint(temp_vertices[i]->point().first, temp_vertices[i]->point().second*-1));
 			temp_myqpoint.setColor(Qt::blue);
 			temp_myqpoint.setIndex(temp_vertices[i]->index());
@@ -793,7 +793,7 @@ Polygon* LECP::trans2Poly(int kernal_index)
 			_sleep(1500);
 		temp_vertices = poly2show->getVisibilityGraph(showVG, showQ, currMode);
 
-		//animation_×öchainÖ®Ç°°ÑµãºÍ°ë±ßµÄ×´Ì¬¸üĞÂÒ»ÏÂ
+		//animation_åšchainä¹‹å‰æŠŠç‚¹å’ŒåŠè¾¹çš„çŠ¶æ€æ›´æ–°ä¸€ä¸‹
 		for (int i = 1; i < vertexNum; i++){
 			poly2show->getPaintWidget()->allQPoints2Draw.at(i).setColor(Qt::blue);
 			poly2show->getPaintWidget()->allQPoints2Draw.at(i).setShowQ(false);
@@ -809,12 +809,12 @@ Polygon* LECP::trans2Poly(int kernal_index)
 		}
 		if (currMode != 0)
 			poly2show->getPaintWidget()->repaint();
-		//animation_×öchainÖ®Ç°°ÑµãºÍ°ë±ßµÄ×´Ì¬¸üĞÂÒ»ÏÂ end//
+		//animation_åšchainä¹‹å‰æŠŠç‚¹å’ŒåŠè¾¹çš„çŠ¶æ€æ›´æ–°ä¸€ä¸‹ end//
 
 		if (currMode != 0)
 			_sleep(1500);
 		temp_vertices = poly2show->getConvexChain(showChain, showL, currMode);
-		temp_vertices.clear(); // why?   ans:Ö»ÊÇÏëÊÍ·ÅÒ»ÏÂ
+		temp_vertices.clear(); // why?   ans:åªæ˜¯æƒ³é‡Šæ”¾ä¸€ä¸‹
 		paintWidget->allQLines2Draw.clear();
 		/*}*/
 	}

@@ -53,9 +53,9 @@ public:
 	LECP_Point* changeMyQPointToLECP_Point(MyQPoint *qPoint);
 	MyQPoint* changeLECP_PointToMyQPoint(LECP_Point *point);
 	
-	void changeLECP_PointsToQPoints();//坐标变换
+	void changeLECP_PointsToQPoints();//鍧愭爣鍙樻崲
 
-	void paintAllPoints();//绘制当前所有点,LECP_Point
+	void paintAllPoints();//缁樺埗褰撳墠鎵�鏈夌偣,LECP_Point
 
 	void animationPoint(MyQPoint  *qPoint, vector<pair<LECP_Point*, LECP_Point*>> lecp_points, double showSpeed);
 	long long getOriginPointIndex(MyQPoint* qPoint);
@@ -80,7 +80,7 @@ public:
 
 	vector<LECP_Point*> points;// store all of the points user input. Calculated  coordinate system	
 	//vector<QPoint> qPoints; //which are under Qt coordinate system
-	vector<MyQPoint*> myQPoints;//绘制都用它，与points的区别在于y（取负）	
+	vector<MyQPoint*> myQPoints;//缁樺埗閮界敤瀹冿紝涓巔oints鐨勫尯鍒湪浜巠锛堝彇璐燂級	
 
 	vector<MyQline*> lines;
 	vector<LECP_Point*> intersectPoints;//can not use MyQPoint, because there is  Deviation

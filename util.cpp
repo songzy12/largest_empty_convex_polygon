@@ -5,7 +5,7 @@
 
 using namespace std;
 
-//°´ÕÕºá×ø±ê´Ó×óÏòÓÒÅÅÁĞ
+//æŒ‰ç…§æ¨ªåæ ‡ä»å·¦å‘å³æ’åˆ—
 bool comparePoint(LECP_Point* a, LECP_Point* b){
 	if (a->x != b->x)
 		return a->x < b->x;
@@ -53,7 +53,7 @@ vector<LECP_Point*>  generateRandomPoints(long long points_number){
 
 	int offset = 40;
 
-	// ÏòÄÚ»ØÊÕ5¸öÏñËØµãµÄÎ»ÖÃ£¬±ÜÃâµãÂäÔÚ±ß½ç»òÕß³¬³ö±ß½çµÄcase
+	// å‘å†…å›æ”¶5ä¸ªåƒç´ ç‚¹çš„ä½ç½®ï¼Œé¿å…ç‚¹è½åœ¨è¾¹ç•Œæˆ–è€…è¶…å‡ºè¾¹ç•Œçš„case
 	int mx = -WIN_WIDTH / 2 + offset;
 	int nx = WIN_WIDTH / 2 - offset;
 	int my = -WIN_HEIGHT / 2 + offset;

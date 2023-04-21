@@ -31,7 +31,7 @@ PaintWidget::~PaintWidget() {
 
 }
 
-//»æÖÆpointsÖĞËùÓĞµã
+//ç»˜åˆ¶pointsä¸­æ‰€æœ‰ç‚¹
 void PaintWidget::paintEvent(QPaintEvent *event) {	
 	paintAllPoints();
 	paintAllLine();
@@ -87,7 +87,7 @@ bool PaintWidget::addPoint(LECP_Point *point) {
 
 	if (it == points.end())
 	{
-		std::cout << points.size() << " point£º" << point->x << "," << point->y << endl;
+		std::cout << points.size() << " pointï¼š" << point->x << "," << point->y << endl;
 
 		return true;
 	}
@@ -145,7 +145,7 @@ void PaintWidget::clear(){
 
 void PaintWidget::setPoints(vector<LECP_Point*> points_){
 	this->points = points_;
-	changeLECP_PointsToQPoints();//×ø±ê±ä»»
+	changeLECP_PointsToQPoints();//åæ ‡å˜æ¢
 	update();
 }
 
@@ -188,7 +188,7 @@ void PaintWidget::loadPoints(char *fileName){
 		points.push_back(point);
 	}
 
-	changeLECP_PointsToQPoints();//×ø±ê±ä»»
+	changeLECP_PointsToQPoints();//åæ ‡å˜æ¢
 
 	update();
 }
@@ -200,7 +200,7 @@ void PaintWidget::paintPoint(MyQPoint point){
 	painter.setBrush(point.getColor());
 	painter.drawEllipse(point.x(), point.y(), 6, 6);
 
-	/*QFont font("ËÎÌå", 12, QFont::Bold, false);
+	/*QFont font("å®‹ä½“", 12, QFont::Bold, false);
 	painter.setFont(font);
 	painter.drawText(point.x()+10, point.y()+5, QString::number(point.getIndex()));*/
 	update();
@@ -214,7 +214,7 @@ void PaintWidget::paintPoint(MyQPoint *point){
 
 	if (allQPoints2Draw.size() == 0){
 		int index = point->getIndex();
-		QFont font("ËÎÌå", 12, QFont::Bold, false);
+		QFont font("å®‹ä½“", 12, QFont::Bold, false);
 		painter.setFont(font);
 		painter.drawText(point->x() + 10, point->y() + 5, QString::number(index));
 	}
@@ -230,7 +230,7 @@ void PaintWidget::paintEdge(HalfEdge* edge_) {
 	update();
 }
 
-//²ÉÓÃindex µÄ method
+//é‡‡ç”¨index çš„ method
 LECP_Point* PaintWidget::changeMyQPointToLECP_Point(MyQPoint *qPoint){
 	vector<MyQPoint*>::iterator it;
 	it = std::find(myQPoints.begin(), myQPoints.end(), qPoint);
@@ -255,11 +255,11 @@ LECP_Point* PaintWidget::changeMyQPointToLECP_Point(MyQPoint *qPoint){
 	return point;
 }
 
-//Ö±½Ó¼ÆËã»á´æÔÚÎó²î£¬Òò´Ë°´ÕÕindex·µ»Ø¶ÔÓ¦µÄMyQPoint
-//vector<LECP_Point> points;ºÍvector<MyQPoint*> myQPoints;´æ´¢Ë³ĞòÒ»Ñù
+//ç›´æ¥è®¡ç®—ä¼šå­˜åœ¨è¯¯å·®ï¼Œå› æ­¤æŒ‰ç…§indexè¿”å›å¯¹åº”çš„MyQPoint
+//vector<LECP_Point> points;å’Œvector<MyQPoint*> myQPoints;å­˜å‚¨é¡ºåºä¸€æ ·
 //Attention: the order of points and myQPoints can not be changed!!!!
 
-// y×ø±êÏà·´
+// yåæ ‡ç›¸å
 MyQPoint* PaintWidget::changeLECP_PointToMyQPoint(LECP_Point *p){
 	
 	MyQPoint *mp = nullptr;
@@ -323,7 +323,7 @@ void PaintWidget::animationPoint(MyQPoint  *qPoint, vector<pair<LECP_Point*, LEC
 	// draw the corresponding 
 	MyQline* qLine=addLine(qPoint);
 
-	displayIntersectionPoint(lecp_points, showSpeed);//°¤¸öÏÔÊ¾½»µãÒÔ¼°¶ÔÓ¦µÄÓÃ»§ÊäÈëµÄpoint
+	displayIntersectionPoint(lecp_points, showSpeed);//æŒ¨ä¸ªæ˜¾ç¤ºäº¤ç‚¹ä»¥åŠå¯¹åº”çš„ç”¨æˆ·è¾“å…¥çš„point
 	qLine->setColor(Qt::blue);
 }
 
@@ -363,13 +363,13 @@ void PaintWidget::paintAllLine(){
 
 		double dy = abs(line->p2().y() - line->p1().y());
 		double dx = abs(line->p2().x() - line->p1().x());
-		//»­±ÊµÄ¿í¶ÈÓ¦¸ÃºÍÖ±ÏßµÄĞ±ÂÊ³É±ÈÀı
+		//ç”»ç¬”çš„å®½åº¦åº”è¯¥å’Œç›´çº¿çš„æ–œç‡æˆæ¯”ä¾‹
 		if (dy == 0 || dx == 0)
 			penWidth = 2;
 		else{
 			penWidth = 2*dx / dy + 1 / scaleX;
 		}
-		painter.setRenderHint(QPainter::Antialiasing, true);//·´×ßÑù
+		painter.setRenderHint(QPainter::Antialiasing, true);//åèµ°æ ·
 		painter.setPen(QPen(line->getColor(), penWidth));
 
 		
@@ -378,7 +378,7 @@ void PaintWidget::paintAllLine(){
 	update();
 }
 
-//Ğ±ÂÊÆÕ±éÆ«´ó
+//æ–œç‡æ™®éåå¤§
 void PaintWidget::getSuitCoordinate(double a, double  b, double &x1, double &y1, double &x2, double &y2){
 	double maxY = WIN_HEIGHT / 2.0;
 
@@ -394,9 +394,9 @@ QLine PaintWidget::getPaintLine(MyQPoint *qPoint){
 	a = point->x;
 	b = point->y;
 
-	//ÒÔQPoint×ø±êÎªÖ÷
+	//ä»¥QPointåæ ‡ä¸ºä¸»
 
-	// y×ø±ê³¬³ö·¶Î§
+	// yåæ ‡è¶…å‡ºèŒƒå›´
 	
     double x1, x2, y1, y2;
 	getSuitCoordinate(a, b,x1,y1,x2,y2);
@@ -461,7 +461,7 @@ void PaintWidget::paintIntersectPoints(){
 	for (long long i = 0; i < intersectPoints.size(); i++){
 		LECP_Point* point = intersectPoints[i];
 		painter.setPen(QPen(Qt::magenta, 2));
-		painter.setBrush(QBrush(Qt::magenta, Qt::SolidPattern)); //ÉèÖÃ»­Ë¢ĞÎÊ½ 
+		painter.setBrush(QBrush(Qt::magenta, Qt::SolidPattern)); //è®¾ç½®ç”»åˆ·å½¢å¼ 
 		double x = point->x*scaleX;
 		double y =- point->y*scaleY;
 
@@ -469,7 +469,7 @@ void PaintWidget::paintIntersectPoints(){
 		//double y = -point->y;
 
 		painter.drawEllipse(x-4, y-4, 8,8);
-		QFont font("ËÎÌå", 12, QFont::Bold, false);
+		QFont font("å®‹ä½“", 12, QFont::Bold, false);
 		painter.setFont(font);
 		painter.drawText(x+10,y+10 , QString::number(point->index));
 	}
@@ -486,7 +486,7 @@ void PaintWidget::paintPoints(MyQPoint* point){
 	painter.drawEllipse(point->x()-4, point->y()-4, 12, 12);
 
 
-	QFont font("ËÎÌå", 12, QFont::Bold, false);
+	QFont font("å®‹ä½“", 12, QFont::Bold, false);
 	painter.setFont(font);
 	painter.drawText(point->x()+10, point->y()+10, QString::number(point->getIndex()));
 
@@ -519,7 +519,7 @@ void PaintWidget::paintEdges(MyQline *line){
 
 	QPen temp_pen(line->getColor(), 1);
 
-	//ÉèÖÃ¼ıÍ··ç¸ñ
+	//è®¾ç½®ç®­å¤´é£æ ¼
 	if (line->getArrowStyle()){
 		temp_pen.setWidthF(2);
 		painter.setPen(temp_pen);
@@ -534,19 +534,19 @@ void PaintWidget::paintEdges(MyQline *line){
 		painter.drawLine(QLineF(destArrowP2, line->p2()));
 	}
 
-	//ĞéÏß·ç¸ñ
+	//è™šçº¿é£æ ¼
 	QVector<qreal> dashes;
 	qreal space = 3;
 	dashes << 5 << space << 5 << space;
-	//ÉèÖÃĞéÏß·ç¸ñ
+	//è®¾ç½®è™šçº¿é£æ ¼
 	if (line->getDotStyle()){
 		temp_pen.setDashPattern(dashes);
 		temp_pen.setWidthF(0.5);
 	}
 
-	//ÏÔÊ¾L
+	//æ˜¾ç¤ºL
 	if (line->showL()){
-		QFont font("ËÎÌå", 12, QFont::Bold, false);
+		QFont font("å®‹ä½“", 12, QFont::Bold, false);
 		painter.setFont(font);
 		painter.drawText((line->x1() + line->x2()) / 2, (line->y1() + line->y2()) / 2, QString::number(line->L()));
 	}
